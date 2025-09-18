@@ -3,14 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Barkday • Dog Age Calculator</title>
+  <title>Barkday • Dog → Human Years (Size‑Aware)</title>
   <style>
-    :root{
-      --bg: #0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734; --shadow: 0 6px 24px rgba(0,0,0,.35);
-    }
-    :root[data-theme="light"]{
-      --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --accent:#059669; --danger:#b91c1c; --border:#e2e8f0; --shadow:0 6px 24px rgba(2,6,23,.08);
-    }
+    :root{ --bg:#0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734; --shadow:0 6px 24px rgba(0,0,0,.35); }
+    :root[data-theme="light"]{ --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --accent:#059669; --danger:#b91c1c; --border:#e2e8f0; --shadow:0 6px 24px rgba(2,6,23,.08); }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial}
@@ -18,33 +14,30 @@
     header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
     .title{display:flex;gap:12px;align-items:center}
     .toggle{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)}
-    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .grid{display:grid;grid-template-columns:1fr;gap:18px}
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
     h1{font-size:22px;margin:0}
     h2{font-size:18px;margin:0 0 8px}
     label{font-weight:600;display:block;margin:14px 0 6px}
-    input[type="number"], select, input[type="date"]{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+    input[type="number"], select, input[type="date"], input[type="text"]{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
     input[type="range"]{width:100%}
-    .row{display:flex;gap:12px;align-items:center}
-    .row > *{flex:1}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .row > *{flex:1 1 220px}
     .muted{color:var(--muted);font-size:14px}
+    .divider{height:1px;background:var(--border);margin:12px -16px}
     .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
     .pill{border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.05));border-radius:14px;padding:10px 12px}
-    .pill h3{margin:0 0 4px;font-size:15px;color:var(--muted);font-weight:600}
+    .pill h3{margin:0 0 6px;font-size:15px;color:var(--muted);font-weight:600}
     .big{font-size:24px;font-weight:800}
-    .note{background:linear-gradient(90deg,var(--brand),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
-    .foot{margin-top:10px;font-size:12px;color:var(--muted)}
-    .divider{height:1px;background:var(--border);margin:12px -16px}
+    .btn{appearance:none;border:1px solid var(--border);background:var(--brand);color:white;padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn.secondary{background:transparent;color:var(--text)}
     .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .chip{border:1px solid var(--border);border-radius:999px;padding:4px 10px;font-size:12px;color:var(--muted)}
-    .index{display:flex;gap:8px;flex-wrap:wrap}
-    .index a{border:1px dashed var(--border);padding:6px 10px;border-radius:10px;text-decoration:none;color:var(--text)}
-    .ok{color:var(--accent);font-weight:700}
-    .btn{appearance:none;border:1px solid var(--border);background:var(--brand);color:white;padding:8px 12px;border-radius:10px;cursor:pointer}
-    .tip{font-size:13px;color:var(--muted);margin-top:6px}
-    .link{background:none;border:0;color:var(--brand);cursor:pointer;padding:0}
-    .hidden{display:none}
+    .cardlist{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:900px){.cardlist{grid-template-columns:1fr}}
+    .gift{border:1px solid var(--border);border-radius:12px;padding:12px}
+    .gift h4{margin:0 0 6px}
+    .link{background:none;border:0;color:var(--brand);cursor:pointer;text-decoration:underline;padding:0}
   </style>
 </head>
 <body>
@@ -52,248 +45,217 @@
     <header>
       <div class="title">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.5 10.5c-.414 0-.75-.336-.75-.75V7.875a3.375 3.375 0 1 1 6.75 0v1.875c0 .414-.336.75-.75.75H7.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M3.75 12.75A2.25 2.25 0 0 1 6 10.5h6a2.25 2.25 0 0 1 2.25 2.25V18a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-5.25Z" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>
-        <h1>Barkday • Dog Age Calculator</h1>
+        <h1>Barkday • Dog → Human Years (Size‑Aware)</h1>
       </div>
       <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
     </header>
 
-    <div class="grid">
-      <!-- Calculator -->
-      <section class="card" id="calc">
-        <h2>Calculator</h2>
-        <p class="muted">Pick your dog's birthdate from the calendar, set weight, and choose a group to tailor guidance. (Manual age entry available if needed.)</p>
-        <div class="divider"></div>
+    <section class="card">
+      <h2>Dog → Human Years (Size‑Aware)</h2>
+      <p class="muted">Evidence‑based calculator using AVMA/AKC milestones (15/9 rule) with a size‑dependent slope after year 2. Optionally show the UCSD epigenetic curve for dogs ≥ 1 year.</p>
+      <div class="divider"></div>
 
-        <label for="dob">Birthdate</label>
-        <div class="row">
+      <div class="row">
+        <div>
+          <label for="dogName">Dog name</label>
+          <input id="dogName" type="text" placeholder="e.g., Flip" />
+        </div>
+        <div>
+          <label for="dob">Birthdate</label>
           <input id="dob" type="date" />
-          <button id="dobTipBtn" class="btn" type="button" aria-expanded="false">Tip</button>
         </div>
-        <div id="dobTip" class="tip hidden">If you only know the age, click <button id="ageModeBtn" class="link" type="button">enter age manually</button>.</div>
-
-        <div id="ageManual" class="hidden">
-          <div class="row">
-            <div>
-              <label for="years">Dog age (years)</label>
-              <input id="years" type="number" inputmode="decimal" min="0" step="1" value="3" />
-            </div>
-            <div>
-              <label for="months">Additional months</label>
-              <input id="months" type="number" inputmode="numeric" min="0" max="11" step="1" value="0" />
-            </div>
-          </div>
-          <div class="tip">Back to calendar? Click <button id="dobModeBtn" class="link" type="button">use birthdate</button>.</div>
+        <div>
+          <label for="sizeBucket">Size bucket</label>
+          <select id="sizeBucket">
+            <option value="auto">Auto by weight</option>
+            <option value="toy">Toy (&lt;20 lb)</option>
+            <option value="small">Small (20–29 lb)</option>
+            <option value="medium">Medium (30–49 lb)</option>
+            <option value="large">Large (50–89 lb)</option>
+            <option value="giant">Giant (90+ lb)</option>
+          </select>
         </div>
+      </div>
 
-        <label for="weightSlider">Weight (lb)</label>
-        <div class="row">
-          <input id="weightSlider" type="range" min="3" max="200" step="1" value="60" />
-          <input id="weightNumber" type="number" min="3" max="200" step="1" value="60" />
+      <div class="row">
+        <div>
+          <label for="adultWeight">Expected adult weight (lb)</label>
+          <input id="adultWeight" type="range" min="3" max="200" step="1" value="60" />
+          <div class="muted">Auto size uses this weight. <span id="adultWeightVal">60</span> lb</div>
         </div>
-        <p class="muted" id="weightClassText">Weight class: —</p>
-
-        <label for="group">Classification</label>
-        <p class="tip">Categories are broad; examples are suggestions, not limits.</p>
-        <select id="group">
-          <option value="working">Working / Herding</option>
-          <option value="sporting">Sporting</option>
-          <option value="hound">Hound</option>
-          <option value="terrier">Terrier</option>
-          <option value="toy">Toy</option>
-          <option value="nonSporting">Non‑Sporting</option>
-          <option value="guardian">Guardian</option>
-          <option value="companion">Companion</option>
-          <option value="mixed">Mixed / Other</option>
-        </select>
-        <div class="chips" id="groupExamples"></div>
-
-        <div class="kpi" role="status" aria-live="polite">
-          <div class="pill"><h3>Human‑equivalent age</h3><div class="big" id="humanEq">—</div></div>
-          <div class="pill"><h3>Simple "dog years" (×7)</h3><div class="big" id="x7">—</div></div>
-          <div class="pill"><h3>Life stage</h3><div class="big" id="lifeStage">—</div></div>
+        <div>
+          <label for="chewer">Chewer level</label>
+          <select id="chewer">
+            <option>Gentle</option>
+            <option selected>Normal</option>
+            <option>Power</option>
+          </select>
         </div>
+        <div>
+          <label for="showEpigenetic">Advanced</label>
+          <div class="row"><label class="muted"><input id="showEpigenetic" type="checkbox"/> Show epigenetic (UCSD) if ≥ 1 yr</label></div>
+        </div>
+      </div>
 
-        <div class="divider"></div>
-        <div id="notes" class="muted"></div>
-        <p class="foot">Model notes: first 2 years age faster; then per‑year rate by weight class. Educational heuristic, not veterinary advice.</p>
-      </section>
+      <div class="row">
+        <div>
+          <label for="breed">Breed (optional)</label>
+          <input id="breed" type="text" placeholder="e.g., Australian Shepherd" />
+          <div class="muted">Used for notes only (no change to math unless a size bucket override applies).</div>
+        </div>
+        <div>
+          <label for="breedGroup">Breed group</label>
+          <select id="breedGroup">
+            <option>Working / Herding</option>
+            <option>Sporting</option>
+            <option>Hound</option>
+            <option>Terrier</option>
+            <option>Toy</option>
+            <option>Non‑Sporting</option>
+            <option>Guardian</option>
+            <option>Companion</option>
+            <option>Mixed / Other</option>
+          </select>
+        </div>
+      </div>
 
-      <!-- Index & Guidance -->
-      <aside class="card">
-        <h2>Index • Groups</h2>
-        <div class="index" id="indexLinks"></div>
-        <div class="divider"></div>
-        <section id="groupInfo"></section>
-      </aside>
-    </div>
+      <label for="giftUrl">Gift ideas feed URL (JSON)</label>
+      <input id="giftUrl" type="text" placeholder="https://.../dog-gifts.json" value="https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json" />
 
-    <footer class="foot">Barkday prototype • Dark & light modes, slider + number sync, calendar DOB, weight‑class model, and group‑specific care notes. All in one file.</footer>
+      <div class="row" style="margin-top:8px">
+        <label class="muted"><input id="ignoreAge" type="checkbox"/> Ignore age filter</label>
+        <label class="muted"><input id="ignoreSize" type="checkbox"/> Ignore size filter</label>
+        <label class="muted"><input id="ignoreChewer" type="checkbox"/> Ignore chewer filter</label>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button id="calcBtn" class="btn" type="button">Calculate</button>
+        <button id="resetBtn" class="btn secondary" type="button">Reset</button>
+        <button id="shareBtn" class="btn secondary" type="button">Share link</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>Results</h2>
+      <div class="kpi">
+        <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
+        <div class="pill"><h3>Human‑years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
+        <div class="pill"><h3>Next dog birthday</h3><div class="big" id="nextBday">—</div></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button id="addCalBtn" class="btn" type="button">Add to calendar (birthday)</button>
+        <button id="remindBtn" class="btn secondary" type="button">Add 1‑week reminder</button>
+      </div>
+
+      <div id="epi" class="muted" style="margin-top:10px"></div>
+
+      <div class="divider"></div>
+
+      <h2>Gift ideas</h2>
+      <button id="loadGifts" class="btn secondary" type="button">Load gift ideas</button>
+      <div id="giftMeta" class="muted" style="margin:8px 0"></div>
+      <div id="gifts" class="cardlist"></div>
+
+      <p class="muted" style="margin-top:12px">Assumptions: Year 1 ≈ 15 human years; Year 2 adds ≈9; after Year 2 slope R by size: Small/Medium = 5, Large = 6, Giant = 7. Uses 365.2425 days/yr.</p>
+    </section>
   </div>
 
   <script>
-    // ----- THEME -----
-    const root = document.documentElement;
-    const toggleBtn = document.getElementById('themeToggle');
+    // Theme
+    const root = document.documentElement; const toggleBtn = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
     root.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
     toggleBtn.textContent = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
-    toggleBtn.addEventListener('click', () => {
-      const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', now);
-      localStorage.setItem('barkday-theme', now);
-      toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light';
-    });
+    toggleBtn.addEventListener('click', () => { const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now); toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light'; });
 
-    // ----- DATA -----
-    const GROUPS = {
-      working:{label:'Working / Herding',examples:['Australian Shepherd','Border Collie','German Shepherd','Cattle Dog'],notes:['High drive: build daily jobs/puzzles (herding games, scentwork, obedience chains).','Mental fatigue is as important as physical; use enrichment (snuffle mats, hide‑and‑seek).','Prevent under‑stimulation → boredom behaviors.']},
-      sporting:{label:'Sporting',examples:['Labrador Retriever','Golden Retriever','Pointer','Setter'],notes:['Endurance + retrieve instincts: structured fetch, dock diving, field games.','Watch weight gain; meal‑prep with measured portions.']},
-      hound:{label:'Hound',examples:['Beagle','Greyhound','Dachshund','Coonhound'],notes:['Scent/sight tracking: long‑line scent walks, lure coursing where safe.','Recall training with high‑value rewards.']},
-      terrier:{label:'Terrier',examples:['Jack Russell','Airedale','Bull Terrier'],notes:['Channel hunt drive: dig boxes, flirt poles, controlled tug.']},
-      toy:{label:'Toy',examples:['Chihuahua','Pomeranian','Maltese'],notes:['Fragility concerns: low‑impact play; dental care is critical.','Thermoregulation: watch for cold/heat stress.']},
-      nonSporting:{label:'Non‑Sporting',examples:['Poodle','Dalmatian','Bulldog'],notes:['Varied needs; tailor enrichment to individual energy and health.']},
-      guardian:{label:'Guardian',examples:['Mastiff','Rottweiler','Doberman'],notes:['Impulse control and neutrality training are key.','Joint support and moderated growth for large/giant frames.']},
-      companion:{label:'Companion',examples:['Cavalier','Bichon Frisé','Coton'],notes:['Human‑bonded: reinforce calm independence to reduce separation stress.']},
-      mixed:{label:'Mixed / Other',examples:['Rescues','Crossbreeds'],notes:['Profile by observed drive (retrieve, scent, herd) vs. label.']}
-    };
-
-    // Weight class helper
-    function weightClass(lb){
-      if(lb < 20) return {key:'toy',label:'Toy (<20 lb)',perYear:4};
-      if(lb < 50) return {key:'medium',label:'Medium (20–49 lb)',perYear:5};
-      if(lb < 90) return {key:'large',label:'Large (50–89 lb)',perYear:6};
-      return {key:'giant',label:'Giant (90+ lb)',perYear:7};
-    }
-
-    // age from DOB
-    function yearsFromDOB(d){
-      if(!d) return null;
-      const today = new Date();
-      const dob = new Date(d);
-      if(isNaN(dob.getTime())) return null;
-      const diffMs = today - dob;
-      if(diffMs < 0) return 0;
-      const years = diffMs / (365.2425 * 24 * 60 * 60 * 1000);
-      return years;
-    }
-
-    // Human‑equivalent heuristic
-    function humanEquivalentAge(yearsFloat, lb){
-      const cls = weightClass(lb);
-      if(yearsFloat <= 0) return 0;
-      const firstTwo = Math.min(yearsFloat, 2) * 10.5;
-      const remaining = Math.max(yearsFloat - 2, 0) * cls.perYear;
-      return firstTwo + remaining;
-    }
-
-    // Life stage
-    function lifeStage(yearsFloat, lb){
-      const c = weightClass(lb).key; const t = yearsFloat;
-      const map = {toy:{adult:1,mature:8,senior:12},medium:{adult:1,mature:7,senior:10},large:{adult:1,mature:6,senior:8},giant:{adult:1,mature:5,senior:7}}[c];
-      if(t < map.adult) return 'Puppy/Junior';
-      if(t < map.mature) return 'Adult';
-      if(t < map.senior) return 'Mature';
-      return 'Senior';
-    }
-
-    // ----- UI WIRING -----
+    // Elements
+    const el = id => document.getElementById(id);
     const els = {
-      dob:document.getElementById('dob'),
-      dobTipBtn:document.getElementById('dobTipBtn'),
-      dobTip:document.getElementById('dobTip'),
-      ageModeBtn:document.getElementById('ageModeBtn'),
-      dobModeBtn:document.getElementById('dobModeBtn'),
-      ageManual:document.getElementById('ageManual'),
-      years:document.getElementById('years'),
-      months:document.getElementById('months'),
-      wSlide:document.getElementById('weightSlider'),
-      wNum:document.getElementById('weightNumber'),
-      wClassText:document.getElementById('weightClassText'),
-      group:document.getElementById('group'),
-      groupExamples:document.getElementById('groupExamples'),
-      humanEq:document.getElementById('humanEq'),
-      x7:document.getElementById('x7'),
-      lifeStage:document.getElementById('lifeStage'),
-      notes:document.getElementById('notes'),
-      idxLinks:document.getElementById('indexLinks'),
-      groupInfo:document.getElementById('groupInfo')
+      dogName: el('dogName'), dob: el('dob'), sizeBucket: el('sizeBucket'), adultWeight: el('adultWeight'), adultWeightVal: el('adultWeightVal'),
+      chewer: el('chewer'), showEpi: el('showEpigenetic'), breed: el('breed'), breedGroup: el('breedGroup'),
+      giftUrl: el('giftUrl'), ignoreAge: el('ignoreAge'), ignoreSize: el('ignoreSize'), ignoreChewer: el('ignoreChewer'),
+      calcBtn: el('calcBtn'), resetBtn: el('resetBtn'), shareBtn: el('shareBtn'),
+      dogAge: el('dogAge'), humanYears: el('humanYears'), slopeNote: el('slopeNote'), nextBday: el('nextBday'), epi: el('epi'),
+      addCal: el('addCalBtn'), remind: el('remindBtn'), loadGifts: el('loadGifts'), giftMeta: el('giftMeta'), gifts: el('gifts')
     };
 
-    function clamp(num,min,max){return Math.min(Math.max(num,min),max)}
+    els.adultWeight.addEventListener('input', () => { els.adultWeightVal.textContent = els.adultWeight.value; });
 
-    // Sync slider <-> number
-    function syncWeight(from){
-      let v = parseInt(from.value || '0',10); v = clamp(v,3,200); els.wSlide.value = v; els.wNum.value = v;
-      const cls = weightClass(v); els.wClassText.textContent = `Weight class: ${cls.label}`;
+    function daysBetween(a,b){ return Math.floor((b - a) / (24*60*60*1000)); }
+    function nextBirthday(dob){ const now = new Date(); const next = new Date(dob); next.setFullYear(now.getFullYear()); if(next < now) next.setFullYear(now.getFullYear()+1); return next; }
+
+    function bucketFromWeight(lb){ if(lb < 20) return 'toy'; if(lb < 30) return 'small'; if(lb < 50) return 'medium'; if(lb < 90) return 'large'; return 'giant'; }
+    function slopeForBucket(bucket){ return {toy:5, small:5, medium:5, large:6, giant:7}[bucket] || 5; }
+
+    function compute(){
+      const dobStr = els.dob.value; if(!dobStr){ alert('Please select a birthdate.'); return; }
+      const dob = new Date(dobStr); const now = new Date(); if(isNaN(dob.getTime()) || dob > now){ alert('Birthdate is invalid.'); return; }
+
+      const days = daysBetween(dob, now); const years = days / 365.2425; // dog age
+      const lb = parseInt(els.adultWeight.value,10);
+      let bucket = els.sizeBucket.value === 'auto' ? bucketFromWeight(lb) : els.sizeBucket.value;
+      const R = slopeForBucket(bucket);
+
+      // AVMA/AKC 15/9 rule, then slope R after 2 years
+      const firstTwo = Math.min(years, 2);
+      const human = firstTwo > 0 ? (Math.min(firstTwo,1)*15 + Math.max(firstTwo-1,0)*9) : 0;
+      const humanTotal = human + Math.max(years-2,0)*R;
+
+      els.dogAge.textContent = `${Math.floor(years)}y ${Math.floor((years%1)*12)}m`;
+      els.humanYears.textContent = humanTotal.toFixed(2);
+      els.slopeNote.textContent = `R=${R} (${bucket})`;
+      const nb = nextBirthday(dob); els.nextBday.textContent = nb.toDateString();
+
+      // Epigenetic note (not altering value)
+      els.epi.textContent = els.showEpi.checked && years >= 1 ? `Epigenetic reference curve (UCSD) roughly tracks higher early-life human‑equivalents; calculation shown uses the AVMA/AKC model.` : '';
     }
 
-    // Compute ageY from DOB or manual
-    function getAgeYears(){
-      const yFromDOB = yearsFromDOB(els.dob.value);
-      if(yFromDOB !== null) return yFromDOB;
-      const y = clamp(parseInt(els.years?.value||'0',10),0,30);
-      const m = clamp(parseInt(els.months?.value||'0',10),0,11);
-      if(els.years) els.years.value = y; if(els.months) els.months.value = m;
-      return y + m/12;
+    // Only calculate on button press
+    els.calcBtn.addEventListener('click', compute);
+
+    // Reset restores defaults
+    els.resetBtn.addEventListener('click', () => {
+      els.dogName.value = ''; els.dob.value = ''; els.sizeBucket.value = 'auto'; els.adultWeight.value = 60; els.adultWeightVal.textContent = '60';
+      els.chewer.value = 'Normal'; els.showEpi.checked = false; els.breed.value=''; els.breedGroup.value='Working / Herding';
+      els.ignoreAge.checked = els.ignoreSize.checked = els.ignoreChewer.checked = false;
+      els.dogAge.textContent = '—'; els.humanYears.textContent = '—'; els.slopeNote.textContent=''; els.nextBday.textContent='—'; els.epi.textContent=''; els.gifts.innerHTML=''; els.giftMeta.textContent='';
+    });
+
+    // Share link (basic querystring)
+    els.shareBtn.addEventListener('click', () => {
+      const params = new URLSearchParams({ n: els.dogName.value||'', d: els.dob.value||'', w: els.adultWeight.value, b: els.sizeBucket.value, c: els.chewer.value, g: els.breedGroup.value, r: els.breed.value||'' });
+      const url = location.origin + location.pathname + '?' + params.toString();
+      navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied to clipboard.')).catch(()=>alert(url));
+    });
+
+    // Gift loader
+    async function loadGifts(){
+      els.gifts.innerHTML = ''; els.giftMeta.textContent = 'Loading…';
+      try{
+        const res = await fetch(els.giftUrl.value, {cache:'no-store'});
+        const items = await res.json();
+        const filtered = items.filter(it => {
+          let ok = true;
+          if(!els.ignoreAge.checked && it.minAgeYears != null) ok = ok && (parseFloat(els.humanYears.textContent)||0) >= it.minAgeYears;
+          if(!els.ignoreSize.checked && it.size){ const b = els.sizeBucket.value==='auto'?bucketFromWeight(parseInt(els.adultWeight.value,10)):els.sizeBucket.value; ok = ok && (it.size.includes(b)||it.size.includes('any')); }
+          if(!els.ignoreChewer.checked && it.chewer){ ok = ok && (it.chewer.toLowerCase() === els.chewer.value.toLowerCase() || it.chewer==='any'); }
+          return ok;
+        }).slice(0,9);
+        els.giftMeta.textContent = `Showing ${filtered.length} picks`;
+        els.gifts.innerHTML = filtered.map(it => `<div class="gift"><h4>${it.title}</h4><div class="muted">${it.tag||''}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
+      }catch(e){ els.giftMeta.textContent = 'Could not load gift ideas.'; }
     }
+    els.loadGifts.addEventListener('click', loadGifts);
 
-    // Compute + render
-    function render(){
-      const lb = parseInt(els.wNum.value||'0',10);
-      const ageY = getAgeYears();
-      const humanEq = humanEquivalentAge(ageY, lb);
-      els.humanEq.textContent = `${humanEq.toFixed(1)} yrs`;
-      els.x7.textContent = `${(ageY*7).toFixed(1)} yrs`;
-      els.lifeStage.textContent = lifeStage(ageY, lb);
-      const g = GROUPS[els.group.value];
-      els.groupExamples.innerHTML = g.examples.map(e=>`<span class="chip">${e}</span>`).join('');
-      const cls = weightClass(lb).label;
-      els.notes.innerHTML = `<span class="note">${g.label}</span>: ${g.notes.join(' ')} Weight guidance: <span class="ok">${cls}</span>. Then ~${weightClass(lb).perYear}/yr equivalence after year 2.`;
-    }
+    // Calendar buttons (placeholders – integrate with real calendar later)
+    els.addCal.addEventListener('click', () => alert('Calendar integration placeholder: add birthday to calendar.'));
+    els.remind.addEventListener('click', () => alert('Reminder integration placeholder: add 1‑week reminder.'));
 
-    // Build index
-    function buildIndex(){
-      els.idxLinks.innerHTML = Object.entries(GROUPS).map(([k,v])=>`<a href="#g_${k}">${v.label}</a>`).join('');
-      els.groupInfo.innerHTML = Object.entries(GROUPS).map(([k,v])=>`
-        <article id="g_${k}" class="section">
-          <h3 style="margin:12px 0 6px">${v.label}</h3>
-          <div class="muted">Examples: ${v.examples.join(', ')}</div>
-          <div class="chips">${v.notes.map(n=>`<span class='chip'>${n}</span>`).join('')}</div>
-        </article>`).join('<div class="divider"></div>');
-    }
-
-    // Events
-    ['input','change'].forEach(evt => {
-      els.wSlide.addEventListener(evt, e => { syncWeight(e.target); render(); });
-      els.wNum.addEventListener(evt, e => { syncWeight(e.target); render(); });
-      if(els.years) els.years.addEventListener(evt, render);
-      if(els.months) els.months.addEventListener(evt, render);
-      els.group.addEventListener(evt, render);
-      els.dob.addEventListener(evt, render);
-    });
-
-    // Tip toggles & mode switches
-    els.dobTipBtn.addEventListener('click',()=>{
-      const open = els.dobTip.classList.toggle('hidden');
-      els.dobTipBtn.setAttribute('aria-expanded', String(!open));
-    });
-    els.ageModeBtn.addEventListener('click',()=>{
-      els.ageManual.classList.remove('hidden');
-      els.dob.value = '';
-      render();
-    });
-    els.dobModeBtn.addEventListener('click',()=>{
-      els.ageManual.classList.add('hidden');
-      render();
-    });
-
-    // Init
-    buildIndex();
-    // Set default DOB to 3 years ago for demo parity
-    const d = new Date(); d.setFullYear(d.getFullYear()-3);
-    els.dob.valueAsDate = d;
-    syncWeight(els.wNum);
-    render();
+    // Optional: hydrate from querystring
+    (function initFromQS(){
+      const q = new URLSearchParams(location.search);
+      if(q.size){ els.dogName.value = q.get('n')||''; els.dob.value = q.get('d')||''; els.adultWeight.value = q.get('w')||60; els.adultWeightVal.textContent = els.adultWeight.value; els.sizeBucket.value = q.get('b')||'auto'; els.chewer.value = q.get('c')||'Normal'; els.breedGroup.value = q.get('g')||'Working / Herding'; els.breed.value = q.get('r')||''; }
+    })();
   </script>
 </body>
 </html>
