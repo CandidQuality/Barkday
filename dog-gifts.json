@@ -1,21 +1,12 @@
 [
   {
-    "title": "Ultra-Tough Rubber Ring (Large)",
-    "url": "https://www.amazon.com/dp/B00EXAMPLE/?tag=YOURTAG-20",
-    "image": "https://images-na.ssl-images-amazon.com/images/I/abc.jpg",
-    "tag": "Durable • Dishwasher-safe",
-    "sizes": ["large","giant"],
-    "minAge": 0.2,
-    "maxAge": 20,
+    "title": "KONG Classic Dog Toy",
+    "url": "https://www.amazon.com/dp/B0002AR18C?tag=yourtag-20",
+    "image": "https://m.media-amazon.com/images/I/71I1E-yY9zL._AC_SL1500_.jpg",
+    "tag": "toy",
+    "sizes": ["medium","large"],
+    "minAge": 0.5,
+    "maxAge": 10,
     "chew": ["strong","super"]
-  },
-  {
-    "title": "Snuffle Mat (All sizes)",
-    "url": "https://www.amazon.com/dp/B00EXAMPLE2/?tag=YOURTAG-20",
-    "image": "https://images-na.ssl-images-amazon.com/images/I/xyz.jpg",
-    "tag": "Enrichment",
-    "sizes": ["small","medium","large","giant"],
-    "minAge": 0.1,
-    "chew": ["normal","strong","super"]
   }
 ]
