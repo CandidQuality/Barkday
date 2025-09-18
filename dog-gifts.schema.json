@@ -4,33 +4,23 @@
   "type": "array",
   "items": {
     "type": "object",
-    "additionalProperties": false,
     "required": ["title", "url"],
     "properties": {
-      "title": { "type": "string", "minLength": 2 },
+      "title": { "type": "string" },
       "url":   { "type": "string", "format": "uri" },
       "image": { "type": "string", "format": "uri" },
       "tag":   { "type": "string" },
-
       "sizes": {
         "type": "array",
-        "items": { "enum": ["small","medium","large","giant"] },
-        "minItems": 1,
-        "uniqueItems": true
+        "items": { "enum": ["small","medium","large","giant"] }
       },
       "minAge": { "type": "number", "minimum": 0 },
       "maxAge": { "type": "number", "minimum": 0 },
-
       "chew": {
         "type": "array",
-        "items": { "enum": ["normal","strong","super"] },
-        "minItems": 1,
-        "uniqueItems": true
+        "items": { "enum": ["normal","strong","super"] }
       }
     },
-    "allOf": [
-      { "if": { "required": ["minAge","maxAge"] },
-        "then": { "properties": { "maxAge": { "minimum": 0 } } } }
-    ]
+    "additionalProperties": false
   }
 }
