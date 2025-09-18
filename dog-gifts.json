@@ -1,0 +1,21 @@
+[
+  {
+    "title": "Ultra-Tough Rubber Ring (Large)",
+    "url": "https://www.amazon.com/dp/B00EXAMPLE/?tag=YOURTAG-20",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/abc.jpg",
+    "tag": "Durable • Dishwasher-safe",
+    "sizes": ["large","giant"],
+    "minAge": 0.2,
+    "maxAge": 20,
+    "chew": ["strong","super"]
+  },
+  {
+    "title": "Snuffle Mat (All sizes)",
+    "url": "https://www.amazon.com/dp/B00EXAMPLE2/?tag=YOURTAG-20",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/xyz.jpg",
+    "tag": "Enrichment",
+    "sizes": ["small","medium","large","giant"],
+    "minAge": 0.1,
+    "chew": ["normal","strong","super"]
+  }
+]
