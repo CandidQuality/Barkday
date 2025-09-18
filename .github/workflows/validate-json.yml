@@ -1,0 +1,27 @@
+name: Validate dog-gifts.json
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'dog-gifts.json', '.github/workflows/validate-json.yml' ]
+  pull_request:
+    paths: [ 'dog-gifts.json' ]
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure file exists
+        run: |
+          test -f dog-gifts.json || (echo "dog-gifts.json missing"; exit 1)
+
+      - name: Validate JSON syntax (Python)
+        run: |
+          python - <<'PY'
+          import json, sys
+          with open('dog-gifts.json','r',encoding='utf-8') as f:
+              json.load(f)
+          print("OK: dog-gifts.json is valid JSON")
+          PY
