@@ -4,23 +4,30 @@
   "type": "array",
   "items": {
     "type": "object",
+    "additionalProperties": false,
     "required": ["title", "url"],
     "properties": {
-      "title": { "type": "string" },
+      "title": { "type": "string", "minLength": 2 },
       "url":   { "type": "string", "format": "uri" },
       "image": { "type": "string", "format": "uri" },
       "tag":   { "type": "string" },
+
       "sizes": {
         "type": "array",
-        "items": { "enum": ["small","medium","large","giant"] }
+        "items": { "enum": ["small","medium","large","giant"] },
+        "minItems": 1,
+        "uniqueItems": true
       },
+
       "minAge": { "type": "number", "minimum": 0 },
       "maxAge": { "type": "number", "minimum": 0 },
+
       "chew": {
         "type": "array",
-        "items": { "enum": ["normal","strong","super"] }
+        "items": { "enum": ["normal","strong","super"] },
+        "minItems": 1,
+        "uniqueItems": true
       }
-    },
-    "additionalProperties": false
+    }
   }
 }
