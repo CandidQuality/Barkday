@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dog Gifts Feed",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["title", "url"],
+    "properties": {
+      "title": { "type": "string", "minLength": 2 },
+      "url":   { "type": "string", "format": "uri" },
+      "image": { "type": "string", "format": "uri" },
+      "tag":   { "type": "string" },
+
+      "sizes": {
+        "type": "array",
+        "items": { "enum": ["small","medium","large","giant"] },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "minAge": { "type": "number", "minimum": 0 },
+      "maxAge": { "type": "number", "minimum": 0 },
+
+      "chew": {
+        "type": "array",
+        "items": { "enum": ["normal","strong","super"] },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "allOf": [
+      { "if": { "required": ["minAge","maxAge"] },
+        "then": { "properties": { "maxAge": { "minimum": 0 } } } }
+    ]
+  }
+}
