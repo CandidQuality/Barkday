@@ -42,7 +42,6 @@
     .hint{color:var(--warn);font-size:.85rem;margin-top:4px}
     .out{display:grid;gap:12px}
     .error{background:#fee2e2;color:#7f1d1d;border:1px solid #fecaca;padding:10px 12px;border-radius:10px;margin-top:10px}
-    .warn-text{color:var(--warn)}
     .result-hero{position:relative;border:1px solid var(--border);border-radius:16px;padding:26px 18px;background:linear-gradient(180deg,var(--hero-bg-top),var(--hero-bg-bot));overflow:hidden}
     .confetti{position:absolute;inset:-60px -60px -60px -60px;pointer-events:none;opacity:.6}
     .confetti .layer{position:absolute;inset:0;background-repeat:repeat;background-size:200px 200px;animation:drift linear infinite}
@@ -52,15 +51,13 @@
         radial-gradient(circle 2.5px at 35% 25%, var(--confetti3) 99%, transparent 0),
         radial-gradient(circle 3px at 50% 50%, var(--confetti4) 99%, transparent 0),
         radial-gradient(circle 2px at 65% 20%, var(--confetti5) 99%, transparent 0);
-      animation-duration: 9s; opacity:.7;
-    }
+      animation-duration: 9s; opacity:.7;}
     .confetti .l2{background-image:
         radial-gradient(circle 2px at 80% 55%, var(--confetti2) 99%, transparent 0),
         radial-gradient(circle 2.5px at 90% 35%, var(--confetti3) 99%, transparent 0),
         radial-gradient(circle 2px at 15% 75%, var(--confetti4) 99%, transparent 0),
         radial-gradient(circle 3px at 55% 80%, var(--confetti1) 99%, transparent 0);
-      animation-duration: 14s; opacity:.5;
-    }
+      animation-duration: 14s; opacity:.5;}
     @keyframes drift { from{ transform:translateY(-60px) } to{ transform:translateY(60px) } }
     .hero-line{font-size:1.35rem;font-weight:800;text-align:center;letter-spacing:.2px;position:relative}
     .cta-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px;position:relative}
@@ -69,9 +66,14 @@
     .disclaimer{font-size:.9rem;padding:8px 12px;border-left:4px solid var(--badge-bg);background:rgba(14,165,233,.08);border-radius:8px}
     .toggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 10px;border-radius:999px;cursor:pointer;color:var(--muted);user-select:none}
     .toggle input{appearance:none;width:34px;height:20px;background:var(--border);border-radius:999px;position:relative;outline:none}
-    .toggle input:after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;background:var(--card);border-radius:50%;transition:left .18s}
+    .toggle input:after{content:'';position:absolute;left:2px;top:2px;width:16px;height:16px;background:var(--card);border-radius:50%;transition:left .18s}
     .toggle input:checked{background:var(--accent)}
     .toggle input:checked:after{left:16px}
+    .pill{background:var(--badge-bg);color:var(--badge-ink);padding:6px 10px;border-radius:999px;border:1px solid var(--border)}
+    .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
+    .gift img{width:100%;height:140px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
+    .link-like{text-decoration:underline}
+    .group-card h4{margin:.3rem 0}
   </style>
 </head>
 <body>
@@ -121,16 +123,44 @@
         </div>
         <div>
           <label>Advanced</label>
-          <div class="row"><input id="epi" type="checkbox" checked/> <span>Show UCSD epigenetic curve (≥ 1 yr)</span></div>
+          <div class="row">
+            <input id="epi" type="checkbox"/>
+            <span>Show science curve
+              <span title="A research-based estimate of human-equivalent age derived from DNA methylation changes in dogs (UCSD/Labrador data). Most useful after 1 year of age.">(?)</span>
+              (UCSD DNA‑methylation, ≥1 yr)
+            </span>
+          </div>
           <div class="row"><input id="smooth" type="checkbox" checked/> <span>Use smooth milestones (blend around 12 & 24 months)</span></div>
         </div>
         <div style="grid-column:1 / -1">
-          <details>
+          <details open>
             <summary>Settings</summary>
             <div style="margin-top:8px">
-              <label for="giftfeed">Gift ideas feed URL (JSON)</label>
-              <input id="giftfeed" type="url" value="https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json" />
+              <label for="group">Dog group (for tailored enrichment)</label>
+              <select id="group">
+                <option value="">— Select —</option>
+                <option value="herding_working">Herding / Working Drive</option>
+                <option value="guardian_protection">Guardian / Protection</option>
+                <option value="sporting_gundog">Sporting / Gun Dogs</option>
+                <option value="scent_hound">Scent Hounds</option>
+                <option value="sight_hound">Sight Hounds</option>
+                <option value="terrier">Terriers</option>
+                <option value="toy_companion">Toy / Companion Dogs</option>
+                <option value="nordic_spitz">Nordic / Spitz Types</option>
+                <option value="bulldog_molosser">Bulldog / Molosser Types</option>
+              </select>
+              <div class="note">Pick the closest fit; examples will show with guidance.</div>
+
+              <label for="giftfeed" style="margin-top:12px;display:block">Gift ideas feed URL (JSON)</label>
+              <input id="giftfeed" type="url" value=\"https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts-working.json" />
               <div class="note">You can swap to your GitHub Pages URL later.</div>
+
+              <input id="milestonesUrl" type="url" value="https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/milestones_dog_barkdays_1_95.json" style="margin-top:10px" />
+              <div class="note">Milestones JSON (per Barkday guidance). Leave as default unless you host your own.</div>
+
+              <input id="groupsUrl" type="url" value="https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/breed_groups.json" style="margin-top:10px" />
+              <div class="note">Breed groups JSON (tailored enrichment).</div>
+
               <div class="row" style="margin-top:6px">
                 <label><input type="checkbox" id="ignoreAge"> Ignore age filter</label>
                 <label><input type="checkbox" id="ignoreSize"> Ignore size filter</label>
@@ -140,7 +170,7 @@
           </details>
         </div>
       </div>
-      <div class="row" style="margin-top:10px">
+      <div class="row" style="margin-top:10px; gap:10px; align-items:center">
         <button class="btn" id="calc" disabled>Calculate</button>
         <button class="btn secondary" id="share" disabled>Share link</button>
         <input id="shareUrl" type="text" readonly style="flex:1; min-width:260px; border:1px dashed var(--border); padding:10px 12px; border-radius:10px; opacity:.9" placeholder="Share URL will appear here" />
@@ -153,6 +183,25 @@
     <div class="card" style="margin-top:16px">
       <h2 style="margin-top:0">Results</h2>
       <div class="out" id="results" aria-live="polite"></div>
+      <!-- Milestones card -->
+      <div id="milestoneCard" class="card" style="margin-top:12px; display:none">
+        <h3 style="margin:0 0 6px 0">Next Barkday guidance</h3>
+        <div id="msTitle" style="font-weight:700;margin-bottom:6px"></div>
+        <div id="msExpect" class="note" style="margin-bottom:8px"></div>
+        <div style="display:grid;grid-template-columns:1fr;gap:10px">
+          <div class="kpi" style="display:block">
+            <div style="font-weight:600;margin-bottom:4px">Training focus</div>
+            <ul id="msTrain" style="margin:0 0 0 16px;padding:0"></ul>
+          </div>
+          <div class="kpi" style="display:block">
+            <div style="font-weight:600;margin-bottom:4px">Care tips</div>
+            <ul id="msCare" style="margin:0 0 0 16px;padding:0"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group overlay -->
+      <div id="groupCard" class="card group-card" style="margin-top:12px; display:none"></div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -167,16 +216,16 @@
     </div>
 
     <div class="footer" style="margin-top:16px">
-      <div class="disclaimer">For fun & educational use — not veterinary advice. Estimates blend AVMA milestones (fast early years) with a smooth, continuous adjustment by expected adult weight. UCSD epigenetic curve (Labrador‑calibrated) is shown for reference.</div>
+      <div class="disclaimer">For fun & educational use — not veterinary advice. Estimates blend AVMA milestones (fast early years) with a smooth, continuous adjustment by expected adult weight. Science curve (UCSD DNA‑methylation) is optional.</div>
     </div>
   </div>
 
 <script>
-(function boot(){
+(function boot() {
   const errBox = document.getElementById('err');
-  try{
-    (function(){
-      const qs = s=>document.querySelector(s);
+  try {
+    (function() {
+      const qs = s => document.querySelector(s);
       const subtitle = qs('#subtitle');
       const dob = qs('#dob');
       const dogname = qs('#dogname');
@@ -185,12 +234,16 @@
       const chew = qs('#chew');
       const epi = qs('#epi');
       const smooth = qs('#smooth');
+      const groupSel = qs('#group');
       const giftfeed = qs('#giftfeed');
+      const milestonesUrl = qs('#milestonesUrl');
+      const groupsUrl = qs('#groupsUrl');
       const out = qs('#results');
       const btn = qs('#calc');
       const share = qs('#share');
       const reset = qs('#reset');
       const shareOk = qs('#shareOk');
+      const shareField = qs('#shareUrl');
       const giftsDiv = qs('#gifts');
       const giftStatus = qs('#giftStatus');
       const giftDiag = qs('#giftDiag');
@@ -200,15 +253,10 @@
       const ignoreSize = qs('#ignoreSize');
       const ignoreChew = qs('#ignoreChew');
       const themeToggle = qs('#themeToggle');
+
       const dobHint = qs('#dobHint');
       const weightHint = qs('#weightHint');
       let hintsActive = false;
-      function showHint(el, show, msg){
-        if(!el) return;
-        if(typeof msg === 'string') el.textContent = msg;
-        el.style.display = show ? 'block' : 'none';
-      }
-
 
       // Theme
       const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
@@ -216,50 +264,46 @@
       const startDark = saved ? saved==='dark' : prefersDark;
       document.body.classList.toggle('theme-dark', startDark);
       themeToggle.checked = startDark;
-      themeToggle.addEventListener('change', ()=>{
+      themeToggle.addEventListener('change', () => {
         const dark = themeToggle.checked;
         document.body.classList.toggle('theme-dark', dark);
         localStorage.setItem('barkday_theme', dark ? 'dark' : 'light');
       });
 
       // Utils
-      function sanitizeFile(s){ return (s||'barkday').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
-      function ordinal(n){ const s=["th","st","nd","rd"], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
-      function yearsBetween(a,b){ return (b - a) / (1000*60*60*24*365.2425); }
-      function fmt(n, d=2){ return Number.isFinite(n) ? n.toFixed(d) : '—'; }
-      function toParts(years){ if(!Number.isFinite(years) || years < 0) return {y:0,m:0,d:0}; const days = years*365.2425; const y = Math.floor(years); const m = Math.floor((days - y*365.2425)/30.4369); const d = Math.max(0, Math.round(days - y*365.2425 - m*30.4369)); return {y,m,d}; }
-      function toICSDate(dt){ const y = dt.getFullYear(); const m = String(dt.getMonth()+1).padStart(2,'0'); const d = String(dt.getDate()).padStart(2,'0'); return `${y}${m}${d}`; }
+      function sanitizeFile(s) { return (s||'barkday').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
+      function ordinal(n) { const s=['th','st','nd','rd'], v=n%100; return n+ (s[(v-20)%10]||s[v]||s[0]); }
+      function yearsBetween(a,b) { return (b - a) / (1000*60*60*24*365.2425); }
+      function fmt(n, d=2) { return Number.isFinite(n) ? n.toFixed(d) : '—'; }
+      function toParts(years) { if(!Number.isFinite(years) || years < 0) return {y:0,m:0,d:0}; const days = years*365.2425; const y = Math.floor(years); const m = Math.floor((days - y*365.2425)/30.4369); const d = Math.max(0, Math.round(days - y*365.2425 - m*30.4369)); return {y,m,d}; }
 
-      // Weight→slope
       const R_ANCHORS = [[5,4.8],[20,5.0],[50,5.5],[90,6.2],[140,7.2]];
-      function slopeR_weight(lbs){
+      function slopeR_weight(lbs) {
         if(!Number.isFinite(lbs)) return 5.5;
         if(lbs <= R_ANCHORS[0][0]) return R_ANCHORS[0][1];
-        for(let i=1;i<R_ANCHORS.length;i++){
+        for(let i=1;i<R_ANCHORS.length;i++) {
           const [x0,y0] = R_ANCHORS[i-1]; const [x1,y1] = R_ANCHORS[i];
-          if(lbs <= x1){ const t=(lbs-x0)/(x1-x0); return y0 + t*(y1-y0); }
+          if(lbs <= x1) { const t=(lbs-x0)/(x1-x0); return y0 + t*(y1-y0); }
         }
         const [xa,ya] = R_ANCHORS[R_ANCHORS.length-2];
         const [xb,yb] = R_ANCHORS[R_ANCHORS.length-1];
         const t=(lbs-xa)/(xb-xa); return ya + t*(yb-ya);
       }
 
-      // Smoothstep
-      function smoothstep(a,b,x){ const t = Math.min(1, Math.max(0, (x-a)/(b-a))); return t*t*(3-2*t); }
+      function smoothstep(a,b,x) { const t = Math.min(1, Math.max(0, (x-a)/(b-a))); return t*t*(3-2*t); }
 
-      // Models
-      function humanYearsPiecewise(D, R){
+      function humanYearsPiecewise(D, R) {
         if(D <= 0) return 0;
         if(D <= 1) return 15 * D;
         if(D <= 2) return 15 + 9*(D-1);
         return 24 + R*(D-2);
       }
-      function humanYearsSmooth(D, R){
+      function humanYearsSmooth(D, R) {
         if(D <= 0) return 0;
         const w = 0.1667; const s1=15, s2=9, s3=R;
         const step = Math.min(1/365, D/800);
         let u=0, H=0;
-        while(u < D - 1e-9){
+        while(u < D - 1e-9) {
           const next = Math.min(D, u+step);
           const t12 = smoothstep(1-w,1+w,u);
           const t23 = smoothstep(2-w,2+w,u);
@@ -269,17 +313,16 @@
         }
         return H;
       }
-      function epiYears(D){ if(D < 1) return NaN; return 16 * Math.log(D) + 31; }
+      function epiYears(D) { if(D < 1) return NaN; return 16 * Math.log(D) + 31; }
 
-      // Solvers
-      function solveDogYearsForHuman(Htarget, R, smoothOn){
+      function solveDogYearsForHuman(Htarget, R, smoothOn) {
         const Hfun = smoothOn ? (d)=>humanYearsSmooth(d,R) : (d)=>humanYearsPiecewise(d,R);
         let lo=0, hi=Math.max(3, Htarget/4+3);
         while(Hfun(hi) < Htarget) hi += 3;
         for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(Hfun(mid)>=Htarget) hi=mid; else lo=mid; }
         return hi;
       }
-      function nextDogBirthdayDate(Dnow, HYnow, R, dobVal, smoothOn){
+      function nextDogBirthdayDate(Dnow, HYnow, R, dobVal, smoothOn) {
         const Htarget = Math.floor(HYnow) + 1;
         const D = solveDogYearsForHuman(Htarget, R, smoothOn);
         const date = new Date(dobVal);
@@ -289,10 +332,16 @@
         return {when: date, atHuman: Htarget, dogYearsAt: D};
       }
 
-      // Inputs state + gating
+      function sanitizeUrlBase() { return location.origin + location.pathname; }
+
       function inputsValid(){
         const wv = Number(weightNum.value || weight.value);
         return !!dob.value && Number.isFinite(wv) && wv >= 5;
+      }
+      function showHint(el, show, msg){
+        if(!el) return;
+        if(typeof msg === 'string') el.textContent = msg;
+        el.style.display = show ? 'block' : 'none';
       }
       function refreshGates(){
         const ok = inputsValid();
@@ -310,29 +359,14 @@
         }
       }
 
-      weightNum.addEventListener('input', ()=>{
-        const v = Number(weightNum.value);
-        if(Number.isFinite(v)){ weight.value = Math.max(5, Math.min(140, v)); }
-        refreshGates();
-      });
-      weight.addEventListener('input', ()=>{
-        weightNum.value = weight.value; // keep number field in sync
-        refreshGates();
-      });
-      dob.addEventListener('input', refreshGates);
-
-      // Personalize subtitle
       function updateSubtitle(){
         const name = (dogname.value || '').trim();
-        if(name){
-          subtitle.textContent = `Let's find out together, what ${name}, your precious friend’s birthdays are, so we can celebrate every single one`;
-        }else{
-          subtitle.textContent = "Let's find out together, what your precious friend’s birthdays are, so we can celebrate every single one";
-        }
+        subtitle.textContent = name
+          ? `Let's find out together, what ${name}, your precious friend’s birthdays are, so we can celebrate every single one`
+          : "Let's find out together, what your precious friend’s birthdays are, so we can celebrate every single one";
       }
       dogname.addEventListener('input', updateSubtitle);
 
-      // Gift heading -> upcoming Barkday
       function setGiftHeading(){
         if(!inputsValid()) { giftHeading.textContent = ''; return; }
         const lbs = parseFloat(weightNum.value || weight.value);
@@ -346,9 +380,117 @@
         giftHeading.textContent = `Gift picks for ${name} — upcoming ${ordinal(nb.atHuman)} Barkday, ~${lbs||0} lb, ${chew.value} chewer`;
       }
 
-      // Compute + render Results (only when inputs valid)
+      function toICSDate(dt) { const y = dt.getFullYear(); const m = String(dt.getMonth()+1).padStart(2,'0'); const d = String(dt.getDate()).padStart(2,'0'); return `${y}${m}${d}`; }
+      function buildICS({title, date, description, url}) {
+        const dt = toICSDate(date);
+        const uid = `${dt}-${Math.random().toString(36).slice(2)}@barkday`;
+        const ics = [
+          'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          `UID:${uid}`,
+          `DTSTAMP:${dt}T000000`,
+          `DTSTART;VALUE=DATE:${dt}`,
+          `SUMMARY:${title}`,
+          `DESCRIPTION:${description.replace(/
+/g,'\n')}\n${url}`,
+          'BEGIN:VALARM','TRIGGER:-P7D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday in 1 week','END:VALARM',
+          'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday tomorrow','END:VALARM',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('
+');
+        return URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+      }
+      function buildICSMany(events){
+        const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+        for(const ev of events){
+          const dt=toICSDate(ev.date); const uid=`${dt}-${Math.random().toString(36).slice(2)}@barkday`;
+          lines.push(
+            'BEGIN:VEVENT',
+            `UID:${uid}`,
+            `DTSTAMP:${dt}T000000`,
+            `DTSTART;VALUE=DATE:${dt}`,
+            `SUMMARY:${ev.title}`,
+            `DESCRIPTION:${ev.description.replace(/
+/g,'\n')}\n${ev.url}`,
+            'BEGIN:VALARM','TRIGGER:-P7D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday in 1 week','END:VALARM',
+            'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday tomorrow','END:VALARM',
+            'END:VEVENT'
+          );
+        }
+        lines.push('END:VCALENDAR');
+        return URL.createObjectURL(new Blob([lines.join('
+')],{type:'text/calendar'}));
+      }
+
+      // Milestones
+      const milestoneCard = document.getElementById('milestoneCard');
+      const msTitle = document.getElementById('msTitle');
+      const msExpect = document.getElementById('msExpect');
+      const msTrain = document.getElementById('msTrain');
+      const msCare = document.getElementById('msCare');
+
+      async function loadMilestone(ageNum){
+        try{
+          const url = (milestonesUrl && milestonesUrl.value) ? milestonesUrl.value.trim() : '';
+          if(!url){ milestoneCard.style.display='none'; return; }
+          const res = await fetch(url, {cache:'no-cache'});
+          if(!res.ok) throw new Error(res.status+' '+res.statusText);
+          const data = await res.json();
+          const key = String(Math.max(1, Math.min(95, ageNum || 1)));
+          const keys = Object.keys(data).map(Number).sort((a,b)=>a-b);
+          const ms = data[key] || data[String(keys[keys.length-1])];
+          if(!ms){ milestoneCard.style.display='none'; return; }
+          msTitle.textContent = ms.title || `Barkday ${ageNum}`;
+          msExpect.textContent = ms.expect || '';
+          msTrain.innerHTML = (ms.train||[]).map(x=>`<li>${x}</li>`).join('');
+          msCare.innerHTML = (ms.care||[]).map(x=>`<li>${x}</li>`).join('');
+          milestoneCard.style.display = 'block';
+        }catch(e){
+          console.error('Milestones load failed', e);
+          milestoneCard.style.display='none';
+        }
+      }
+
+      // Breed groups
+      const groupCard = document.getElementById('groupCard');
+      let BREED_GROUPS = null;
+
+      async function loadBreedGroups(){
+        try{
+          const url = (groupsUrl && groupsUrl.value) ? groupsUrl.value.trim() : '';
+          if(!url){ BREED_GROUPS = null; return; }
+          const res = await fetch(url, {cache:'no-cache'});
+          if(!res.ok) throw new Error(res.status+' '+res.statusText);
+          BREED_GROUPS = await res.json();
+        }catch(e){
+          console.error('Group load failed', e);
+          BREED_GROUPS = null;
+        }
+      }
+      function renderGroupOverlay(groupId){
+        if(!BREED_GROUPS || !groupId){ groupCard.style.display='none'; groupCard.innerHTML=''; return; }
+        const g = BREED_GROUPS.find(x=>x.id===groupId);
+        if(!g){ groupCard.style.display='none'; groupCard.innerHTML=''; return; }
+        groupCard.innerHTML = `
+          <h3 style="margin:0 0 6px 0">Group profile: ${g.name}</h3>
+          <div class="note" style="margin-bottom:8px">Examples: ${g.examples.join(', ')}</div>
+          <div style="display:grid;grid-template-columns:1fr;gap:10px">
+            <div>
+              <h4>Enrichment ideas</h4>
+              <ul style="margin:6px 0 0 16px">${(g.enrichment||[]).map(x=>`<li>${x}</li>`).join('')}</ul>
+            </div>
+            <div>
+              <h4>Owner tips</h4>
+              <ul style="margin:6px 0 0 16px">${(g.owner_tips||[]).map(x=>`<li>${x}</li>`).join('')}</ul>
+            </div>
+          </div>
+          ${g.cautions?.length ? `<div class="note" style="margin-top:8px">Cautions: ${g.cautions.join(' • ')}</div>` : ''}
+        `;
+        groupCard.style.display='block';
+      }
+
       function compute(){
-        const shareField = document.getElementById('shareUrl');
         if(!inputsValid()){
           out.innerHTML = '<p class="note warn-text">Enter a birthdate and best‑guess weight, then press Calculate.</p>';
           return;
@@ -373,6 +515,9 @@
         shareUrl.searchParams.set('w', String(lbs));
         shareUrl.searchParams.set('chew', chew.value);
         if(giftfeed.value) shareUrl.searchParams.set('gift', giftfeed.value);
+        if(milestonesUrl.value) shareUrl.searchParams.set('ms', milestonesUrl.value);
+        if(groupsUrl.value) shareUrl.searchParams.set('grp', groupsUrl.value);
+        if(groupSel.value) shareUrl.searchParams.set('group', groupSel.value);
         shareUrl.searchParams.set('epi', epi.checked? '1':'0');
         shareUrl.searchParams.set('smooth', smooth.checked? '1':'0');
         if(shareField) shareField.value = shareUrl.toString();
@@ -381,57 +526,28 @@
         const ord = ordinal(nb.atHuman);
         const title = `${dogname.value?dogname.value + "'s ":""}${ord} Barkday`;
         const desc = `Celebrate ${dogname.value?dogname.value + "'s ":""}${ord}.`;
+        const icsUrl = buildICS({title, date: nb.when, description: `${desc}
+Reload data:`, url: shareUrl.toString()});
 
-        // Build ICS links
-        function toICSDate(d){ const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}${m}${dd}`; }
-        function buildICS({title, date, description, url}){
-          const dt = toICSDate(date);
-          const uid = `${dt}-${Math.random().toString(36).slice(2)}@barkday`;
-          const ics = [
-            'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',
-            'BEGIN:VEVENT',`UID:${uid}`,`DTSTAMP:${dt}T000000`,`DTSTART;VALUE=DATE:${dt}`,
-            `SUMMARY:${title}`,`DESCRIPTION:${description.replace(/\n/g,'\\n')}\\n${url}`,
-            'BEGIN:VALARM','TRIGGER:-P7D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday in 1 week','END:VALARM',
-            'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday tomorrow','END:VALARM',
-            'END:VEVENT','END:VCALENDAR'
-          ].join('\r\n');
-          return URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
-        }
-        function buildICSMany(events){
-          const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
-          for(const ev of events){
-            const dt=toICSDate(ev.date); const uid=`${dt}-${Math.random().toString(36).slice(2)}@barkday`;
-            lines.push('BEGIN:VEVENT',`UID:${uid}`,`DTSTAMP:${dt}T000000`,`DTSTART;VALUE=DATE:${dt}`,
-              `SUMMARY:${ev.title}`,`DESCRIPTION:${ev.description.replace(/\n/g,'\\n')}\\n${ev.url}`,
-              'BEGIN:VALARM','TRIGGER:-P7D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday in 1 week','END:VALARM',
-              'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday tomorrow','END:VALARM','END:VEVENT');
-          }
-          lines.push('END:VCALENDAR');
-          return URL.createObjectURL(new Blob([lines.join('\r\n')],{type:'text/calendar'}));
-        }
-
-        const icsUrl = buildICS({title, date: nb.when, description: `${desc}\nReload data:`, url: shareUrl.toString()});
-
-        // Multi-events (next 365d)
+        // Multi-events for next 365d
         const horizon = new Date(now); horizon.setDate(horizon.getDate()+365);
         const events = [];
         let k = Math.floor(HY)+1;
         while(k < 200){
-          const Dk = (function(H){ // reuse solver
-            const Hfun = smooth.checked ? (d)=>humanYearsSmooth(d,R) : (d)=>humanYearsPiecewise(d,R);
-            let lo=0, hi=Math.max(3, H/4+3);
-            while(Hfun(hi) < H) hi += 3;
-            for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(Hfun(mid)>=H) hi=mid; else lo=mid; }
-            return hi;
-          })(k);
+          const H = k;
+          const Hfun = smooth.checked ? (d)=>humanYearsSmooth(d,R) : (d)=>humanYearsPiecewise(d,R);
+          let lo=0, hi=Math.max(3, H/4+3);
+          while(Hfun(hi) < H) hi += 3;
+          for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(Hfun(mid)>=H) hi=mid; else lo=mid; }
+          const Dk = hi;
           const dDate = new Date(dobVal);
           const yWhole = Math.floor(Dk), dRem = Dk - yWhole;
           dDate.setFullYear(dDate.getFullYear()+yWhole);
           dDate.setDate(dDate.getDate()+Math.round(dRem*365.2425));
           if(dDate <= now){ k++; continue; }
           if(dDate > horizon) break;
-          const tk = `${dogname.value?dogname.value + "'s ":""}${ord}`;
-          events.push({title: `${dogname.value?dogname.value + "'s ":""}${ordinal(k)} Barkday`, date:dDate, description:`Celebrate ${dogname.value?dogname.value + "'s ": ""}${ordinal(k)}.\nReload data:`, url: shareUrl.toString()});
+          events.push({title: `${dogname.value?dogname.value + "'s ":""}${ordinal(k)} Barkday`, date:dDate, description:`Celebrate ${dogname.value?dogname.value + "'s ": ""}${ordinal(k)}.
+Reload data:`, url: shareUrl.toString()});
           k++;
         }
         const icsManyUrl = buildICSMany(events);
@@ -444,16 +560,18 @@
               <a class="btn" href="${icsUrl}" download="${fileBase}_${nb.atHuman}th_barkday.ics">Add to calendar (1‑week & 1‑day reminders)</a>
               <a class="btn secondary" href="${icsManyUrl}" download="${fileBase}_barkdays_next_year.ics">All Barkdays (next year)</a>
             </div>
+            <div class="note" style="text-align:center;margin-top:6px">Some calendars (e.g., Google Calendar on the web) may ignore custom early reminders and use their defaults.</div>
           </div>
-          ${epi.checked && !isNaN(epiVal) ? `<div class="kpi"><span>UCSD epigenetic curve</span> <b>${fmt(epiVal,2)}</b> <span class="note">(reference ≥ 1 yr)</span></div>` : ''}
+          ${epi.checked && !isNaN(epiVal) ? `<div class="kpi"><span>Science curve (UCSD DNA‑methylation)</span> <b>${fmt(epiVal,2)}</b> <span class="note">(reference ≥ 1 yr)</span></div>` : ''}
           <div class="kpi"><span>Dog‑years (human equivalent)</span> <b>${fmt(HY,2)}</b> <span class="note">R≈${fmt(R,2)} • ${smooth.checked ? 'smooth' : 'step'}</span></div>
           <div class="kpi"><span>Dog age today</span> <b>${parts.y}y ${parts.m}m ${parts.d}d</b></div>
         `;
 
         setGiftHeading();
+        loadMilestone(nb.atHuman);
+        renderGroupOverlay(groupSel.value);
       }
 
-      // Load gifts (requires valid inputs)
       async function loadGifts(){
         if(!inputsValid()){ giftStatus.textContent='Enter DOB and weight first.'; return; }
         setGiftHeading();
@@ -488,26 +606,35 @@
         }catch(e){ console.error(e); giftStatus.textContent='Could not load the feed (CORS or network error). Showing fallback picks.'; tryFallback(); }
       }
 
-      // Start Over
       function resetForm(){
         const hasResults = out && out.textContent.trim().length > 0;
         const msg = hasResults
-          ? 'Before starting over, remember to download your calendar links if you want to keep them.\n\nStart over now?'
+          ? 'Before starting over, remember to download your calendar links if you want to keep them.
+
+Start over now?'
           : 'Start over and clear entries?';
         if(!confirm(msg)) return;
         dogname.value = ''; dob.value = '';
         weight.value = ''; weightNum.value = '';
         share.disabled = true; btn.disabled = true; loadGiftsBtn.disabled = true;
-        chew.value = 'normal'; epi.checked = true; smooth.checked = true;
+        chew.value = 'normal'; epi.checked = false; smooth.checked = true;
         ignoreAge.checked = false; ignoreSize.checked = false; ignoreChew.checked = false;
+        groupSel.value = '';
         subtitle.textContent = "Let's find out together, what your precious friend’s birthdays are, so we can celebrate every single one";
         giftHeading.textContent = ''; giftStatus.textContent = ''; giftDiag.textContent = ''; giftsDiv.innerHTML = '';
-        out.innerHTML = '';
+        out.innerHTML = ''; milestoneCard.style.display='none'; groupCard.style.display='none'; groupCard.innerHTML='';
         const base = location.origin + location.pathname; history.replaceState({}, '', base);
         dogname.focus();
+        showHint(dobHint,false); showHint(weightHint,false); hintsActive=false;
       }
 
-      // Button bindings
+      // Bindings
+      weightNum.addEventListener('input', ()=>{ weight.value = Math.max(5, Math.min(140, Number(weightNum.value)||0)); refreshGates(); });
+      weight.addEventListener('input', ()=>{ weightNum.value = weight.value; refreshGates(); });
+      dob.addEventListener('input', refreshGates);
+      chew.addEventListener('change', setGiftHeading);
+      groupSel.addEventListener('change', ()=>{ if(out.textContent.trim()) renderGroupOverlay(groupSel.value); });
+
       btn.addEventListener('click', ()=>{
         if(!inputsValid()){
           hintsActive = true;
@@ -521,25 +648,29 @@
         }
         compute();
       });
+
       share.addEventListener('click', async ()=>{
         if(!inputsValid()) return;
         try{
-          const base = location.origin + location.pathname; // avoids file:/// paths
+          const base = location.origin + location.pathname;
           const u=new URL(base);
           if(dogname.value) u.searchParams.set('name', dogname.value);
           if(dob.value) u.searchParams.set('dob', dob.value);
           u.searchParams.set('w', weightNum.value || weight.value);
           u.searchParams.set('chew', chew.value);
           if(giftfeed.value) u.searchParams.set('gift', giftfeed.value);
+          if(milestonesUrl.value) u.searchParams.set('ms', milestonesUrl.value);
+          if(groupsUrl.value) u.searchParams.set('grp', groupsUrl.value);
+          if(groupSel.value) u.searchParams.set('group', groupSel.value);
           u.searchParams.set('epi', epi.checked? '1':'0');
           u.searchParams.set('smooth', smooth.checked? '1':'0');
           const s = u.toString();
-          const field = document.getElementById('shareUrl');
-          if(field){ field.value = s; field.select(); try{ document.execCommand('copy'); }catch{} }
+          if(shareField){ shareField.value = s; shareField.select(); try{ document.execCommand('copy'); }catch{} }
           await navigator.clipboard.writeText(s);
           shareOk.style.display='inline-block'; setTimeout(()=> shareOk.style.display='none',1500);
         }catch(e){ alert('Copy failed.'); }
       });
+
       loadGiftsBtn.addEventListener('click', loadGifts);
       ignoreAge.addEventListener('change', ()=>{ if(giftsDiv.innerHTML) loadGifts(); });
       ignoreSize.addEventListener('change', ()=>{ if(giftsDiv.innerHTML) loadGifts(); });
@@ -552,19 +683,40 @@
         layers.forEach(el=> el.style.animationPlayState = (document.visibilityState === 'hidden' ? 'paused' : 'running'));
       });
 
-      // Initialize from URL, but do NOT auto-compute
+      // Initialize from URL (no auto-compute)
       const url = new URL(location.href);
       const n = url.searchParams.get('name'); if(n){ dogname.value = n; updateSubtitle(); }
-      const w = url.searchParams.get('w'); if(w){ weightNum.value = w; weight.value = Math.max(5, Math.min(140, +w)); weight.disabled = false; }
+      const w = url.searchParams.get('w'); if(w){ weightNum.value = w; weight.value = Math.max(5, Math.min(140, +w)); }
       const dobq = url.searchParams.get('dob'); if(dobq){ dob.value = dobq; }
       const chewq = url.searchParams.get('chew'); if(chewq){ chew.value = chewq; }
       const giftq = url.searchParams.get('gift'); if(giftq){ giftfeed.value = giftq; }
-      const epiq = url.searchParams.get('epi'); if(epiq==='0') epi.checked=false;
+      const msq = url.searchParams.get('ms'); if(msq){ milestonesUrl.value = msq; }
+      const grpq = url.searchParams.get('grp'); if(grpq){ groupsUrl.value = grpq; }
+      const groupPreset = url.searchParams.get('group'); if(groupPreset){ groupSel.value = groupPreset; }
+      const epiq = url.searchParams.get('epi'); if(epiq==='1') epi.checked=true;
       const smoothq = url.searchParams.get('smooth'); if(smoothq==='0') smooth.checked=false;
 
+      loadBreedGroups();
       refreshGates();
+
+      // Live change of groups URL
+      if(groupsUrl){
+        groupsUrl.addEventListener('change', async ()=>{
+          await loadBreedGroups();
+          if(out.textContent.trim()) renderGroupOverlay(groupSel.value);
+        });
+      }
+      if(milestonesUrl){
+        milestonesUrl.addEventListener('change', ()=>{
+          const t = document.querySelector('.hero-line');
+          if(t){
+            const m = t.textContent.match(/will be\s+(\d+)\s+years/i);
+            if(m) loadMilestone(parseInt(m[1],10));
+          }
+        });
+      }
     })();
-  }catch(e){
+  } catch(e) {
     console.error(e);
     errBox.style.display='block';
     errBox.textContent = 'Script error: ' + (e && e.message ? e.message : String(e));
