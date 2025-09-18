@@ -143,6 +143,7 @@
       <div class="row" style="margin-top:10px">
         <button class="btn" id="calc" disabled>Calculate</button>
         <button class="btn secondary" id="share" disabled>Share link</button>
+        <input id="shareUrl" type="text" readonly style="flex:1; min-width:260px; border:1px dashed var(--border); padding:10px 12px; border-radius:10px; opacity:.9" placeholder="Share URL will appear here" />
         <button class="btn warn" id="reset">Start over</button>
         <span id="shareOk" class="pill" style="display:none">Link copied</span>
       </div>
@@ -347,6 +348,7 @@
 
       // Compute + render Results (only when inputs valid)
       function compute(){
+        const shareField = document.getElementById('shareUrl');
         if(!inputsValid()){
           out.innerHTML = '<p class="note warn-text">Enter a birthdate and best‑guess weight, then press Calculate.</p>';
           return;
@@ -365,7 +367,7 @@
         const dateStr = nb.when.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
         const name = (dogname.value||'your precious friend');
 
-        const shareUrl = new URL(location.href);
+        const shareUrl = new URL(location.origin + location.pathname);
         if(dogname.value) shareUrl.searchParams.set('name', dogname.value);
         shareUrl.searchParams.set('dob', dob.value);
         shareUrl.searchParams.set('w', String(lbs));
@@ -373,6 +375,7 @@
         if(giftfeed.value) shareUrl.searchParams.set('gift', giftfeed.value);
         shareUrl.searchParams.set('epi', epi.checked? '1':'0');
         shareUrl.searchParams.set('smooth', smooth.checked? '1':'0');
+        if(shareField) shareField.value = shareUrl.toString();
 
         const fileBase = sanitizeFile(dogname.value) || 'barkday';
         const ord = ordinal(nb.atHuman);
@@ -521,7 +524,8 @@
       share.addEventListener('click', async ()=>{
         if(!inputsValid()) return;
         try{
-          const u=new URL(location.href);
+          const base = location.origin + location.pathname; // avoids file:/// paths
+          const u=new URL(base);
           if(dogname.value) u.searchParams.set('name', dogname.value);
           if(dob.value) u.searchParams.set('dob', dob.value);
           u.searchParams.set('w', weightNum.value || weight.value);
@@ -529,7 +533,10 @@
           if(giftfeed.value) u.searchParams.set('gift', giftfeed.value);
           u.searchParams.set('epi', epi.checked? '1':'0');
           u.searchParams.set('smooth', smooth.checked? '1':'0');
-          await navigator.clipboard.writeText(u.toString());
+          const s = u.toString();
+          const field = document.getElementById('shareUrl');
+          if(field){ field.value = s; field.select(); try{ document.execCommand('copy'); }catch{} }
+          await navigator.clipboard.writeText(s);
           shareOk.style.display='inline-block'; setTimeout(()=> shareOk.style.display='none',1500);
         }catch(e){ alert('Copy failed.'); }
       });
