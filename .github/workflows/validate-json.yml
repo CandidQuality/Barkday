@@ -16,19 +16,19 @@ jobs:
       - name: Check JSON parses
         run: |
           python - <<'PY'
-          import json,sys
+          import json
           json.load(open('dog-gifts.json','r',encoding='utf-8'))
           print("OK: JSON parses")
           PY
 
       - name: Install jsonschema
-        run: pipx runpip python -q install jsonschema
+        run: pip install jsonschema
 
       - name: Validate against schema
         run: |
           python - <<'PY'
           import json, sys
-          from jsonschema import validate, Draft202012Validator
+          from jsonschema import Draft202012Validator
           data = json.load(open('dog-gifts.json','r',encoding='utf-8'))
           schema = json.load(open('dog-gifts.schema.json','r',encoding='utf-8'))
           v = Draft202012Validator(schema)
