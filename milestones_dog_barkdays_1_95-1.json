@@ -1,0 +1,1427 @@
+{
+  "1": {
+    "title": "1st Barkday — Puppy year — rapid learning & socialization",
+    "expect": "High curiosity, short attention span; socialization is key.",
+    "train": [
+      "Short, upbeat sessions (3–5 min) 2–3×/day",
+      "Name game & hand target",
+      "Sit/down basics with luring"
+    ],
+    "care": [
+      "Multiple short naps; controlled playdates",
+      "Enrichment: snuffle mat once daily",
+      "Vet consult on vaccines & parasite plan"
+    ],
+    "short": "Recall, stays, and social calm; add scent games."
+  },
+  "2": {
+    "title": "2nd Barkday — Late puppy — impulse control begins",
+    "expect": "High curiosity, short attention span; socialization is key.",
+    "train": [
+      "Introduce stay (1–3s), reward calm",
+      "Loose-leash basics in quiet areas",
+      "Recall on long line (5–10 m)"
+    ],
+    "care": [
+      "Rotate 2 puzzles/week",
+      "Reinforce calm greetings",
+      "Teething support if needed"
+    ],
+    "short": "Recall, stays, and social calm; add scent games."
+  },
+  "3": {
+    "title": "3rd Barkday — Young adolescent — testing limits is normal",
+    "expect": "Impulse control growing; expect occasional boundary testing.",
+    "train": [
+      "Increase stay (5–10s) with distance",
+      "Leave-it / drop-it games",
+      "Mat/place training for settle"
+    ],
+    "care": [
+      "Daily exercise 40–60 min (split)",
+      "Grooming routine weekly",
+      "Basic dental chew/brush intro"
+    ],
+    "short": "Recall, stays, and social calm; add scent games."
+  },
+  "4": {
+    "title": "4th Barkday — Adolescent peak — build consistency",
+    "expect": "Impulse control growing; expect occasional boundary testing.",
+    "train": [
+      "Recall with higher distractions",
+      "Directional fetch (left/right)",
+      "Start scent games: simple hides"
+    ],
+    "care": [
+      "Warmup before fetch/tug",
+      "Two enrichment activities/day",
+      "Weight check; adjust calories"
+    ],
+    "short": "Recall, stays, and social calm; add scent games."
+  },
+  "5": {
+    "title": "5th Barkday — Early adult — refine manners",
+    "expect": "Prime learning window; habits cement quickly—good or bad.",
+    "train": [
+      "Longer stays (30–60s) & duration on mat",
+      "Heel in low-to-moderate distractions",
+      "Trick chaining (spin→sit→touch)"
+    ],
+    "care": [
+      "Vary routes; novelty walks",
+      "Conditioning 2×/week (hills/cavaletti)",
+      "Annual wellness exam"
+    ],
+    "short": "Proof cues; nosework & conditioning keep things sharp."
+  },
+  "6": {
+    "title": "6th Barkday — Early adult — refine manners",
+    "expect": "Prime learning window; habits cement quickly—good or bad.",
+    "train": [
+      "Longer stays (30–60s) & duration on mat",
+      "Heel in low-to-moderate distractions",
+      "Trick chaining (spin→sit→touch)"
+    ],
+    "care": [
+      "Vary routes; novelty walks",
+      "Conditioning 2×/week (hills/cavaletti)",
+      "Annual wellness exam"
+    ],
+    "short": "Proof cues; nosework & conditioning keep things sharp."
+  },
+  "7": {
+    "title": "7th Barkday — Prime adult — mental work matters",
+    "expect": "Prime learning window; habits cement quickly—good or bad.",
+    "train": [
+      "Proof cues around dogs/people",
+      "Advanced nosework patterns",
+      "Calm settle in busy areas (cafés/parks)"
+    ],
+    "care": [
+      "Cross‑training (swim/hike/puzzle)",
+      "Teeth check; consider cleaning",
+      "Parasite prevention review"
+    ],
+    "short": "Proof cues; nosework & conditioning keep things sharp."
+  },
+  "8": {
+    "title": "8th Barkday — Prime adult — mental work matters",
+    "expect": "Prime learning window; habits cement quickly—good or bad.",
+    "train": [
+      "Proof cues around dogs/people",
+      "Advanced nosework patterns",
+      "Calm settle in busy areas (cafés/parks)"
+    ],
+    "care": [
+      "Cross‑training (swim/hike/puzzle)",
+      "Teeth check; consider cleaning",
+      "Parasite prevention review"
+    ],
+    "short": "Proof cues; nosework & conditioning keep things sharp."
+  },
+  "9": {
+    "title": "9th Barkday — Prime adult — mental work matters",
+    "expect": "Prime learning window; habits cement quickly—good or bad.",
+    "train": [
+      "Proof cues around dogs/people",
+      "Advanced nosework patterns",
+      "Calm settle in busy areas (cafés/parks)"
+    ],
+    "care": [
+      "Cross‑training (swim/hike/puzzle)",
+      "Teeth check; consider cleaning",
+      "Parasite prevention review"
+    ],
+    "short": "Proof cues; nosework & conditioning keep things sharp."
+  },
+  "10": {
+    "title": "10th Barkday — Mature adult — protect joints, keep brain busy",
+    "expect": "Energy steady; protect joints and keep the brain engaged.",
+    "train": [
+      "Low‑impact agility (cavaletti/backing up)",
+      "Longer calm settles (5–10 min)",
+      "Discrimination games (toy A vs B)"
+    ],
+    "care": [
+      "Joint warmups/cooldowns",
+      "Surface awareness (non‑slip rugs)",
+      "Body condition re‑check"
+    ],
+    "short": "Low‑impact work, longer calm settles, joint warmups."
+  },
+  "11": {
+    "title": "11th Barkday — Mature adult — protect joints, keep brain busy",
+    "expect": "Energy steady; protect joints and keep the brain engaged.",
+    "train": [
+      "Low‑impact agility (cavaletti/backing up)",
+      "Longer calm settles (5–10 min)",
+      "Discrimination games (toy A vs B)"
+    ],
+    "care": [
+      "Joint warmups/cooldowns",
+      "Surface awareness (non‑slip rugs)",
+      "Body condition re‑check"
+    ],
+    "short": "Low‑impact work, longer calm settles, joint warmups."
+  },
+  "12": {
+    "title": "12th Barkday — Mature adult — protect joints, keep brain busy",
+    "expect": "Energy steady; protect joints and keep the brain engaged.",
+    "train": [
+      "Low‑impact agility (cavaletti/backing up)",
+      "Longer calm settles (5–10 min)",
+      "Discrimination games (toy A vs B)"
+    ],
+    "care": [
+      "Joint warmups/cooldowns",
+      "Surface awareness (non‑slip rugs)",
+      "Body condition re‑check"
+    ],
+    "short": "Low‑impact work, longer calm settles, joint warmups."
+  },
+  "13": {
+    "title": "13th Barkday — Early senior — shorter, richer sessions",
+    "expect": "Slight slowdown; shorter focused sessions work best.",
+    "train": [
+      "3–5 min training bursts, more frequently",
+      "Gentle sniffaris & puzzle feeders",
+      "Balance work: wobble cushion/slow stands"
+    ],
+    "care": [
+      "Senior baseline labs with vet",
+      "Softer chews & heated rest",
+      "Monitor vision/hearing changes"
+    ],
+    "short": "Short, rich sessions; gentle puzzles & balance work."
+  },
+  "14": {
+    "title": "14th Barkday — Early senior — shorter, richer sessions",
+    "expect": "Slight slowdown; shorter focused sessions work best.",
+    "train": [
+      "3–5 min training bursts, more frequently",
+      "Gentle sniffaris & puzzle feeders",
+      "Balance work: wobble cushion/slow stands"
+    ],
+    "care": [
+      "Senior baseline labs with vet",
+      "Softer chews & heated rest",
+      "Monitor vision/hearing changes"
+    ],
+    "short": "Short, rich sessions; gentle puzzles & balance work."
+  },
+  "15": {
+    "title": "15th Barkday — Early senior — shorter, richer sessions",
+    "expect": "Slight slowdown; shorter focused sessions work best.",
+    "train": [
+      "3–5 min training bursts, more frequently",
+      "Gentle sniffaris & puzzle feeders",
+      "Balance work: wobble cushion/slow stands"
+    ],
+    "care": [
+      "Senior baseline labs with vet",
+      "Softer chews & heated rest",
+      "Monitor vision/hearing changes"
+    ],
+    "short": "Short, rich sessions; gentle puzzles & balance work."
+  },
+  "16": {
+    "title": "16th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "17": {
+    "title": "17th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "18": {
+    "title": "18th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "19": {
+    "title": "19th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "20": {
+    "title": "20th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "21": {
+    "title": "21st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "22": {
+    "title": "22nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "23": {
+    "title": "23rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "24": {
+    "title": "24th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "25": {
+    "title": "25th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "26": {
+    "title": "26th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "27": {
+    "title": "27th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "28": {
+    "title": "28th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "29": {
+    "title": "29th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "30": {
+    "title": "30th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "31": {
+    "title": "31st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "32": {
+    "title": "32nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "33": {
+    "title": "33rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "34": {
+    "title": "34th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "35": {
+    "title": "35th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "36": {
+    "title": "36th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "37": {
+    "title": "37th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "38": {
+    "title": "38th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "39": {
+    "title": "39th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "40": {
+    "title": "40th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "41": {
+    "title": "41st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "42": {
+    "title": "42nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "43": {
+    "title": "43rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "44": {
+    "title": "44th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "45": {
+    "title": "45th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "46": {
+    "title": "46th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "47": {
+    "title": "47th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "48": {
+    "title": "48th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "49": {
+    "title": "49th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "50": {
+    "title": "50th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "51": {
+    "title": "51st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "52": {
+    "title": "52nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "53": {
+    "title": "53rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "54": {
+    "title": "54th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "55": {
+    "title": "55th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "56": {
+    "title": "56th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "57": {
+    "title": "57th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "58": {
+    "title": "58th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "59": {
+    "title": "59th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "60": {
+    "title": "60th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "61": {
+    "title": "61st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "62": {
+    "title": "62nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "63": {
+    "title": "63rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "64": {
+    "title": "64th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "65": {
+    "title": "65th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "66": {
+    "title": "66th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "67": {
+    "title": "67th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "68": {
+    "title": "68th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "69": {
+    "title": "69th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "70": {
+    "title": "70th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "71": {
+    "title": "71st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "72": {
+    "title": "72nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "73": {
+    "title": "73rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "74": {
+    "title": "74th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "75": {
+    "title": "75th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "76": {
+    "title": "76th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "77": {
+    "title": "77th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "78": {
+    "title": "78th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "79": {
+    "title": "79th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "80": {
+    "title": "80th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "81": {
+    "title": "81st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "82": {
+    "title": "82nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "83": {
+    "title": "83rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "84": {
+    "title": "84th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "85": {
+    "title": "85th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "86": {
+    "title": "86th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "87": {
+    "title": "87th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "88": {
+    "title": "88th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "89": {
+    "title": "89th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "90": {
+    "title": "90th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "91": {
+    "title": "91st Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "92": {
+    "title": "92nd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "93": {
+    "title": "93rd Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "94": {
+    "title": "94th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  },
+  "95": {
+    "title": "95th Barkday — Senior 16+ — comfort, cognition, safe movement",
+    "expect": "Comfort first—cognition and gentle mobility keep quality of life high.",
+    "train": [
+      "Cognitive games: easy scent hides",
+      "Cooperative care (nail/ear/teeth)",
+      "Mobility: figure‑8s, massage, slow stairs"
+    ],
+    "care": [
+      "Twice‑yearly vet visits",
+      "Joint support & ramps as needed",
+      "Short, frequent enrichment"
+    ],
+    "short": "Easy scent games, cooperative care, gentle mobility."
+  }
+}
