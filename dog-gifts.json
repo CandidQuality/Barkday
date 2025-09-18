@@ -6,7 +6,37 @@
     "tag": "toy",
     "sizes": ["medium","large"],
     "minAge": 0.5,
-    "maxAge": 10,
+    "maxAge": 12,
     "chew": ["strong","super"]
+  },
+  {
+    "title": "Nylabone Healthy Edibles Dog Chew Treats",
+    "url": "https://www.amazon.com/dp/B0002AS7Z2?tag=yourtag-20",
+    "image": "https://m.media-amazon.com/images/I/81jAMnO0GoL._AC_SL1500_.jpg",
+    "tag": "treat",
+    "sizes": ["small","medium"],
+    "minAge": 1,
+    "maxAge": 15,
+    "chew": ["normal","strong"]
+  },
+  {
+    "title": "Chuckit! Ultra Ball, Medium (2 Pack)",
+    "url": "https://www.amazon.com/dp/B000F4AVPA?tag=yourtag-20",
+    "image": "https://m.media-amazon.com/images/I/81dIgImJfVL._AC_SL1500_.jpg",
+    "tag": "fetch",
+    "sizes": ["medium","large"],
+    "minAge": 0.3,
+    "maxAge": 10,
+    "chew": ["normal"]
+  },
+  {
+    "title": "FurHaven Orthopedic Dog Bed",
+    "url": "https://www.amazon.com/dp/B01JAY2US8?tag=yourtag-20",
+    "image": "https://m.media-amazon.com/images/I/81dZP6jK6ZL._AC_SL1500_.jpg",
+    "tag": "bed",
+    "sizes": ["large","giant"],
+    "minAge": 1,
+    "maxAge": 15,
+    "chew": ["normal"]
   }
 ]
