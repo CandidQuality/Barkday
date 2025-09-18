@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Barkday™ — Celebrate Every Moment</title>
+  <style>
+    :root {
+      --bg: #f7fafc; --card: #ffffff; --fg: #0f172a; --muted: #475569; --border: #e2e8f0;
+      --accent: #0ea5e9; --accent-ink: #ffffff; --badge-bg: #e0f2fe; --badge-ink: #0369a1;
+      --hero-bg-top: #eff6ff; --hero-bg-bot: #e0f2fe; --shadow: 0 1px 2px rgba(0,0,0,.06);
+      --confetti1:#60a5fa; --confetti2:#f472b6; --confetti3:#34d399; --confetti4:#fbbf24; --confetti5:#a78bfa;
+      --warn:#ef4444;
+    }
+    .theme-dark {
+      --bg: #0b1220; --card: #0f172a; --fg: #e5e7eb; --muted: #94a3b8; --border: #172036;
+      --accent: #38bdf8; --accent-ink: #00131f; --badge-bg: #082f49; --badge-ink: #7dd3fc;
+      --hero-bg-top: #0b1b2c; --hero-bg-bot: #08263c; --shadow: 0 1px 2px rgba(0,0,0,.5);
+      --confetti1:#60a5fa; --confetti2:#fb7185; --confetti3:#22d3ee; --confetti4:#f59e0b; --confetti5:#a78bfa;
+    }
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--fg);margin:0}
+    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+    .hero{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:12px;background:var(--badge-bg);display:flex;align-items:center;justify-content:center;font-size:22px}
+    h1{font-size:1.8rem;margin:0}
+    .subtitle{margin:6px 0 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:880px){ .grid{grid-template-columns: repeat(3, 1fr);} }
+    label{font-weight:600;font-size:.95rem}
+    input,select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:1rem;background:var(--card);color:var(--fg)}
+    input[type=range]{padding:0}
+    select option{background:var(--card); color:var(--fg);}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .btn{background:var(--accent);color:var(--accent-ink);border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;box-shadow:var(--shadow)}
+    .btn[disabled]{opacity:.5;cursor:not-allowed}
+    .btn.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+    .btn.warn{background:var(--warn);color:#fff}
+    .note{font-size:.9rem;color:var(--muted)}
+    .hint{color:var(--warn);font-size:.85rem;margin-top:4px}
+    .out{display:grid;gap:12px}
+    .error{background:#fee2e2;color:#7f1d1d;border:1px solid #fecaca;padding:10px 12px;border-radius:10px;margin-top:10px}
+    .warn-text{color:var(--warn)}
+    .result-hero{position:relative;border:1px solid var(--border);border-radius:16px;padding:26px 18px;background:linear-gradient(180deg,var(--hero-bg-top),var(--hero-bg-bot));overflow:hidden}
+    .confetti{position:absolute;inset:-60px -60px -60px -60px;pointer-events:none;opacity:.6}
+    .confetti .layer{position:absolute;inset:0;background-repeat:repeat;background-size:200px 200px;animation:drift linear infinite}
+    .confetti .l1{background-image:
+        radial-gradient(circle 3px at 10% 30%, var(--confetti1) 99%, transparent 0),
+        radial-gradient(circle 2px at 20% 60%, var(--confetti2) 99%, transparent 0),
+        radial-gradient(circle 2.5px at 35% 25%, var(--confetti3) 99%, transparent 0),
+        radial-gradient(circle 3px at 50% 50%, var(--confetti4) 99%, transparent 0),
+        radial-gradient(circle 2px at 65% 20%, var(--confetti5) 99%, transparent 0);
+      animation-duration: 9s; opacity:.7;
+    }
+    .confetti .l2{background-image:
+        radial-gradient(circle 2px at 80% 55%, var(--confetti2) 99%, transparent 0),
+        radial-gradient(circle 2.5px at 90% 35%, var(--confetti3) 99%, transparent 0),
+        radial-gradient(circle 2px at 15% 75%, var(--confetti4) 99%, transparent 0),
+        radial-gradient(circle 3px at 55% 80%, var(--confetti1) 99%, transparent 0);
+      animation-duration: 14s; opacity:.5;
+    }
+    @keyframes drift { from{ transform:translateY(-60px) } to{ transform:translateY(60px) } }
+    .hero-line{font-size:1.35rem;font-weight:800;text-align:center;letter-spacing:.2px;position:relative}
+    .cta-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px;position:relative}
+    .kpi{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border:1px solid var(--border);border-radius:12px}
+    .kpi b{font-size:1.1rem}
+    .disclaimer{font-size:.9rem;padding:8px 12px;border-left:4px solid var(--badge-bg);background:rgba(14,165,233,.08);border-radius:8px}
+    .toggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 10px;border-radius:999px;cursor:pointer;color:var(--muted);user-select:none}
+    .toggle input{appearance:none;width:34px;height:20px;background:var(--border);border-radius:999px;position:relative;outline:none}
+    .toggle input:after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;background:var(--card);border-radius:50%;transition:left .18s}
+    .toggle input:checked{background:var(--accent)}
+    .toggle input:checked:after{left:16px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">🐾</div>
+          <div>
+            <h1>Barkday™</h1>
+            <p id="subtitle" class="subtitle">Let's find out together, what your precious friend’s birthdays are, so we can celebrate every single one</p>
+          </div>
+        </div>
+        <label class="toggle" title="Dark mode">
+          <span>Dark</span>
+          <input id="themeToggle" type="checkbox" />
+        </label>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="dogname">Dog name</label>
+          <input id="dogname" type="text" placeholder="e.g., Scout" />
+        </div>
+        <div>
+          <label for="dob">Birthdate</label>
+          <input id="dob" type="date" />
+          <div class="note">Dog age shown under Results.</div>
+          <div id="dobHint" class="hint" style="display:none">Please enter a birthdate.</div>
+        </div>
+        <div>
+          <label for="weightNum">Expected adult weight (lb)</label>
+          <div class="row">
+            <input id="weightNum" type="number" min="5" max="200" step="1" placeholder="best guess" />
+            <input id="weight" type="range" min="5" max="140" step="5" />
+          </div>
+          <div class="note">Aging rate adjusts continuously with weight (no hard size buckets).</div>
+          <div id="weightHint" class="hint" style="display:none">Please enter a best‑guess weight (≥ 5 lb).</div>
+        </div>
+        <div>
+          <label for="chew">Chewer level</label>
+          <select id="chew">
+            <option value="normal">Normal</option>
+            <option value="strong">Strong chewer</option>
+            <option value="super">Super chewer</option>
+          </select>
+        </div>
+        <div>
+          <label>Advanced</label>
+          <div class="row"><input id="epi" type="checkbox" checked/> <span>Show UCSD epigenetic curve (≥ 1 yr)</span></div>
+          <div class="row"><input id="smooth" type="checkbox" checked/> <span>Use smooth milestones (blend around 12 & 24 months)</span></div>
+        </div>
+        <div style="grid-column:1 / -1">
+          <details>
+            <summary>Settings</summary>
+            <div style="margin-top:8px">
+              <label for="giftfeed">Gift ideas feed URL (JSON)</label>
+              <input id="giftfeed" type="url" value="https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json" />
+              <div class="note">You can swap to your GitHub Pages URL later.</div>
+              <div class="row" style="margin-top:6px">
+                <label><input type="checkbox" id="ignoreAge"> Ignore age filter</label>
+                <label><input type="checkbox" id="ignoreSize"> Ignore size filter</label>
+                <label><input type="checkbox" id="ignoreChew"> Ignore chewer filter</label>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="calc" disabled>Calculate</button>
+        <button class="btn secondary" id="share" disabled>Share link</button>
+        <button class="btn warn" id="reset">Start over</button>
+        <span id="shareOk" class="pill" style="display:none">Link copied</span>
+      </div>
+      <div id="err" class="error" style="display:none"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2 style="margin-top:0">Results</h2>
+      <div class="out" id="results" aria-live="polite"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2 style="margin-top:0">Gift ideas</h2>
+      <div id="giftHeading" class="subtle" style="margin-bottom:6px"></div>
+      <div class="cta-bar">
+        <button class="btn secondary" id="loadGifts" disabled>Load gift ideas</button>
+        <span class="note" id="giftStatus"></span>
+      </div>
+      <div id="giftDiag" class="note" style="margin-top:6px"></div>
+      <div id="gifts" class="gift-grid"></div>
+    </div>
+
+    <div class="footer" style="margin-top:16px">
+      <div class="disclaimer">For fun & educational use — not veterinary advice. Estimates blend AVMA milestones (fast early years) with a smooth, continuous adjustment by expected adult weight. UCSD epigenetic curve (Labrador‑calibrated) is shown for reference.</div>
+    </div>
+  </div>
+
+<script>
+(function boot(){
+  const errBox = document.getElementById('err');
+  try{
+    (function(){
+      const qs = s=>document.querySelector(s);
+      const subtitle = qs('#subtitle');
+      const dob = qs('#dob');
+      const dogname = qs('#dogname');
+      const weight = qs('#weight');
+      const weightNum = qs('#weightNum');
+      const chew = qs('#chew');
+      const epi = qs('#epi');
+      const smooth = qs('#smooth');
+      const giftfeed = qs('#giftfeed');
+      const out = qs('#results');
+      const btn = qs('#calc');
+      const share = qs('#share');
+      const reset = qs('#reset');
+      const shareOk = qs('#shareOk');
+      const giftsDiv = qs('#gifts');
+      const giftStatus = qs('#giftStatus');
+      const giftDiag = qs('#giftDiag');
+      const giftHeading = qs('#giftHeading');
+      const loadGiftsBtn = qs('#loadGifts');
+      const ignoreAge = qs('#ignoreAge');
+      const ignoreSize = qs('#ignoreSize');
+      const ignoreChew = qs('#ignoreChew');
+      const themeToggle = qs('#themeToggle');
+      const dobHint = qs('#dobHint');
+      const weightHint = qs('#weightHint');
+      let hintsActive = false;
+      function showHint(el, show, msg){
+        if(!el) return;
+        if(typeof msg === 'string') el.textContent = msg;
+        el.style.display = show ? 'block' : 'none';
+      }
+
+
+      // Theme
+      const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      const saved = localStorage.getItem('barkday_theme');
+      const startDark = saved ? saved==='dark' : prefersDark;
+      document.body.classList.toggle('theme-dark', startDark);
+      themeToggle.checked = startDark;
+      themeToggle.addEventListener('change', ()=>{
+        const dark = themeToggle.checked;
+        document.body.classList.toggle('theme-dark', dark);
+        localStorage.setItem('barkday_theme', dark ? 'dark' : 'light');
+      });
+
+      // Utils
+      function sanitizeFile(s){ return (s||'barkday').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
+      function ordinal(n){ const s=["th","st","nd","rd"], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+      function yearsBetween(a,b){ return (b - a) / (1000*60*60*24*365.2425); }
+      function fmt(n, d=2){ return Number.isFinite(n) ? n.toFixed(d) : '—'; }
+      function toParts(years){ if(!Number.isFinite(years) || years < 0) return {y:0,m:0,d:0}; const days = years*365.2425; const y = Math.floor(years); const m = Math.floor((days - y*365.2425)/30.4369); const d = Math.max(0, Math.round(days - y*365.2425 - m*30.4369)); return {y,m,d}; }
+      function toICSDate(dt){ const y = dt.getFullYear(); const m = String(dt.getMonth()+1).padStart(2,'0'); const d = String(dt.getDate()).padStart(2,'0'); return `${y}${m}${d}`; }
+
+      // Weight→slope
+      const R_ANCHORS = [[5,4.8],[20,5.0],[50,5.5],[90,6.2],[140,7.2]];
+      function slopeR_weight(lbs){
+        if(!Number.isFinite(lbs)) return 5.5;
+        if(lbs <= R_ANCHORS[0][0]) return R_ANCHORS[0][1];
+        for(let i=1;i<R_ANCHORS.length;i++){
+          const [x0,y0] = R_ANCHORS[i-1]; const [x1,y1] = R_ANCHORS[i];
+          if(lbs <= x1){ const t=(lbs-x0)/(x1-x0); return y0 + t*(y1-y0); }
+        }
+        const [xa,ya] = R_ANCHORS[R_ANCHORS.length-2];
+        const [xb,yb] = R_ANCHORS[R_ANCHORS.length-1];
+        const t=(lbs-xa)/(xb-xa); return ya + t*(yb-ya);
+      }
+
+      // Smoothstep
+      function smoothstep(a,b,x){ const t = Math.min(1, Math.max(0, (x-a)/(b-a))); return t*t*(3-2*t); }
+
+      // Models
+      function humanYearsPiecewise(D, R){
+        if(D <= 0) return 0;
+        if(D <= 1) return 15 * D;
+        if(D <= 2) return 15 + 9*(D-1);
+        return 24 + R*(D-2);
+      }
+      function humanYearsSmooth(D, R){
+        if(D <= 0) return 0;
+        const w = 0.1667; const s1=15, s2=9, s3=R;
+        const step = Math.min(1/365, D/800);
+        let u=0, H=0;
+        while(u < D - 1e-9){
+          const next = Math.min(D, u+step);
+          const t12 = smoothstep(1-w,1+w,u);
+          const t23 = smoothstep(2-w,2+w,u);
+          const slope = (1-t12)*s1 + t12*((1-t23)*s2 + t23*s3);
+          H += slope * (next-u);
+          u = next;
+        }
+        return H;
+      }
+      function epiYears(D){ if(D < 1) return NaN; return 16 * Math.log(D) + 31; }
+
+      // Solvers
+      function solveDogYearsForHuman(Htarget, R, smoothOn){
+        const Hfun = smoothOn ? (d)=>humanYearsSmooth(d,R) : (d)=>humanYearsPiecewise(d,R);
+        let lo=0, hi=Math.max(3, Htarget/4+3);
+        while(Hfun(hi) < Htarget) hi += 3;
+        for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(Hfun(mid)>=Htarget) hi=mid; else lo=mid; }
+        return hi;
+      }
+      function nextDogBirthdayDate(Dnow, HYnow, R, dobVal, smoothOn){
+        const Htarget = Math.floor(HYnow) + 1;
+        const D = solveDogYearsForHuman(Htarget, R, smoothOn);
+        const date = new Date(dobVal);
+        const yWhole = Math.floor(D), rem = D - yWhole;
+        date.setFullYear(date.getFullYear()+yWhole);
+        date.setDate(date.getDate() + Math.round(rem*365.2425));
+        return {when: date, atHuman: Htarget, dogYearsAt: D};
+      }
+
+      // Inputs state + gating
+      function inputsValid(){
+        const wv = Number(weightNum.value || weight.value);
+        return !!dob.value && Number.isFinite(wv) && wv >= 5;
+      }
+      function refreshGates(){
+        const ok = inputsValid();
+        btn.disabled = !ok;
+        share.disabled = !ok;
+        loadGiftsBtn.disabled = !ok;
+        if(hintsActive){
+          const wv = Number(weightNum.value || weight.value);
+          showHint(dobHint, !dob.value);
+          showHint(weightHint, !(Number.isFinite(wv) && wv>=5));
+        } else {
+          if(dob.value) showHint(dobHint,false);
+          const wv = Number(weightNum.value || weight.value);
+          if(Number.isFinite(wv) && wv>=5) showHint(weightHint,false);
+        }
+      }
+
+      weightNum.addEventListener('input', ()=>{
+        const v = Number(weightNum.value);
+        if(Number.isFinite(v)){ weight.value = Math.max(5, Math.min(140, v)); }
+        refreshGates();
+      });
+      weight.addEventListener('input', ()=>{
+        weightNum.value = weight.value; // keep number field in sync
+        refreshGates();
+      });
+      dob.addEventListener('input', refreshGates);
+
+      // Personalize subtitle
+      function updateSubtitle(){
+        const name = (dogname.value || '').trim();
+        if(name){
+          subtitle.textContent = `Let's find out together, what ${name}, your precious friend’s birthdays are, so we can celebrate every single one`;
+        }else{
+          subtitle.textContent = "Let's find out together, what your precious friend’s birthdays are, so we can celebrate every single one";
+        }
+      }
+      dogname.addEventListener('input', updateSubtitle);
+
+      // Gift heading -> upcoming Barkday
+      function setGiftHeading(){
+        if(!inputsValid()) { giftHeading.textContent = ''; return; }
+        const lbs = parseFloat(weightNum.value || weight.value);
+        const dobVal = new Date(dob.value);
+        const now = new Date();
+        const D = yearsBetween(dobVal, now);
+        const R = slopeR_weight(lbs);
+        const HY = smooth.checked ? humanYearsSmooth(D,R) : humanYearsPiecewise(D,R);
+        const nb = nextDogBirthdayDate(D, HY, R, dobVal, smooth.checked);
+        const name = dogname.value || 'your pup';
+        giftHeading.textContent = `Gift picks for ${name} — upcoming ${ordinal(nb.atHuman)} Barkday, ~${lbs||0} lb, ${chew.value} chewer`;
+      }
+
+      // Compute + render Results (only when inputs valid)
+      function compute(){
+        if(!inputsValid()){
+          out.innerHTML = '<p class="note warn-text">Enter a birthdate and best‑guess weight, then press Calculate.</p>';
+          return;
+        }
+        const dobVal = new Date(dob.value);
+        const now = new Date();
+        const D = yearsBetween(dobVal, now);
+        const lbs = parseFloat(weightNum.value || weight.value);
+        const R = slopeR_weight(lbs);
+        if(D < 0){ out.innerHTML = '<p class="note">Birthdate is in the future.</p>'; return; }
+
+        const HY = smooth.checked ? humanYearsSmooth(D,R) : humanYearsPiecewise(D,R);
+        const parts = toParts(D);
+        const epiVal = epi.checked ? epiYears(D) : NaN;
+        const nb = nextDogBirthdayDate(D, HY, R, dobVal, smooth.checked);
+        const dateStr = nb.when.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+        const name = (dogname.value||'your precious friend');
+
+        const shareUrl = new URL(location.href);
+        if(dogname.value) shareUrl.searchParams.set('name', dogname.value);
+        shareUrl.searchParams.set('dob', dob.value);
+        shareUrl.searchParams.set('w', String(lbs));
+        shareUrl.searchParams.set('chew', chew.value);
+        if(giftfeed.value) shareUrl.searchParams.set('gift', giftfeed.value);
+        shareUrl.searchParams.set('epi', epi.checked? '1':'0');
+        shareUrl.searchParams.set('smooth', smooth.checked? '1':'0');
+
+        const fileBase = sanitizeFile(dogname.value) || 'barkday';
+        const ord = ordinal(nb.atHuman);
+        const title = `${dogname.value?dogname.value + "'s ":""}${ord} Barkday`;
+        const desc = `Celebrate ${dogname.value?dogname.value + "'s ":""}${ord}.`;
+
+        // Build ICS links
+        function toICSDate(d){ const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0'); return `${y}${m}${dd}`; }
+        function buildICS({title, date, description, url}){
+          const dt = toICSDate(date);
+          const uid = `${dt}-${Math.random().toString(36).slice(2)}@barkday`;
+          const ics = [
+            'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH',
+            'BEGIN:VEVENT',`UID:${uid}`,`DTSTAMP:${dt}T000000`,`DTSTART;VALUE=DATE:${dt}`,
+            `SUMMARY:${title}`,`DESCRIPTION:${description.replace(/\n/g,'\\n')}\\n${url}`,
+            'BEGIN:VALARM','TRIGGER:-P7D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday in 1 week','END:VALARM',
+            'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday tomorrow','END:VALARM',
+            'END:VEVENT','END:VCALENDAR'
+          ].join('\r\n');
+          return URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+        }
+        function buildICSMany(events){
+          const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+          for(const ev of events){
+            const dt=toICSDate(ev.date); const uid=`${dt}-${Math.random().toString(36).slice(2)}@barkday`;
+            lines.push('BEGIN:VEVENT',`UID:${uid}`,`DTSTAMP:${dt}T000000`,`DTSTART;VALUE=DATE:${dt}`,
+              `SUMMARY:${ev.title}`,`DESCRIPTION:${ev.description.replace(/\n/g,'\\n')}\\n${ev.url}`,
+              'BEGIN:VALARM','TRIGGER:-P7D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday in 1 week','END:VALARM',
+              'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Upcoming Barkday tomorrow','END:VALARM','END:VEVENT');
+          }
+          lines.push('END:VCALENDAR');
+          return URL.createObjectURL(new Blob([lines.join('\r\n')],{type:'text/calendar'}));
+        }
+
+        const icsUrl = buildICS({title, date: nb.when, description: `${desc}\nReload data:`, url: shareUrl.toString()});
+
+        // Multi-events (next 365d)
+        const horizon = new Date(now); horizon.setDate(horizon.getDate()+365);
+        const events = [];
+        let k = Math.floor(HY)+1;
+        while(k < 200){
+          const Dk = (function(H){ // reuse solver
+            const Hfun = smooth.checked ? (d)=>humanYearsSmooth(d,R) : (d)=>humanYearsPiecewise(d,R);
+            let lo=0, hi=Math.max(3, H/4+3);
+            while(Hfun(hi) < H) hi += 3;
+            for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(Hfun(mid)>=H) hi=mid; else lo=mid; }
+            return hi;
+          })(k);
+          const dDate = new Date(dobVal);
+          const yWhole = Math.floor(Dk), dRem = Dk - yWhole;
+          dDate.setFullYear(dDate.getFullYear()+yWhole);
+          dDate.setDate(dDate.getDate()+Math.round(dRem*365.2425));
+          if(dDate <= now){ k++; continue; }
+          if(dDate > horizon) break;
+          const tk = `${dogname.value?dogname.value + "'s ":""}${ord}`;
+          events.push({title: `${dogname.value?dogname.value + "'s ":""}${ordinal(k)} Barkday`, date:dDate, description:`Celebrate ${dogname.value?dogname.value + "'s ": ""}${ordinal(k)}.\nReload data:`, url: shareUrl.toString()});
+          k++;
+        }
+        const icsManyUrl = buildICSMany(events);
+
+        out.innerHTML = `
+          <div class="result-hero">
+            <div class="confetti"><div class="layer l1"></div><div class="layer l2"></div></div>
+            <div class="hero-line">On <span style="text-decoration:underline">${dateStr}</span>, ${name} will be <strong>${nb.atHuman} years</strong> old.</div>
+            <div class="cta-bar">
+              <a class="btn" href="${icsUrl}" download="${fileBase}_${nb.atHuman}th_barkday.ics">Add to calendar (1‑week & 1‑day reminders)</a>
+              <a class="btn secondary" href="${icsManyUrl}" download="${fileBase}_barkdays_next_year.ics">All Barkdays (next year)</a>
+            </div>
+          </div>
+          ${epi.checked && !isNaN(epiVal) ? `<div class="kpi"><span>UCSD epigenetic curve</span> <b>${fmt(epiVal,2)}</b> <span class="note">(reference ≥ 1 yr)</span></div>` : ''}
+          <div class="kpi"><span>Dog‑years (human equivalent)</span> <b>${fmt(HY,2)}</b> <span class="note">R≈${fmt(R,2)} • ${smooth.checked ? 'smooth' : 'step'}</span></div>
+          <div class="kpi"><span>Dog age today</span> <b>${parts.y}y ${parts.m}m ${parts.d}d</b></div>
+        `;
+
+        setGiftHeading();
+      }
+
+      // Load gifts (requires valid inputs)
+      async function loadGifts(){
+        if(!inputsValid()){ giftStatus.textContent='Enter DOB and weight first.'; return; }
+        setGiftHeading();
+        const url = (giftfeed.value||'').trim();
+        giftsDiv.innerHTML=''; giftStatus.textContent=''; giftDiag.textContent='';
+        const lbs = parseFloat(weightNum.value || weight.value);
+        const dogAgeYears = yearsBetween(new Date(dob.value), new Date());
+        const chewLevel = chew.value;
+
+        const FALLBACK=[
+          { title:'Puppy Snuffle Mat', url:'https://www.amazon.com/s?k=snuffle+mat+for+puppies', tag:'enrichment' },
+          { title:'Soft Puppy Teething Ring', url:'https://www.amazon.com/s?k=puppy+teething+ring', tag:'teething' },
+          { title:'KONG Puppy (Assorted Sizes)', url:'https://www.amazon.com/s?k=kong+puppy', tag:'stuffable' }
+        ];
+        const tryFallback=()=>{ giftStatus.innerHTML='Showing fallback picks for young pups.'; giftsDiv.innerHTML=FALLBACK.map(it=>`<div class="gift"><h3 style="margin:.4rem 0">${it.title}</h3><div class="note">${it.tag}</div><a class="link-like" target="_blank" rel="noopener" href="${it.url}">View</a></div>`).join(''); };
+
+        if(!url){ tryFallback(); return; }
+        giftStatus.textContent='Loading…';
+        try{
+          const res=await fetch(url,{cache:'no-cache'});
+          if(!res.ok) throw new Error(res.status+' '+res.statusText);
+          const data=await res.json();
+          const preCount = Array.isArray(data) ? data.length : 0;
+          let items = Array.isArray(data)? data.slice(): [];
+          if(!ignoreAge.checked){ items = items.filter(it => (it.minAge==null || dogAgeYears >= it.minAge) && (it.maxAge==null || dogAgeYears <= it.maxAge)); }
+          if(!ignoreChew.checked){ items = items.filter(it => !it.chew || it.chew.includes(chewLevel)); }
+          const postCount = items.length;
+          giftDiag.innerHTML=`Feed items: <b>${preCount}</b> • Dog age: <b>${dogAgeYears.toFixed(2)}y</b> • Weight: <b>${lbs||0} lb</b> • Chewer: <b>${chewLevel}</b>${ignoreAge.checked||ignoreChew.checked? ' • filters relaxed':''}`;
+          if(postCount===0){ if(dogAgeYears<0.5 && !ignoreAge.checked){ tryFallback(); } else { giftStatus.textContent='No matching items. Toggle ignore boxes or adjust your feed.'; } return; }
+          giftStatus.textContent=`Showing ${postCount} items`;
+          giftsDiv.innerHTML = items.map(it=>`<div class="gift">${it.image?`<img src="${it.image}" alt="">`:''}<h3 style="margin:.4rem 0">${it.title||'Item'}</h3>${it.tag?`<div class="note">${it.tag}</div>`:''}<a class="link-like" href="${it.url}" target="_blank" rel="noopener">View</a></div>`).join('');
+        }catch(e){ console.error(e); giftStatus.textContent='Could not load the feed (CORS or network error). Showing fallback picks.'; tryFallback(); }
+      }
+
+      // Start Over
+      function resetForm(){
+        const hasResults = out && out.textContent.trim().length > 0;
+        const msg = hasResults
+          ? 'Before starting over, remember to download your calendar links if you want to keep them.\n\nStart over now?'
+          : 'Start over and clear entries?';
+        if(!confirm(msg)) return;
+        dogname.value = ''; dob.value = '';
+        weight.value = ''; weightNum.value = '';
+        share.disabled = true; btn.disabled = true; loadGiftsBtn.disabled = true;
+        chew.value = 'normal'; epi.checked = true; smooth.checked = true;
+        ignoreAge.checked = false; ignoreSize.checked = false; ignoreChew.checked = false;
+        subtitle.textContent = "Let's find out together, what your precious friend’s birthdays are, so we can celebrate every single one";
+        giftHeading.textContent = ''; giftStatus.textContent = ''; giftDiag.textContent = ''; giftsDiv.innerHTML = '';
+        out.innerHTML = '';
+        const base = location.origin + location.pathname; history.replaceState({}, '', base);
+        dogname.focus();
+      }
+
+      // Button bindings
+      btn.addEventListener('click', ()=>{
+        if(!inputsValid()){
+          hintsActive = true;
+          const wv = Number(weightNum.value || weight.value);
+          const needDob = !dob.value;
+          const needW = !(Number.isFinite(wv) && wv>=5);
+          showHint(dobHint, needDob);
+          showHint(weightHint, needW);
+          (needDob ? dob : (needW ? weightNum : btn)).focus();
+          return;
+        }
+        compute();
+      });
+      share.addEventListener('click', async ()=>{
+        if(!inputsValid()) return;
+        try{
+          const u=new URL(location.href);
+          if(dogname.value) u.searchParams.set('name', dogname.value);
+          if(dob.value) u.searchParams.set('dob', dob.value);
+          u.searchParams.set('w', weightNum.value || weight.value);
+          u.searchParams.set('chew', chew.value);
+          if(giftfeed.value) u.searchParams.set('gift', giftfeed.value);
+          u.searchParams.set('epi', epi.checked? '1':'0');
+          u.searchParams.set('smooth', smooth.checked? '1':'0');
+          await navigator.clipboard.writeText(u.toString());
+          shareOk.style.display='inline-block'; setTimeout(()=> shareOk.style.display='none',1500);
+        }catch(e){ alert('Copy failed.'); }
+      });
+      loadGiftsBtn.addEventListener('click', loadGifts);
+      ignoreAge.addEventListener('change', ()=>{ if(giftsDiv.innerHTML) loadGifts(); });
+      ignoreSize.addEventListener('change', ()=>{ if(giftsDiv.innerHTML) loadGifts(); });
+      ignoreChew.addEventListener('change', ()=>{ if(giftsDiv.innerHTML) loadGifts(); });
+      reset.addEventListener('click', resetForm);
+
+      // Confetti pause on hidden tab
+      document.addEventListener('visibilitychange', ()=>{
+        const layers = document.querySelectorAll('.confetti .layer');
+        layers.forEach(el=> el.style.animationPlayState = (document.visibilityState === 'hidden' ? 'paused' : 'running'));
+      });
+
+      // Initialize from URL, but do NOT auto-compute
+      const url = new URL(location.href);
+      const n = url.searchParams.get('name'); if(n){ dogname.value = n; updateSubtitle(); }
+      const w = url.searchParams.get('w'); if(w){ weightNum.value = w; weight.value = Math.max(5, Math.min(140, +w)); weight.disabled = false; }
+      const dobq = url.searchParams.get('dob'); if(dobq){ dob.value = dobq; }
+      const chewq = url.searchParams.get('chew'); if(chewq){ chew.value = chewq; }
+      const giftq = url.searchParams.get('gift'); if(giftq){ giftfeed.value = giftq; }
+      const epiq = url.searchParams.get('epi'); if(epiq==='0') epi.checked=false;
+      const smoothq = url.searchParams.get('smooth'); if(smoothq==='0') smooth.checked=false;
+
+      refreshGates();
+    })();
+  }catch(e){
+    console.error(e);
+    errBox.style.display='block';
+    errBox.textContent = 'Script error: ' + (e && e.message ? e.message : String(e));
+  }
+})();
+</script>
+</body>
+</html>
