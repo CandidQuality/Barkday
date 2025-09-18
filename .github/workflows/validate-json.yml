@@ -3,25 +3,40 @@ name: Validate dog-gifts.json
 on:
   push:
     branches: [ main ]
-    paths: [ 'dog-gifts.json', '.github/workflows/validate-json.yml' ]
+    paths: [ 'dog-gifts.json', 'dog-gifts.schema.json', '.github/workflows/validate-json.yml' ]
   pull_request:
-    paths: [ 'dog-gifts.json' ]
+    paths: [ 'dog-gifts.json', 'dog-gifts.schema.json' ]
 
 jobs:
-  parse:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Ensure file exists
+      - name: Check JSON parses
         run: |
-          test -f dog-gifts.json || (echo "dog-gifts.json missing"; exit 1)
+          python - <<'PY'
+          import json,sys
+          json.load(open('dog-gifts.json','r',encoding='utf-8'))
+          print("OK: JSON parses")
+          PY
 
-      - name: Validate JSON syntax (Python)
+      - name: Install jsonschema
+        run: pipx runpip python -q install jsonschema
+
+      - name: Validate against schema
         run: |
           python - <<'PY'
           import json, sys
-          with open('dog-gifts.json','r',encoding='utf-8') as f:
-              json.load(f)
-          print("OK: dog-gifts.json is valid JSON")
+          from jsonschema import validate, Draft202012Validator
+          data = json.load(open('dog-gifts.json','r',encoding='utf-8'))
+          schema = json.load(open('dog-gifts.schema.json','r',encoding='utf-8'))
+          v = Draft202012Validator(schema)
+          errors = sorted(v.iter_errors(data), key=lambda e: e.path)
+          if errors:
+              for e in errors:
+                  loc = "/".join(map(str,e.path)) or "<root>"
+                  print(f"SCHEMA ERROR at {loc}: {e.message}")
+              sys.exit(1)
+          print("OK: Schema validation passed")
           PY
