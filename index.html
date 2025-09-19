@@ -278,23 +278,72 @@
     function icsEvent(summary, start, end){ return `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\nBEGIN:VEVENT\nUID:${Date.now()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${summary}\nEND:VEVENT\nEND:VCALENDAR`; }
     function downloadICS(name, ics){ const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
 
-    // Gift loader (URL hidden)
+    // Gift loader (improved filtering)
     async function loadGifts(){
       els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
-      try{ const res = await fetch(GIFT_FEED_URL,{cache:'no-store'}); const items = await res.json(); const lb=parseInt(els.adultWeight.value,10);
-        const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant'; const h = parseFloat(els.humanYears.textContent);
-        const filtered = items.filter(it=>{
-          let ok=true; if(!els.ignoreChewer.checked && it.chewer){ ok = ok && (it.chewer.toLowerCase()===els.chewer.value.toLowerCase() || it.chewer==='any'); }
-          if(!els.ignoreSize.checked && it.size){ ok = ok && (it.size.includes(bucket)||it.size.includes('any')); }
-          if(!isNaN(h) && !els.ignoreAge.checked){ if(it.minHumanYears!=null) ok = ok && h>=it.minHumanYears; if(it.maxHumanYears!=null) ok = ok && h<=it.maxHumanYears; }
-          return ok; }).slice(0,9);
-        els.giftMeta.textContent = `Showing ${filtered.length} picks`;
-        els.gifts.innerHTML = filtered.map(it=>`<div class="gift"><h4>${it.title}</h4><div class="muted">${it.tag||''}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
-      }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; }
+      try{
+        const res = await fetch(GIFT_FEED_URL,{cache:'no-store'});
+        const items = await res.json();
+        const lb = parseInt(els.adultWeight.value,10);
+        const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant';
+        const dogYears = parseFloat(els.humanYears.textContent);
+        const chewer = (els.chewer.value||'').toLowerCase();
+
+        const getSizes = it => Array.isArray(it.sizes)? it.sizes.map(s=>String(s).toLowerCase())
+                              : it.size? String(it.size).toLowerCase().split(/[\,\s]+/).filter(Boolean)
+                              : [];
+        const getChewer = it => (it.chewer? String(it.chewer).toLowerCase(): 'any');
+        const getAgeBounds = it => {
+          const minDY = it.minDogYears ?? it.minHumanYears ?? it.min_age ?? null;
+          const maxDY = it.maxDogYears ?? it.maxHumanYears ?? it.max_age ?? null;
+          let tag = (it.ageTag||it.tag||'').toString().toLowerCase();
+          if((minDY==null && maxDY==null) && tag){
+            if(tag.includes('puppy')) return [0, 1.6];
+            if(tag.includes('adult')) return [1.0, 7.0];
+            if(tag.includes('senior')) return [7.0, 20.0];
+          }
+          return [minDY, maxDY];
+        };
+
+        const results = [];
+        for(const it of items){
+          let ok = true; let score = 0;
+          const sizes = getSizes(it);
+          const sizeMatches = !sizes.length || sizes.includes('any') || sizes.includes(bucket);
+          if(!els.ignoreSize.checked && !sizeMatches) ok = false; else if(sizeMatches) score += 1;
+          const itemChewer = getChewer(it);
+          const chewMatches = itemChewer==='any' || itemChewer===chewer;
+          if(!els.ignoreChewer.checked && !chewMatches) ok = false; else if(chewMatches) score += 1;
+          const [minA,maxA] = getAgeBounds(it);
+          let ageMatches = true;
+          if(!isNaN(dogYears) && !els.ignoreAge.checked){
+            if(minA!=null) ageMatches = ageMatches && dogYears >= Number(minA);
+            if(maxA!=null) ageMatches = ageMatches && dogYears <= Number(maxA);
+          }
+          if(!els.ignoreAge.checked && !ageMatches) ok = false; else if(ageMatches) score += 1;
+          if(ok) results.push({it, score, rnd: Math.random()});
+        }
+
+        results.sort((a,b)=> (b.score-a.score) || (a.rnd-b.rnd));
+        const top = results.slice(0,12).map(r=>r.it);
+
+        const parts = [];
+        parts.push(`filters: size=${bucket}`);
+        parts.push(`chewer=${chewer||'normal'}`);
+        if(!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
+        const ignored = [];
+        if(els.ignoreSize.checked) ignored.push('size');
+        if(els.ignoreChewer.checked) ignored.push('chewer');
+        if(els.ignoreAge.checked) ignored.push('age');
+        els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length? ' • ignored: '+ignored.join(', '):''}`;
+
+        els.gifts.innerHTML = top.map(it=>`<div class="gift"><h4>${it.title||'Gift'}</h4><div class="muted">${(it.tag||it.ageTag||'').toString()}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
+      }catch(e){
+        els.giftMeta.textContent='Could not load gift ideas.';
+      }
     }
 
     // ===================== Embedded Recommendation Matrix (DOG‑YEARS)
-    // Schema: { group: { dogYear:int -> { lanes:{training:[],health:[],nutrition:[],exercise:[],bonding:[],gear:[]} } } }
     const RECO = {
       "Working / Herding": {
         1:{ lanes:{
@@ -402,7 +451,7 @@
 
       // Celebrate + Plan
       els.nextBday.scrollIntoView({behavior:'smooth', block:'center'}); confetti();
-      renderPlan(group, upcoming); // feed DOG‑YEARS integer
+      renderPlan(group, upcoming);
 
       // Keep gifts in sync if already loaded
       if(els.gifts.children.length) loadGifts();
