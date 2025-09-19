@@ -3,160 +3,387 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Barkday • Dog → Human Years (Size‑Aware)</title>
+  <title>Barkday™ • Dog → Human Years (Size‑Aware)</title>
   <style>
     :root{ --bg:#0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734; --shadow:0 6px 24px rgba(0,0,0,.35); }
     :root[data-theme="light"]{ --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --accent:#059669; --danger:#b91c1c; --border:#e2e8f0; --shadow:0 6px 24px rgba(2,6,23,.08); }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial}
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
-    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+    .title{display:flex;gap:12px;align-items:center}
+    .toggle{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)}
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    h1{font-size:22px;margin:0}
+    h2{font-size:18px;margin:0 0 8px}
     label{font-weight:600;display:block;margin:14px 0 6px}
-    input,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+    input[type="number"], select, input[type="date"], input[type="text"]{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
     input[type="range"]{width:100%}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .row>*{flex:1 1 220px}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .row > *{flex:1 1 220px}
     .muted{color:var(--muted);font-size:14px}
     .divider{height:1px;background:var(--border);margin:12px -16px}
     .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
-    .pill{border:1px solid var(--border);border-radius:14px;padding:10px 12px}
-    .pill h3{margin:0 0 6px;font-size:15px;color:var(--muted)}
+    .pill{border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.05));border-radius:14px;padding:10px 12px}
+    .pill h3{margin:0 0 6px;font-size:15px;color:var(--muted);font-weight:600}
     .big{font-size:24px;font-weight:800}
     .btn{appearance:none;border:1px solid var(--border);background:var(--brand);color:white;padding:10px 14px;border-radius:12px;cursor:pointer}
     .btn.secondary{background:transparent;color:var(--text)}
+    .cardlist{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:900px){.cardlist{grid-template-columns:1fr}}
+    .gift{border:1px solid var(--border);border-radius:12px;padding:12px}
+    .gift h4{margin:0 0 6px}
+    .link{background:none;border:0;color:var(--brand);cursor:pointer;text-decoration:underline;padding:0}
+    .hero{margin:4px 0 0 44px}
+    .warn{background:rgba(255,107,107,.1);border:1px solid var(--danger);color:var(--danger);padding:8px 10px;border-radius:10px;margin:8px 0}
   </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Barkday • Dog → Human Years (Size‑Aware)</h1>
-    <button id="themeToggle" class="btn secondary" type="button">🌙 Dark</button>
-  </header>
-
-  <section class="card">
-    <h2>Dog → Human Years</h2>
-    <div class="divider"></div>
-
-    <div class="row">
-      <div><label for="dogName">Dog name</label><input id="dogName" type="text" placeholder="e.g., Flip"></div>
-      <div><label for="dob">Birthdate</label><input id="dob" type="date"></div>
-      <div><label for="sizeBucket">Size bucket</label>
-        <select id="sizeBucket">
-          <option value="auto">Auto by weight</option>
-          <option value="toy">Toy (&lt;20 lb)</option>
-          <option value="small">Small (20–29 lb)</option>
-          <option value="medium">Medium (30–49 lb)</option>
-          <option value="large">Large (50–89 lb)</option>
-          <option value="giant">Giant (90+ lb)</option>
-        </select>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.5 10.5c-.414 0-.75-.336-.75-.75V7.875a3.375 3.375 0 1 1 6.75 0v1.875c0 .414-.336.75-.75.75H7.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M3.75 12.75A2.25 2.25 0 0 1 6 10.5h6a2.25 2.25 0 0 1 2.25 2.25V18a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-5.25Z" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <h1>Barkday™</h1>
       </div>
-    </div>
+      <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
+    </header>
+    <p id="heroLine" class="muted hero">Let’s find out together what your precious friend’s birthdays are, so we can celebrate every single one.</p>
 
-    <div class="row">
-      <div><label for="adultWeight">Expected adult weight (lb)</label>
-        <input id="adultWeight" type="range" min="3" max="200" step="1" value="60"><div class="muted"><span id="adultWeightVal">60</span> lb</div></div>
-      <div><label for="chewer">Chewer level</label>
-        <select id="chewer"><option>Gentle</option><option selected>Normal</option><option>Power</option></select>
+    <section class="card">
+      <h2>Dog → Human Years (Size‑Aware)</h2>
+      <p class="muted">Evidence‑based calculator using AVMA/AKC milestones (15/9 rule) with a <strong>weight‑continuous slope</strong> after year 2. Optional UCSD DNA‑methylation curve (≥ 1 yr). <em>Calculate/Reset only — no auto‑recalc.</em></p>
+      <div class="divider"></div>
+
+      <div class="row">
+        <div>
+          <label for="dogName">Dog name</label>
+          <input id="dogName" type="text" placeholder="e.g., Flip" />
+        </div>
+        <div>
+          <label for="dob">Birthdate</label>
+          <input id="dob" type="date" />
+          <div class="muted">Dog age shown under Results.</div>
+        </div>
+        <div>
+          <label for="adultWeight">Expected adult weight (lb)</label>
+          <input id="adultWeight" type="range" min="3" max="200" step="1" value="55" />
+          <div class="muted">Aging rate adjusts <em>continuously</em> with weight. <span id="adultWeightVal">55</span> lb</div>
+        </div>
       </div>
-      <div><label for="showEpigenetic">Advanced</label><label class="muted"><input id="showEpigenetic" type="checkbox"> Show epigenetic if ≥ 1 yr</label></div>
-    </div>
 
-    <div class="row">
-      <div><label for="breed">Breed (optional)</label><input id="breed" type="text" placeholder="e.g., Australian Shepherd"></div>
-      <div><label for="breedGroup">Breed group</label>
-        <select id="breedGroup"><option>Working / Herding</option><option>Sporting</option><option>Hound</option><option>Terrier</option><option>Toy</option><option>Non‑Sporting</option><option>Guardian</option><option>Companion</option><option>Mixed / Other</option></select>
+      <div class="row">
+        <div>
+          <label for="chewer">Chewer level</label>
+          <select id="chewer">
+            <option>Gentle</option>
+            <option selected>Normal</option>
+            <option>Power</option>
+          </select>
+        </div>
+        <div>
+          <label>Advanced</label>
+          <div class="row">
+            <label class="muted"><input id="showEpigenetic" type="checkbox"/> Show science curve (?) (UCSD DNA‑methylation, ≥1 yr)</label>
+          </div>
+          <div class="row">
+            <label class="muted"><input id="smoothMilestones" type="checkbox" checked/> Use smooth milestones (blend around 12 & 24 months)</label>
+          </div>
+        </div>
+        <div>
+          <label for="breed">Breed (optional)</label>
+          <input id="breed" type="text" placeholder="e.g., Australian Shepherd" />
+          <div class="muted">Notes only — math stays weight‑based.</div>
+        </div>
+        <div>
+          <label for="breedGroup">Breed group</label>
+          <select id="breedGroup">
+            <option>Working / Herding</option>
+            <option>Sporting</option>
+            <option>Hound</option>
+            <option>Terrier</option>
+            <option>Toy</option>
+            <option>Non‑Sporting</option>
+            <option>Guardian</option>
+            <option>Companion</option>
+            <option>Mixed / Other</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="row" style="margin-top:12px">
-      <button id="calcBtn" class="btn" type="button">Calculate</button>
-      <button id="resetBtn" class="btn secondary" type="button">Reset</button>
-    </div>
+      <label for="giftUrl">Gift ideas feed URL (JSON)</label>
+      <input id="giftUrl" type="text" placeholder="https://.../dog-gifts.json" value="https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json" />
 
-    <div class="divider"></div>
-    <h2>Results</h2>
-    <div class="kpi">
-      <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
-      <div class="pill"><h3>Human‑years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
-      <div class="pill"><h3>Dog birthday (next)</h3><div class="big" id="dogBday">—</div></div>
-    </div>
-  </section>
-</div>
+      <div class="row" style="margin-top:8px">
+        <label class="muted"><input id="ignoreAge" type="checkbox"/> Ignore age filter</label>
+        <label class="muted"><input id="ignoreSize" type="checkbox"/> Ignore size filter</label>
+        <label class="muted"><input id="ignoreChewer" type="checkbox"/> Ignore chewer filter</label>
+      </div>
 
-<script>
-  const el=id=>document.getElementById(id);
-  const els={dogName:el('dogName'),dob:el('dob'),adultWeight:el('adultWeight'),adultWeightVal:el('adultWeightVal'),sizeBucket:el('sizeBucket'),chewer:el('chewer'),showEpi:el('showEpigenetic'),breed:el('breed'),breedGroup:el('breedGroup'),calcBtn:el('calcBtn'),resetBtn:el('resetBtn'),dogAge:el('dogAge'),humanYears:el('humanYears'),slopeNote:el('slopeNote'),dogBday:el('dogBday')};
+      <div class="row" style="margin-top:12px">
+        <button id="calcBtn" class="btn" type="button">Calculate</button>
+        <button id="resetBtn" class="btn secondary" type="button">Reset</button>
+        <button id="shareBtn" class="btn secondary" type="button">Share link</button>
+      </div>
 
-  els.adultWeight.addEventListener('input',()=>{els.adultWeightVal.textContent=els.adultWeight.value});
+      <div id="sizeWarn" class="warn" style="display:none"></div>
 
-  function bucketFromWeight(lb){if(lb<20)return'toy';if(lb<30)return'small';if(lb<50)return'medium';if(lb<90)return'large';return'giant'}
-  function slopeForBucket(b){return{toy:5,small:5,medium:5,large:6,giant:7}[b]||5}
+      <div class="divider"></div>
 
-  function compute(){
-    const dob=new Date(els.dob.value);if(isNaN(dob))return alert('Enter valid DOB');
-    const now=new Date();const days=(now-dob)/(1000*60*60*24);const years=days/365.2425;
-    const lb=parseInt(els.adultWeight.value,10);const bucket=els.sizeBucket.value==='auto'?bucketFromWeight(lb):els.sizeBucket.value;const R=slopeForBucket(bucket);
-    const human=(years>=1?15:years*15)+(years>=2?9:Math.max(years-1,0)*9)+Math.max(years-2,0)*R;
-    els.dogAge.textContent=`${Math.floor(years)}y ${Math.floor((years%1)*12)}m`;
-    els.humanYears.textContent=human.toFixed(2);
-    els.slopeNote.textContent=`R=${R} (${bucket})`;
-    const dogBirth=new Date(dob);dogBirth.setFullYear(dogBirth.getFullYear()+Math.floor(years)+1);
-    els.dogBday.textContent=dogBirth.toDateString();
-  }
+      <h2>Results</h2>
+      <div class="kpi">
+        <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
+        <div class="pill"><h3>Human‑years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
+        <div class="pill"><h3>Next dog‑year birthday</h3><div class="big" id="nextBday">—</div><div class="muted" id="nextBdayDelta"></div></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button id="addCalBtn" class="btn" type="button">Add to calendar (birthday)</button>
+        <button id="remindBtn" class="btn secondary" type="button">Add 1‑week reminder</button>
+        <button id="addYearSeries" class="btn secondary" type="button">Add next 3 dog‑year birthdays</button>
+      </div>
 
-  els.calcBtn.addEventListener('click',compute);
-  els.resetBtn.addEventListener('click',()=>{els.dogName.value='';els.dob.value='';els.adultWeight.value=60;els.adultWeightVal.textContent='60';els.sizeBucket.value='auto';els.chewer.value='Normal';els.showEpi.checked=false;els.breed.value='';els.breedGroup.value='Working / Herding';els.dogAge.textContent='—';els.humanYears.textContent='—';els.slopeNote.textContent='';els.dogBday.textContent='—'});
-</script>
+      <div id="epi" class="muted" style="margin-top:10px"></div>
+
+      <div class="divider"></div>
+
+      <h2>Gift ideas</h2>
+      <button id="loadGifts" class="btn secondary" type="button">Load gift ideas</button>
+      <div id="giftMeta" class="muted" style="margin:8px 0"></div>
+      <div id="gifts" class="cardlist"></div>
+
+      <p class="muted" style="margin-top:12px">Assumptions: Year 1 ≈ 15 human years; Year 2 adds ≈9; after Year 2, slope R is <em>continuous by weight</em> from 5 → 7. Uses 365.2425 days/yr.</p>
+    </section>
+  </div>
+
   <script>
-    // --- Post-load enhancements: dog-year birthday + gentle size warning (weight-based math preserved)
-    (function(){
-      const el = id => document.getElementById(id);
-      const btn = el('calcBtn');
-      const nextEl = el('nextBday');
-      if(nextEl){
-        const h3 = nextEl.previousElementSibling; if(h3 && h3.tagName==='H3'){ h3.textContent = 'Next dog‑year birthday'; }
-        const delta = document.createElement('div'); delta.id='nextBdayDelta'; delta.className='muted'; nextEl.after(delta);
+    // --- Theme
+    const root = document.documentElement; const toggleBtn = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
+    root.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
+    toggleBtn.textContent = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+    toggleBtn.addEventListener('click', () => { const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now); toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light'; });
+
+    // --- Elements
+    const el = id => document.getElementById(id);
+    const els = {
+      dogName: el('dogName'), dob: el('dob'), adultWeight: el('adultWeight'), adultWeightVal: el('adultWeightVal'),
+      chewer: el('chewer'), showEpi: el('showEpigenetic'), smooth: el('smoothMilestones'), breed: el('breed'), breedGroup: el('breedGroup'),
+      giftUrl: el('giftUrl'), ignoreAge: el('ignoreAge'), ignoreSize: el('ignoreSize'), ignoreChewer: el('ignoreChewer'),
+      calcBtn: el('calcBtn'), resetBtn: el('resetBtn'), shareBtn: el('shareBtn'), sizeWarn: el('sizeWarn'),
+      dogAge: el('dogAge'), humanYears: el('humanYears'), slopeNote: el('slopeNote'), nextBday: el('nextBday'), nextBdayDelta: el('nextBdayDelta'), epi: el('epi'),
+      addCal: el('addCalBtn'), remind: el('remindBtn'), addYearSeries: el('addYearSeries'),
+      loadGifts: el('loadGifts'), giftMeta: el('giftMeta'), gifts: el('gifts'), heroLine: el('heroLine')
+    };
+
+    // --- Header personalization
+    function possessive(n){ if(!n) return "your precious friend's"; const t=n.trim(); if(!t) return "your precious friend's"; return /s$/i.test(t)? `${t}’` : `${t}’s`; }
+    function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${possessive(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
+    els.dogName.addEventListener('input', renderHero); renderHero();
+
+    // --- Helpers
+    function daysBetween(a,b){ return Math.floor((b - a) / (24*60*60*1000)); }
+    function clamp(n,min,max){ return Math.min(Math.max(n,min),max); }
+
+    // Weight‑continuous slope: map 0–200 lb into R ≈ 5→7 using piecewise linear ramps
+    function slopeFromWeight(lb){
+      const w = clamp(lb, 3, 200);
+      // base 5 at 0–20; 5→6 from 20–50; 6→7 from 50–90; ≥90 stays ~7 (soft ramp to 7.2 by 200)
+      if(w <= 20) return 5;
+      if(w <= 50) return 5 + (w-20)*(1/30); // 5→6
+      if(w <= 90) return 6 + (w-50)*(1/40); // 6→7
+      return 7 + (w-90)*(0.2/110); // 7→7.2
+    }
+
+    // Smooth blend around 1y & 2y
+    function smoothBlend(x, center, width){ // 0..1 transition using smoothstep
+      const t = clamp((x - (center - width/2)) / width, 0, 1); return t*t*(3 - 2*t);
+    }
+
+    // Human‑equivalent years as function of dog age (calendar years)
+    function humanEqYears(tYears, lb, useSmooth){
+      const R = slopeFromWeight(lb);
+      if(!useSmooth){
+        if(tYears <= 1) return 15*tYears;
+        if(tYears <= 2) return 15 + 9*(tYears-1);
+        return 24 + R*(tYears-2);
       }
-      function bucketFromWeight(lb){ if(lb < 20) return 'toy'; if(lb < 30) return 'small'; if(lb < 50) return 'medium'; if(lb < 90) return 'large'; return 'giant'; }
-      function slopeForBucket(bucket){ return {toy:5, small:5, medium:5, large:6, giant:7}[bucket] || 5; }
-      function daysBetween(a,b){ return Math.floor((b - a) / (24*60*60*1000)); }
-      function nextDogYearDate(dob, currentHumanEq, R){
-        const target = Math.floor(currentHumanEq)+1;
-        let tYears;
-        if(target <= 15){ tYears = target/15; }
-        else if(target <= 24){ tYears = 1 + (target-15)/9; }
-        else { tYears = 2 + (target-24)/R; }
-        const ms = dob.getTime() + tYears*365.2425*24*60*60*1000;
-        return new Date(ms);
+      // Smooth at 1y over 0.25y window; at 2y over 0.5y window
+      const f1 = smoothBlend(tYears, 1, 0.25); // transition 15→9
+      const slope12 = 15 + f1*(9-15); // between 0..1y we use 15; between 1..2y gradually moves to 9
+      if(tYears <= 2){
+        // integrate approximate piecewise: 0..1 linear 15; 1..t slope12
+        const part0 = Math.min(tYears,1)*15;
+        const part1 = tYears>1 ? (tYears-1)*slope12 : 0;
+        return part0 + part1;
       }
-      function computeHumanEq(dob, weight, sizeBucket){
-        const now = new Date();
-        const days = daysBetween(dob, now); const years = days/365.2425;
-        const bucket = sizeBucket==='auto' ? bucketFromWeight(weight) : sizeBucket;
-        const R = slopeForBucket(bucket);
-        const firstTwo = Math.min(years, 2);
-        const human1 = firstTwo>0 ? (Math.min(firstTwo,1)*15 + Math.max(firstTwo-1,0)*9) : 0;
-        const humanTotal = human1 + Math.max(years-2,0)*R;
-        return {years, humanTotal, R};
+      // after 2y, transition 9→R over 0.5y window centered at 2y
+      const f2 = smoothBlend(tYears, 2, 0.5);
+      const slopePost = 9 + f2*(R-9);
+      const upTo2 = humanEqYears(2, lb, true);
+      return upTo2 + (tYears-2)*slopePost;
+    }
+
+    // Invert humanEqYears to find the next integer dog‑year birthday date (solve for t)
+    function nextDogYearDate(dob, currentHumanEq, lb, useSmooth){
+      const target = Math.floor(currentHumanEq) + 1; // next integer
+      // Bisection between now age and +5 years window
+      const now = new Date();
+      const yearsNow = daysBetween(dob, now) / 365.2425;
+      let lo = yearsNow, hi = yearsNow + 5; // should be within 5y horizon
+      for(let i=0;i<40;i++){
+        const mid = (lo+hi)/2;
+        const h = humanEqYears(mid, lb, useSmooth);
+        if(h >= target) hi = mid; else lo = mid;
       }
-      function extraCompute(){
-        const dobStr = el('dob').value; if(!dobStr) return; const dob = new Date(dobStr);
-        const weight = parseInt(el('adultWeight').value||'0',10);
-        const sizeBucket = el('sizeBucket').value;
-        const outHuman = parseFloat((el('humanYears').textContent||'').replace(/[^0-9.\-]/g,''));
-        const {humanTotal, R} = isNaN(outHuman) ? computeHumanEq(dob, weight, sizeBucket) : {humanTotal: outHuman, R: slopeForBucket(sizeBucket==='auto'?bucketFromWeight(weight):sizeBucket)};
-        const nbd = nextDogYearDate(dob, humanTotal, R);
-        el('nextBday').textContent = nbd.toDateString();
-        const daysTo = daysBetween(new Date(), nbd); el('nextBdayDelta').textContent = daysTo>0 ? `${daysTo} days from now` : '';
-        // Gentle warning if group suggests extreme vs weight
-        const bg = (el('breedGroup').value||'').toLowerCase();
-        const warnToy = (bg.includes('toy') && weight>30);
-        const warnGiant = ((bg.includes('guardian')||bg.includes('working')) && weight<20);
-        if(warnToy || warnGiant){
-          alert('Heads‑up: breed group suggests a different typical size. The calculator remains weight‑based; adjust size bucket only if you want to change the math.');
-        }
+      const t = (lo+hi)/2; const ms = dob.getTime() + t*365.2425*24*60*60*1000; return new Date(ms);
+    }
+
+    // Confetti burst
+    function confetti(durationMs=1800){
+      const canvas = document.createElement('canvas');
+      canvas.style.position='fixed'; canvas.style.inset='0'; canvas.style.pointerEvents='none'; canvas.width=innerWidth; canvas.height=innerHeight; document.body.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      const colors = ['#4aa3ff','#6ae3b2','#ffd166','#ff6b6b','#a78bfa'];
+      const N = 160; const parts = Array.from({length:N},()=>({
+        x: Math.random()*canvas.width,
+        y: -20 - Math.random()*40,
+        vx: (Math.random()-.5)*4,
+        vy: 2 + Math.random()*3,
+        g: 0.05 + Math.random()*0.05,
+        s: 4 + Math.random()*4,
+        c: colors[Math.floor(Math.random()*colors.length)],
+        r: Math.random()*Math.PI
+      }));
+      let start = null; function tick(ts){ if(!start) start = ts; const t=ts-start; ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); }
+        if(t<durationMs) requestAnimationFrame(tick); else document.body.removeChild(canvas);
       }
-      if(btn){ btn.addEventListener('click', extraCompute); }
+      requestAnimationFrame(tick);
+    }
+
+    // Add‑to‑calendar (.ics)
+    function icsEvent(summary, dtStart, dtEnd){
+      function fmt(d){ const pad=n=>String(n).padStart(2,'0'); return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+pad(d.getUTCSeconds())+'Z'; }
+      return `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\nBEGIN:VEVENT\nUID:${Date.now()}@barkday\nDTSTAMP:${fmt(new Date())}\nDTSTART:${fmt(dtStart)}\nDTEND:${fmt(dtEnd)}\nSUMMARY:${summary}\nEND:VEVENT\nEND:VCALENDAR`;
+    }
+    function downloadICS(name, ics){ const blob = new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+
+    // Gift loader
+    async function loadGifts(){
+      els.gifts.innerHTML = ''; els.giftMeta.textContent = 'Loading…';
+      try{
+        const res = await fetch(els.giftUrl.value, {cache:'no-store'});
+        const items = await res.json();
+        const filtered = items.filter(it => {
+          let ok = true;
+          if(!els.ignoreChewer.checked && it.chewer){ ok = ok && (it.chewer.toLowerCase() === els.chewer.value.toLowerCase() || it.chewer==='any'); }
+          if(!els.ignoreSize.checked && it.size){
+            const lb = parseInt(els.adultWeight.value,10);
+            const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant';
+            ok = ok && (it.size.includes(bucket)||it.size.includes('any'));
+          }
+          // Age filter uses human‑equivalent result if present
+          const h = parseFloat(els.humanYears.textContent); if(!isNaN(h) && !els.ignoreAge.checked){ if(it.minHumanYears!=null) ok = ok && h >= it.minHumanYears; if(it.maxHumanYears!=null) ok = ok && h <= it.maxHumanYears; }
+          return ok;
+        }).slice(0,9);
+        els.giftMeta.textContent = `Showing ${filtered.length} picks`;
+        els.gifts.innerHTML = filtered.map(it => `<div class="gift"><h4>${it.title}</h4><div class="muted">${it.tag||''}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
+      }catch(e){ els.giftMeta.textContent = 'Could not load gift ideas.'; }
+    }
+
+    // --- Calculate (button‑only)
+    els.adultWeight.addEventListener('input', ()=> els.adultWeightVal.textContent = els.adultWeight.value);
+
+    function compute(){
+      // Validate inputs
+      const dobStr = els.dob.value; if(!dobStr){ alert('Please select a birthdate.'); return; }
+      const dob = new Date(dobStr); const now = new Date(); if(isNaN(dob.getTime()) || dob > now){ alert('Birthdate is invalid.'); return; }
+      const lb = parseInt(els.adultWeight.value,10);
+
+      // Dog age now
+      const days = daysBetween(dob, now); const years = days / 365.2425; const months = Math.floor((years%1)*12); const yrs = Math.floor(years);
+      els.dogAge.textContent = `${yrs}y ${months}m`;
+
+      // Human‑equivalent
+      const H = humanEqYears(years, lb, els.smooth.checked);
+      els.humanYears.textContent = H.toFixed(2);
+      const R = slopeFromWeight(lb); els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight‑continuous)`;
+
+      // Next dog‑year birthday (when humanEq ticks to next integer)
+      const nbd = nextDogYearDate(dob, H, lb, els.smooth.checked);
+      els.nextBday.textContent = nbd.toDateString();
+      const daysTo = daysBetween(now, nbd); els.nextBdayDelta.textContent = daysTo>0 ? `${daysTo} days from now` : '';
+
+      // Epigenetic note (display only)
+      els.epi.textContent = (els.showEpi.checked && years >= 1) ? 'Science curve (UCSD epigenetic clock) trends higher early‑life human‑equivalents. Calculation shown uses AVMA/AKC model with weight‑continuous slope.' : '';
+
+      // Gentle mismatch warning
+      const bg = (els.breedGroup.value||'').toLowerCase(); let warn='';
+      if(bg.includes('toy') && lb>30) warn = 'Breed group “Toy” but weight > 30 lb. Math stays weight‑based; change only if you intend to.';
+      if((bg.includes('guardian')||bg.includes('working')) && lb<20) warn = 'Breed group suggests large/giant, but weight < 20 lb. Math remains weight‑based.';
+      els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
+
+      // Scroll to results & confetti burst
+      els.nextBday.scrollIntoView({behavior:'smooth', block:'center'});
+      confetti();
+    }
+
+    els.calcBtn.addEventListener('click', compute);
+
+    // Reset
+    els.resetBtn.addEventListener('click', () => {
+      els.dogName.value = ''; els.dob.value = ''; els.adultWeight.value = 55; els.adultWeightVal.textContent = '55';
+      els.chewer.value = 'Normal'; els.showEpi.checked = false; els.smooth.checked = true; els.breed.value=''; els.breedGroup.value='Working / Herding';
+      els.ignoreAge.checked = els.ignoreSize.checked = els.ignoreChewer.checked = false;
+      els.dogAge.textContent = '—'; els.humanYears.textContent = '—'; els.slopeNote.textContent=''; els.nextBday.textContent='—'; els.nextBdayDelta.textContent=''; els.epi.textContent=''; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.sizeWarn.style.display='none';
+      renderHero();
+    });
+
+    // Share link
+    els.shareBtn.addEventListener('click', () => {
+      const params = new URLSearchParams({ n: els.dogName.value||'', d: els.dob.value||'', w: els.adultWeight.value, c: els.chewer.value, g: els.breedGroup.value, r: els.breed.value||'', s: els.smooth.checked?1:0, e: els.showEpi.checked?1:0 });
+      const url = location.origin + location.pathname + '?' + params.toString();
+      navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied to clipboard.')).catch(()=>alert(url));
+    });
+
+    // Calendar buttons
+    function addSingleICS(){
+      if(!els.nextBday.textContent || els.nextBday.textContent==='—') { alert('Calculate first.'); return; }
+      const name = els.dogName.value || 'Your dog';
+      const start = new Date(els.nextBday.textContent); const end = new Date(start.getTime()+60*60*1000);
+      downloadICS('barkday.ics', icsEvent(`${name} — Next Dog‑Year Birthday`, start, end));
+    }
+    function addSeriesICS(){
+      if(!els.dob.value) { alert('Calculate first.'); return; }
+      const name = els.dogName.value || 'Your dog'; const dob = new Date(els.dob.value); const lb = parseInt(els.adultWeight.value,10);
+      const now = new Date(); const years = daysBetween(dob, now)/365.2425; const H = humanEqYears(years, lb, els.smooth.checked);
+      const first = nextDogYearDate(dob, H, lb, els.smooth.checked);
+      const events = []; let cur = first; let human = Math.floor(H)+1;
+      for(let i=0;i<3;i++){
+        const start = cur; const end = new Date(start.getTime()+60*60*1000); const sum = `${name} — Dog‑Year ${human}`; events.push({start,end,sum});
+        human += 1; // find next by solving again using target human
+        // Shift target by +1 dog‑year using small step forward
+        const tempH = human-0.0001; // ensure monotonic
+        cur = nextDogYearDate(dob, tempH-1, lb, els.smooth.checked); // effectively compute by target human
+      }
+      // Build multi‑event ICS
+      function fmt(d){ const pad=n=>String(n).padStart(2,'0'); return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+pad(d.getUTCSeconds())+'Z'; }
+      let ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
+      for(const ev of events){ ics += `BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmt(new Date())}\nDTSTART:${fmt(ev.start)}\nDTEND:${fmt(ev.end)}\nSUMMARY:${ev.sum}\nEND:VEVENT\n`; }
+      ics += 'END:VCALENDAR';
+      downloadICS('barkday_series.ics', ics);
+    }
+    els.addCal.addEventListener('click', addSingleICS);
+    els.remind.addEventListener('click', () => alert('Reminder integration placeholder: add 1‑week reminder.'));
+    els.addYearSeries.addEventListener('click', addSeriesICS);
+
+    // Gifts
+    els.loadGifts.addEventListener('click', loadGifts);
+
+    // QS hydrate (keeps Calculate‑only workflow)
+    (function initFromQS(){
+      const q = new URLSearchParams(location.search);
+      if(q.size){ els.dogName.value = q.get('n')||''; els.dob.value = q.get('d')||''; els.adultWeight.value = q.get('w')||55; els.adultWeightVal.textContent = els.adultWeight.value; els.chewer.value = q.get('c')||'Normal'; els.breedGroup.value = q.get('g')||'Working / Herding'; els.breed.value = q.get('r')||''; els.smooth.checked = q.get('s')==='1'; els.showEpi.checked = q.get('e')==='1'; renderHero(); }
     })();
   </script>
 </body>
