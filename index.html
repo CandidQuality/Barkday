@@ -167,14 +167,7 @@
 
     // Elements
     const el = id => document.getElementById(id);
-    const els = {
-      dogName: el('dogName'), dob: el('dob'), adultWeight: el('adultWeight'), adultWeightVal: el('adultWeightVal'),
-      chewer: el('chewer'), showEpi: el('showEpigenetic'), smooth: el('smoothMilestones'), breed: el('breed'), breedGroup: el('breedGroup'),
-      ignoreAge: el('ignoreAge'), ignoreSize: el('ignoreSize'), ignoreChewer: el('ignoreChewer'),
-      calcBtn: el('calcBtn'), resetBtn: el('resetBtn'), shareBtn: el('shareBtn'), sizeWarn: el('sizeWarn'),
-      nextBday: el('nextBday'), nextBdayDelta: el('nextBdayDelta'), dogAge: el('dogAge'), humanYears: el('humanYears'), slopeNote: el('slopeNote'),
-      addCal: el('addCalBtn'), remind: el('remindBtn'), addYearSeries: el('addYearSeries'),
-      loadGifts: el('loadGifts'), giftMeta: el('giftMeta'), gifts: el('gifts'), heroLine: el('heroLine'), profileLine: el('profileLine'), breedNotes: el('breedNotes')
+    const els = {$1breedNotes: el('breedNotes'), nextHeadline: el('nextHeadline')
     };
 
     // Personalized header
@@ -252,7 +245,7 @@
 
       const nbd = nextDogYearDate(dob, H, lb, els.smooth.checked); els.nextBday.textContent = nbd.toDateString(); const daysTo = daysBetween(now, nbd); els.nextBdayDelta.textContent = daysTo>0? `${daysTo} days from now` : '';
 
-      const name = els.dogName.value || 'your dog'; const breedTxt=(els.breed.value||'').trim(); const group=els.breedGroup.value; els.profileLine.textContent = `Profile: ${name}${breedTxt?` — ${breedTxt}`:''} • Group: ${group} • Weight: ${lb} lb`;
+      const name = els.dogName.value || 'your dog'; const upcoming = Math.floor(H) + 1; els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`; const breedTxt=(els.breed.value||'').trim(); const group=els.breedGroup.value; els.profileLine.textContent = `Profile: ${name}${breedTxt?` — ${breedTxt}`:''} • Group: ${group} • Weight: ${lb} lb`;
       const notes = GROUPS[group]||[]; els.breedNotes.innerHTML = notes.map(n=>`• ${n}`).join(' ');
 
       let warn=''; if(group.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight‑based.'; if((group.includes('Guardian')||group.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight‑based.'; els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
