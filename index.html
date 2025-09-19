@@ -165,6 +165,19 @@
     // CONSTANTS
     const GIFT_FEED_URL = 'https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json'; // hidden from UI
 
+    // --- Breed notes (display only) — declared BEFORE any use
+    const GROUPS = {
+      'Working / Herding':['High drive: daily jobs/puzzles (herding games, scentwork, obedience chains).','Mental fatigue matters as much as physical; enrichment like snuffle mats and hide‑and‑seek.','Prevent under‑stimulation → boredom behaviors.'],
+      'Sporting':['Endurance + retrieve instincts: structured fetch, dock diving, field games.','Watch weight gain; meal‑prep measured portions.'],
+      'Hound':['Scent/sight tracking: long‑line scent walks, lure coursing where safe.','Strong recall training with high‑value rewards.'],
+      'Terrier':['Channel hunt drive: dig boxes, flirt poles, controlled tug.'],
+      'Toy':['Fragility: low‑impact play; dental care is critical.','Mind thermoregulation (cold/heat).'],
+      'Non‑Sporting':['Varied needs; tailor enrichment to individual energy and health.'],
+      'Guardian':['Impulse control & neutrality training.','Joint support and moderated growth for large/giant frames.'],
+      'Companion':['Human‑bonded: reinforce calm independence to reduce separation stress.'],
+      'Mixed / Other':['Profile by observed drive (retrieve, scent, herd) rather than labels.']
+    };
+
     // Elements
     const el = id => document.getElementById(id);
     const els = {
@@ -222,19 +235,6 @@
     function smoothBlend(x, center, width){ const t = clamp((x - (center - width/2)) / width, 0, 1); return t*t*(3 - 2*t); }
     function humanEqYears(tYears, lb, useSmooth){ const R = slopeFromWeight(lb); if(!useSmooth){ if(tYears <= 1) return 15*tYears; if(tYears <= 2) return 15 + 9*(tYears-1); return 24 + R*(tYears-2); } const f1 = smoothBlend(tYears, 1, 0.25); const slope12 = 15 + f1*(9-15); if(tYears <= 2){ const part0 = Math.min(tYears,1)*15; const part1 = tYears>1 ? (tYears-1)*slope12 : 0; return part0 + part1; } const f2 = smoothBlend(tYears, 2, 0.5); const slopePost = 9 + f2*(R-9); const upTo2 = humanEqYears(2, lb, true); return upTo2 + (tYears-2)*slopePost; }
     function nextDogYearDate(dob, currentHumanEq, lb, useSmooth){ const target = Math.floor(currentHumanEq) + 1; const now = new Date(); const yearsNow = daysBetween(dob, now) / 365.2425; let lo = yearsNow, hi = yearsNow + 5; for(let i=0;i<40;i++){ const mid=(lo+hi)/2; const h=humanEqYears(mid, lb, useSmooth); if(h>=target) hi=mid; else lo=mid; } const t=(lo+hi)/2; return new Date(dob.getTime() + t*365.2425*24*60*60*1000); }
-
-    // Breed notes (display only)
-    const GROUPS = {
-      'Working / Herding':['High drive: daily jobs/puzzles (herding games, scentwork, obedience chains).','Mental fatigue matters as much as physical; enrichment like snuffle mats and hide‑and‑seek.','Prevent under‑stimulation → boredom behaviors.'],
-      'Sporting':['Endurance + retrieve instincts: structured fetch, dock diving, field games.','Watch weight gain; meal‑prep measured portions.'],
-      'Hound':['Scent/sight tracking: long‑line scent walks, lure coursing where safe.','Strong recall training with high‑value rewards.'],
-      'Terrier':['Channel hunt drive: dig boxes, flirt poles, controlled tug.'],
-      'Toy':['Fragility: low‑impact play; dental care is critical.','Mind thermoregulation (cold/heat).'],
-      'Non‑Sporting':['Varied needs; tailor enrichment to individual energy and health.'],
-      'Guardian':['Impulse control & neutrality training.','Joint support and moderated growth for large/giant frames.'],
-      'Companion':['Human‑bonded: reinforce calm independence to reduce separation stress.'],
-      'Mixed / Other':['Profile by observed drive (retrieve, scent, herd) rather than labels.']
-    };
 
     // Confetti (multi‑color)
     function confetti(durationMs=1700){
