@@ -165,26 +165,33 @@
     // CONSTANTS
     const GIFT_FEED_URL = 'https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json'; // hidden from UI
 
-    // Elements
-    const el = id => document.getElementById(id);
-    const els = {
-      dogName: el('dogName'), dob: el('dob'), adultWeight: el('adultWeight'), adultWeightVal: el('adultWeightVal'),
-      chewer: el('chewer'), showEpi: el('showEpigenetic'), smooth: el('smoothMilestones'), breed: el('breed'), breedGroup: el('breedGroup'),
-      ignoreAge: el('ignoreAge'), ignoreSize: el('ignoreSize'), ignoreChewer: el('ignoreChewer'),
-      calcBtn: el('calcBtn'), resetBtn: el('resetBtn'), shareBtn: el('shareBtn'), sizeWarn: el('sizeWarn'),
-      nextHeadline: el('nextHeadline'), nextBday: el('nextBday'), nextBdayDelta: el('nextBdayDelta'),
-      dogAge: el('dogAge'), humanYears: el('humanYears'), slopeNote: el('slopeNote'),
-      addCal: el('addCalBtn'), remind: el('remindBtn'), addYearSeries: el('addYearSeries'),
-      loadGifts: el('loadGifts'), giftMeta: el('giftMeta'), gifts: el('gifts'), heroLine: el('heroLine'), profileLine: el('profileLine'), breedNotes: el('breedNotes')
-    };
+    // Elements$1renderHero();
 
-    // Personalized header
-    function possessive(n){ if(!n) return "your precious friend's"; const t=n.trim(); if(!t) return "your precious friend's"; return /s$/i.test(t)? `${t}’` : `${t}’s`; }
-    function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${possessive(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
-    els.dogName.addEventListener('input', renderHero); renderHero();
+    // --- Live breed/group notes (display-only)
+    function updateBreedNotes(){
+      const name = els.dogName.value || 'your dog';
+      const breedTxt = (els.breed.value||'').trim();
+      const group = els.breedGroup.value;
+      const lb = parseInt(els.adultWeight.value,10) || 55;
+      els.profileLine.textContent = `Profile: ${name}${breedTxt?` — ${breedTxt}`:''} • Group: ${group} • Weight: ${lb} lb`;
+      const notes = GROUPS[group]||[]; els.breedNotes.innerHTML = notes.map(n=>`• ${n}`).join(' ');
+    }
+    ['input','change'].forEach(ev=>{
+      els.breed.addEventListener(ev, updateBreedNotes);
+      els.breedGroup.addEventListener(ev, updateBreedNotes);
+      els.dogName.addEventListener(ev, updateBreedNotes);
+    });
+    updateBreedNotes();
 
-    // Slider label (5‑lb steps)
-    els.adultWeight.addEventListener('input', ()=> { const v = Math.round(parseInt(els.adultWeight.value,10)/5)*5; els.adultWeight.value = v; els.adultWeightVal.textContent = v; });
+    // Slider label (5‑lb steps)$1
+
+    // If gifts are showing, re-filter when relevant controls change
+    function reloadGiftsIfShown(){ if(els.gifts && els.gifts.children && els.gifts.children.length>0){ loadGifts(); } }
+    els.adultWeight.addEventListener('change', reloadGiftsIfShown);
+    els.chewer.addEventListener('change', reloadGiftsIfShown);
+    els.ignoreAge.addEventListener('change', reloadGiftsIfShown);
+    els.ignoreSize.addEventListener('change', reloadGiftsIfShown);
+    els.ignoreChewer.addEventListener('change', reloadGiftsIfShown);
 
     // Helpers
     function daysBetween(a,b){ return Math.floor((b - a) / (24*60*60*1000)); }
@@ -222,20 +229,7 @@
     function icsEvent(summary, start, end){ return `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\nBEGIN:VEVENT\nUID:${Date.now()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${summary}\nEND:VEVENT\nEND:VCALENDAR`; }
     function downloadICS(name, ics){ const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
 
-    // Gift loader (URL hidden)
-    async function loadGifts(){
-      els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
-      try{ const res = await fetch(GIFT_FEED_URL,{cache:'no-store'}); const items = await res.json(); const lb=parseInt(els.adultWeight.value,10);
-        const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant'; const h = parseFloat(els.humanYears.textContent);
-        const filtered = items.filter(it=>{
-          let ok=true; if(!els.ignoreChewer.checked && it.chewer){ ok = ok && (it.chewer.toLowerCase()===els.chewer.value.toLowerCase() || it.chewer==='any'); }
-          if(!els.ignoreSize.checked && it.size){ ok = ok && (it.size.includes(bucket)||it.size.includes('any')); }
-          if(!isNaN(h) && !els.ignoreAge.checked){ if(it.minHumanYears!=null) ok = ok && h>=it.minHumanYears; if(it.maxHumanYears!=null) ok = ok && h<=it.maxHumanYears; }
-          return ok; }).slice(0,9);
-        els.giftMeta.textContent = `Showing ${filtered.length} picks`;
-        els.gifts.innerHTML = filtered.map(it=>`<div class="gift"><h4>${it.title}</h4><div class="muted">${it.tag||''}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
-      }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; }
-    }
+    // Gift loader (URL hidden)$1
 
     // CALCULATE
     const updateWeightLabel = ()=> els.adultWeightVal.textContent = els.adultWeight.value; updateWeightLabel();
@@ -269,6 +263,10 @@
 
       // Celebrate
       els.nextBday.scrollIntoView({behavior:'smooth', block:'center'}); confetti();
+
+      // If user already opened gifts once, keep them in sync after a new calculation
+      reloadGiftsIfShown();
+    }); confetti();
     }
 
     // EVENTS
