@@ -13,6 +13,7 @@
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
     header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
     .title{display:flex;gap:12px;align-items:center}
+    .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#0b0c10}
     .toggle{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)}
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
     h1{font-size:22px;margin:0}
@@ -36,12 +37,16 @@
     .link{background:none;border:0;color:var(--brand);cursor:pointer;text-decoration:underline;padding:0}
     .hero{margin:4px 0 0 44px}
     .warn{background:rgba(255,107,107,.1);border:1px solid var(--danger);color:var(--danger);padding:8px 10px;border-radius:10px;margin:8px 0}
+    .primary{outline:2px solid var(--brand);}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="title">
+        <div class="logo" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 7c0-1.38 1.12-2.5 2.5-2.5S12.5 5.62 12.5 7 11.38 9.5 10 9.5 7.5 8.38 7.5 7Zm6-1c0-1.38 1.12-2.5 2.5-2.5S18.5 4.62 18.5 6 17.38 8.5 16 8.5 13.5 7.38 13.5 6Zm-9 6c0-1.38 1.12-2.5 2.5-2.5S9.5 10.62 9.5 12s-1.12 2.5-2.5 2.5S4.5 13.38 4.5 12Zm14 0c0-1.38 1.12-2.5 2.5-2.5S23.5 10.62 23.5 12s-1.12 2.5-2.5 2.5S18.5 13.38 18.5 12Zm-6.5 4c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4Z"/></svg>
+        </div>
         <h1>Barkday™</h1>
       </div>
       <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
@@ -126,10 +131,13 @@
 
       <h2>Results</h2>
       <div class="kpi">
+        <div class="pill primary"><h3>Next dog‑year birthday</h3><div class="big" id="nextBday">—</div><div class="muted" id="nextBdayDelta"></div></div>
         <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
         <div class="pill"><h3>Human‑years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
-        <div class="pill"><h3>Next dog‑year birthday</h3><div class="big" id="nextBday">—</div><div class="muted" id="nextBdayDelta"></div></div>
       </div>
+      <p id="profileLine" class="muted" style="margin:8px 0 0">—</p>
+      <div id="breedNotes" class="muted" style="margin:6px 0 0"></div>
+
       <div class="row" style="margin-top:10px">
         <button id="addCalBtn" class="btn" type="button">Add to calendar (birthday)</button>
         <button id="remindBtn" class="btn secondary" type="button">Add 1‑week reminder</button>
@@ -148,8 +156,156 @@
   </div>
 
   <script>
-    // breed group is informational only, result is always weight‑based
-    // Ensure layout lines up with flexible row columns
+    // --- THEME & SETUP
+    const root = document.documentElement; const toggleBtn = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
+    root.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
+    toggleBtn.textContent = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+    toggleBtn.addEventListener('click', () => { const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now); toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light'; });
+
+    const el = id => document.getElementById(id);
+    const els = {
+      dogName: el('dogName'), dob: el('dob'), adultWeight: el('adultWeight'), adultWeightVal: el('adultWeightVal'),
+      chewer: el('chewer'), showEpi: el('showEpigenetic'), smooth: el('smoothMilestones'), breed: el('breed'), breedGroup: el('breedGroup'),
+      giftUrl: el('giftUrl'), ignoreAge: el('ignoreAge'), ignoreSize: el('ignoreSize'), ignoreChewer: el('ignoreChewer'),
+      calcBtn: el('calcBtn'), resetBtn: el('resetBtn'), shareBtn: el('shareBtn'), sizeWarn: el('sizeWarn'),
+      nextBday: el('nextBday'), nextBdayDelta: el('nextBdayDelta'), dogAge: el('dogAge'), humanYears: el('humanYears'), slopeNote: el('slopeNote'),
+      addCal: el('addCalBtn'), remind: el('remindBtn'), addYearSeries: el('addYearSeries'),
+      loadGifts: el('loadGifts'), giftMeta: el('giftMeta'), gifts: el('gifts'), heroLine: el('heroLine'), profileLine: el('profileLine'), breedNotes: el('breedNotes')
+    };
+
+    // Personalized header
+    function possessive(n){ if(!n) return "your precious friend's"; const t=n.trim(); if(!t) return "your precious friend's"; return /s$/i.test(t)? `${t}’` : `${t}’s`; }
+    function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${possessive(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
+    els.dogName.addEventListener('input', renderHero); renderHero();
+
+    // Slider label
+    els.adultWeight.addEventListener('input', ()=> els.adultWeightVal.textContent = els.adultWeight.value);
+
+    // ---- MODEL HELPERS
+    function daysBetween(a,b){ return Math.floor((b - a) / (24*60*60*1000)); }
+    function clamp(n,min,max){ return Math.min(Math.max(n,min),max); }
+
+    // Weight‑continuous slope from 5→7 (soft 7.2 at 200 lb)
+    function slopeFromWeight(lb){
+      const w = clamp(lb, 3, 200);
+      if(w <= 20) return 5;
+      if(w <= 50) return 5 + (w-20)*(1/30);
+      if(w <= 90) return 6 + (w-50)*(1/40);
+      return 7 + (w-90)*(0.2/110);
+    }
+
+    function smoothBlend(x, center, width){ const t = clamp((x - (center - width/2)) / width, 0, 1); return t*t*(3 - 2*t); }
+
+    function humanEqYears(tYears, lb, useSmooth){
+      const R = slopeFromWeight(lb);
+      if(!useSmooth){
+        if(tYears <= 1) return 15*tYears;
+        if(tYears <= 2) return 15 + 9*(tYears-1);
+        return 24 + R*(tYears-2);
+      }
+      const f1 = smoothBlend(tYears, 1, 0.25); const slope12 = 15 + f1*(9-15);
+      if(tYears <= 2){ const part0 = Math.min(tYears,1)*15; const part1 = tYears>1 ? (tYears-1)*slope12 : 0; return part0 + part1; }
+      const f2 = smoothBlend(tYears, 2, 0.5); const slopePost = 9 + f2*(R-9); const upTo2 = humanEqYears(2, lb, true); return upTo2 + (tYears-2)*slopePost;
+    }
+
+    function nextDogYearDate(dob, currentHumanEq, lb, useSmooth){
+      const target = Math.floor(currentHumanEq) + 1; const now = new Date(); const yearsNow = daysBetween(dob, now) / 365.2425;
+      let lo = yearsNow, hi = yearsNow + 5; for(let i=0;i<40;i++){ const mid=(lo+hi)/2; const h=humanEqYears(mid, lb, useSmooth); if(h>=target) hi=mid; else lo=mid; }
+      const t=(lo+hi)/2; return new Date(dob.getTime() + t*365.2425*24*60*60*1000);
+    }
+
+    // Breed group notes (display only)
+    const GROUPS = {
+      'Working / Herding':['High drive: daily jobs/puzzles (herding games, scentwork, obedience chains).','Mental fatigue matters as much as physical; enrichment like snuffle mats and hide‑and‑seek.','Prevent under‑stimulation → boredom behaviors.'],
+      'Sporting':['Endurance + retrieve instincts: structured fetch, dock diving, field games.','Watch weight gain; meal‑prep measured portions.'],
+      'Hound':['Scent/sight tracking: long‑line scent walks, lure coursing where safe.','Strong recall training with high‑value rewards.'],
+      'Terrier':['Channel hunt drive: dig boxes, flirt poles, controlled tug.'],
+      'Toy':['Fragility: low‑impact play; dental care is critical.','Mind thermoregulation (cold/heat).'],
+      'Non‑Sporting':['Varied needs; tailor enrichment to individual energy and health.'],
+      'Guardian':['Impulse control & neutrality training.','Joint support and moderated growth for large/giant frames.'],
+      'Companion':['Human‑bonded: reinforce calm independence to reduce separation stress.'],
+      'Mixed / Other':['Profile by observed drive (retrieve, scent, herd) rather than labels.']
+    };
+
+    // Confetti
+    function confetti(durationMs=1700){
+      const canvas = document.createElement('canvas'); canvas.style.position='fixed'; canvas.style.inset='0'; canvas.style.pointerEvents='none'; canvas.width=innerWidth; canvas.height=innerHeight; document.body.appendChild(canvas);
+      const ctx = canvas.getContext('2d'); const colors=['#4aa3ff','#6ae3b2','#ffd166','#ff6b6b','#a78bfa']; const N=160;
+      const parts = Array.from({length:N},()=>({x:Math.random()*canvas.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:colors[Math|0?Math.floor(Math.random()*5):0],r:Math.random()*Math.PI}));
+      let start=null; function tick(ts){ if(!start) start=ts; const t=ts-start; ctx.clearRect(0,0,canvas.width,canvas.height); for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); } if(t<durationMs) requestAnimationFrame(tick); else canvas.remove(); } requestAnimationFrame(tick);
+    }
+
+    // ICS helpers
+    function fmtUTC(d){ const pad=n=>String(n).padStart(2,'0'); return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+pad(d.getUTCSeconds())+'Z'; }
+    function icsEvent(summary, start, end){ return `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\nBEGIN:VEVENT\nUID:${Date.now()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${summary}\nEND:VEVENT\nEND:VCALENDAR`; }
+    function downloadICS(name, ics){ const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+
+    // Gift loader (unchanged behavior)
+    async function loadGifts(){
+      els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
+      try{ const res = await fetch(els.giftUrl.value,{cache:'no-store'}); const items = await res.json(); const lb=parseInt(els.adultWeight.value,10);
+        const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant'; const h = parseFloat(els.humanYears.textContent);
+        const filtered = items.filter(it=>{
+          let ok=true; if(!els.ignoreChewer.checked && it.chewer){ ok = ok && (it.chewer.toLowerCase()===els.chewer.value.toLowerCase() || it.chewer==='any'); }
+          if(!els.ignoreSize.checked && it.size){ ok = ok && (it.size.includes(bucket)||it.size.includes('any')); }
+          if(!isNaN(h) && !els.ignoreAge.checked){ if(it.minHumanYears!=null) ok = ok && h>=it.minHumanYears; if(it.maxHumanYears!=null) ok = ok && h<=it.maxHumanYears; }
+          return ok; }).slice(0,9);
+        els.giftMeta.textContent = `Showing ${filtered.length} picks`;
+        els.gifts.innerHTML = filtered.map(it=>`<div class="gift"><h4>${it.title}</h4><div class="muted">${it.tag||''}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
+      }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; }
+    }
+
+    // --- CALCULATE (button‑only)
+    function compute(){
+      const dobStr = els.dob.value; if(!dobStr){ alert('Please select a birthdate.'); return; }
+      const dob = new Date(dobStr); const now = new Date(); if(isNaN(dob.getTime()) || dob>now){ alert('Birthdate is invalid.'); return; }
+      const lb = parseInt(els.adultWeight.value,10);
+
+      // Age now
+      const days = daysBetween(dob, now); const years = days/365.2425; const yrs=Math.floor(years); const months=Math.floor((years%1)*12);
+      els.dogAge.textContent = `${yrs}y ${months}m`;
+
+      // Human‑equivalent
+      const H = humanEqYears(years, lb, els.smooth.checked); els.humanYears.textContent = H.toFixed(2); const R = slopeFromWeight(lb); els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight‑continuous)`;
+
+      // Next dog‑year birthday (primary)
+      const nbd = nextDogYearDate(dob, H, lb, els.smooth.checked); els.nextBday.textContent = nbd.toDateString(); const daysTo = daysBetween(now, nbd); els.nextBdayDelta.textContent = daysTo>0? `${daysTo} days from now` : '';
+
+      // Profile & group notes
+      const name = els.dogName.value || 'your dog'; const breedTxt=(els.breed.value||'').trim(); const group=els.breedGroup.value; els.profileLine.textContent = `Profile: ${name}${breedTxt?` — ${breedTxt}`:''} • Group: ${group} • Weight: ${lb} lb`;
+      const notes = GROUPS[group]||[]; els.breedNotes.innerHTML = notes.map(n=>`• ${n}`).join(' ');
+
+      // Gentle mismatch warning (weight remains authoritative)
+      let warn=''; if(group.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight‑based.'; if((group.includes('Guardian')||group.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight‑based.'; els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
+
+      // Gift meta
+      els.giftMeta.textContent = `Gift picks for ${name} — by weight ${lb} lb${breedTxt?`, ${breedTxt}`:''}`;
+
+      // Celebrate!
+      els.nextBday.scrollIntoView({behavior:'smooth', block:'center'}); confetti();
+    }
+
+    // Reset & Share
+    els.calcBtn.addEventListener('click', compute);
+    els.resetBtn.addEventListener('click', ()=>{
+      els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; els.adultWeightVal.textContent='55'; els.chewer.value='Normal'; els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding'; els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false; els.nextBday.textContent='—'; els.nextBdayDelta.textContent=''; els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent=''; els.epi.textContent=''; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.sizeWarn.style.display='none'; renderHero();
+    });
+    els.shareBtn.addEventListener('click', ()=>{
+      const p = new URLSearchParams({ n:els.dogName.value||'', d:els.dob.value||'', w:els.adultWeight.value, c:els.chewer.value, g:els.breedGroup.value, r:els.breed.value||'', s:els.smooth.checked?1:0, e:els.showEpi.checked?1:0 });
+      const url = location.origin + location.pathname + '?' + p.toString(); navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
+    });
+
+    // ICS buttons
+    els.addCal.addEventListener('click', ()=>{ if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; } const start=new Date(els.nextBday.textContent); const end=new Date(start.getTime()+60*60*1000); const name=els.dogName.value||'Your dog'; downloadICS('barkday.ics', icsEvent(`${name} — Next Dog‑Year Birthday`, start, end)); });
+    els.remind.addEventListener('click', ()=> alert('Reminder integration placeholder: add 1‑week reminder.'));
+    els.addYearSeries.addEventListener('click', ()=>{ if(!els.dob.value){ alert('Calculate first.'); return; } const name=els.dogName.value||'Your dog'; const dob=new Date(els.dob.value); const lb=parseInt(els.adultWeight.value,10); const now=new Date(); const years=daysBetween(dob, now)/365.2425; const H=humanEqYears(years, lb, els.smooth.checked); let cur=nextDogYearDate(dob, H, lb, els.smooth.checked); let human=Math.floor(H)+1; let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n'; for(let i=0;i<3;i++){ const start=cur; const end=new Date(start.getTime()+60*60*1000); ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog‑Year ${human}\nEND:VEVENT\n`; human++; cur=nextDogYearDate(dob, human-1, lb, els.smooth.checked); } ics+='END:VCALENDAR'; downloadICS('barkday_series.ics', ics); });
+
+    // Gift loader
+    els.loadGifts.addEventListener('click', loadGifts);
+
+    // QS hydrate (no auto compute)
+    (function initFromQS(){ const q=new URLSearchParams(location.search); if(q.size){ els.dogName.value=q.get('n')||''; els.dob.value=q.get('d')||''; els.adultWeight.value=q.get('w')||55; els.adultWeightVal.textContent=els.adultWeight.value; els.chewer.value=q.get('c')||'Normal'; els.breedGroup.value=q.get('g')||'Working / Herding'; els.breed.value=q.get('r')||''; els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1'; renderHero(); } })();
   </script>
 </body>
 </html>
