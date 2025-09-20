@@ -21,6 +21,7 @@
     html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial}
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
+
     header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
     .title{display:flex;gap:12px;align-items:center}
     .logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;overflow:hidden;background:transparent}
@@ -38,21 +39,24 @@
     .row > div{flex:1 1 240px;min-width:220px}
     .muted{color:var(--muted);font-size:14px}
     .divider{height:1px;background:var(--border);margin:12px -16px}
+
     .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
     .pill{border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.05));border-radius:14px;padding:10px 12px}
     .pill h3{margin:0 0 6px;font-size:15px;color:var(--muted);font-weight:600}
     .big{font-size:24px;font-weight:800}
     .pill.primary .big{font-size:26px}
     .headline{font-size:28px;font-weight:900;line-height:1.15;margin:0 0 4px}
+    .primary{outline:2px solid var(--brand);}
+
     .btn{appearance:none;border:1px solid var(--border);background:var(--brand);color:white;padding:10px 14px;border-radius:12px;cursor:pointer}
     .btn.secondary{background:transparent;color:var(--text)}
+
     .cardlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .gift{border:1px solid var(--border);border-radius:12px;padding:12px}
     .gift h4{margin:0 0 6px}
     .link{background:none;border:0;color:var(--brand);cursor:pointer;text-decoration:underline;padding:0}
     .hero{margin:4px 0 0 44px}
     .warn{background:rgba(255,107,107,.1);border:1px solid var(--danger);color:var(--danger);padding:8px 10px;border-radius:10px;margin:8px 0}
-    .primary{outline:2px solid var(--brand);}
 
     /* Plan lanes */
     .plan{margin-top:12px}
@@ -60,18 +64,34 @@
     .lane h4{margin:0 0 6px;font-size:15px;color:var(--muted)}
     .lane ul{margin:0;padding-left:18px}
     .lane li{margin:4px 0}
+
+    /* Splash screen */
+    .splash{
+      position:fixed; inset:0; display:grid; place-items:center;
+      background:radial-gradient(1000px 500px at 20% 10%, rgba(255,255,255,.06), transparent),
+                 radial-gradient(1000px 500px at 80% 90%, rgba(255,255,255,.05), transparent),
+                 var(--bg);
+      z-index:9999; transition:opacity .5s ease; opacity:1;
+    }
+    .splash.hide{ opacity:0; pointer-events:none }
+    .splash .logoWrap{width:160px;height:160px;border-radius:20px;display:grid;place-items:center}
+    .splash .logoWrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
   </style>
 </head>
 <body>
+  <!-- SPLASH -->
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="logoWrap">
+      <img alt="Barkday logo" src="data:image/png;base64,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" />
+    </div>
+  </div>
+
   <div class="wrap">
     <header>
       <div class="title">
         <div class="logo" aria-hidden="true">
-          <!-- Inline base64 logo; replace the tiny placeholder with your real base64 string -->
-          <img class="logoImg"
-               alt="Barkday logo"
-               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAE5JREFUeNpi/P//PwMlgImB4T8GJgYGBh4xMDAw/Gf4z0A0gJgYhhQxwCqGm4E0gNQkQ3g0wQyUAg2g0jEwJYwQk2g0g0g0g8gQb0GQh0gUQKQ2gAAAwB3Qv6JtG0K9wAAAABJRU5ErkJggg=="
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"/>
+          <img class="logoImg" alt="Barkday logo"
+               src="data:image/png;base64,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" />
           <div class="logoFallback" style="display:none">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 7c0-1.38 1.12-2.5 2.5-2.5S12.5 5.62 12.5 7 11.38 9.5 10 9.5 7.5 8.38 7.5 7Zm6-1c0-1.38 1.12-2.5 2.5-2.5S18.5 4.62 18.5 6 17.38 8.5 16 8.5 13.5 7.38 13.5 6Zm-9 6c0-1.38 1.12-2.5 2.5-2.5S9.5 10.62 9.5 12s-1.12 2.5-2.5 2.5S4.5 13.38 4.5 12Zm14 0c0-1.38 1.12-2.5 2.5-2.5S23.5 10.62 23.5 12s-1.12 2.5-2.5 2.5S18.5 13.38 18.5 12Zm-6.5 4c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4Z"/></svg>
           </div>
@@ -198,6 +218,11 @@
       const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now);
       toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light';
+    });
+
+    // Splash: fade out after load
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('splash')?.classList.add('hide'), 900);
     });
 
     // Hidden constants
@@ -342,7 +367,7 @@
     async function loadGifts(){
       els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
       try{
-        const res = await fetch(GIFT_FEED_URL,{cache:'no-store'});
+        const res = await fetch('https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json',{cache:'no-store'});
         const items = await res.json();
         const lb = parseInt(els.adultWeight.value,10);
         const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant';
@@ -406,7 +431,7 @@
       }
     }
 
-    // Recommendation Matrix (DOG-YEARS)
+    // Recommendation Matrix (DOG-YEARS) — abbreviated sample
     const RECO = {
       "Working / Herding": {
         1:{ lanes:{
@@ -423,35 +448,17 @@
           exercise:["Daily brain work: 15–20 min scentwork","Two high-quality fetch sessions/week, flat ground"],
           bonding:["Trick chaining (spin→bow→place)","Field trips to calm public spaces"],
           gear:["Puzzle feeder (level 2)","High-visibility collar for off-lead fields"] } },
-        4:{ lanes:{
-          training:["Proof off-lead recall in fenced area","Refine heel with variable pace"],
-          health:["Pro dental cleaning if tartar present","Joint baseline: range-of-motion notes"],
-          nutrition:["Evaluate joint support (glucosamine/chondroitin) for >50 lb"],
-          exercise:["Add low-impact swim day biweekly","Avoid repetitive high jumps"],
-          bonding:["Team task: carry soft pack (≤10% BW) on hikes"],
-          gear:["Swim vest (if new to water)","Soft-fit pack with chest load"] } },
-        7:{ lanes:{
-          training:["Short, positive refreshers; avoid frustration windows"],
-          health:["Senior labs baseline (CBC/Chem/UA)","Arthritis check; start joint plan if stiff"],
-          nutrition:["Slight calorie reduction if activity dips","EPA/DHA for joints & cognition"],
-          exercise:["More warm-ups; surface changes for proprioception"],
-          bonding:["Scent trails in yard (5–8 hides)"],
-          gear:["Orthopedic bed","Non-slip indoor runners"] } },
-        10:{ lanes:{
-          training:["Cognitive games over high-impact drills"],
-          health:["Biannual vet checks","Eye/heart screening if breed-linked"],
-          nutrition:["Senior formula or tailored macros; monitor muscle mass"],
-          exercise:["Short, frequent walks; gentle hill work"],
-          bonding:["Massage / calm brushing routines"],
-          gear:["Lightweight ramp","Support harness for car/steps"] } }
+        4:{ lanes:{ training:["Proof off-lead recall in fenced area","Refine heel with variable pace"] } },
+        7:{ lanes:{ health:["Senior labs baseline (CBC/Chem/UA)","Arthritis check; start joint plan if stiff"] } },
+        10:{ lanes:{ gear:["Lightweight ramp","Support harness for car/steps"] } }
       },
       "Sporting": {
-        1:{ lanes:{ training:["Retrieve manners: hold/drop on cue","Intro steadiness before fetch release"], health:["Heartworm/flea plan","Ear care routine after wet work"], nutrition:["Puppy→adult when plates close"], exercise:["Endurance walks; avoid forced long runs"], bonding:["Dock entry confidence (ramp into water)"], gear:["Bumper dummy","Ear-drying wipes"] } },
-        5:{ lanes:{ training:["Blind retrieves (short) with scent assist"], health:["Dental cleaning cadence 12–18 mo"], nutrition:["Monitor treat creep; weigh monthly"], exercise:["Swim intervals vs repetitive fetch"], bonding:["Field search games (3–5 marks)"], gear:["Neoprene vest for cold swims"] } }
+        1:{ lanes:{ training:["Retrieve manners: hold/drop on cue","Intro steadiness before fetch release"] } },
+        5:{ lanes:{ exercise:["Swim intervals vs repetitive fetch"] } }
       },
       "Toy": {
-        1:{ lanes:{ training:["Handling desensitization (paws/ears/mouth)","Carrier/teacup-crate comfort"], health:["Patella check plan","Dental brushing every other day"], nutrition:["Small-breed kibble; avoid hypoglycemia (small meals)"], exercise:["Short play bursts; avoid high jumps"], bonding:["Mat training for cafes"], gear:["Y-front harness","Soft-mesh stairs/ramps"] } },
-        8:{ lanes:{ training:["Nosework indoors; no jumping"], health:["Dental every 12 months typical","Tracheal sensitivity watch (collar→harness)"], nutrition:["High-palatability senior diet if picky"], exercise:["Multiple 10–15 min walks"], bonding:["Lickmats; massage sessions"], gear:["Heated bed (thermo-safe)"] } }
+        1:{ lanes:{ health:["Patella check plan","Dental brushing every other day"] } },
+        8:{ lanes:{ exercise:["Multiple 10–15 min walks"] } }
       }
     };
 
@@ -507,7 +514,7 @@
       const breedTxt=(els.breed.value||'').trim(); const group=els.breedGroup.value; els.profileLine.textContent = `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${group} • Weight: ${lb} lb`;
       const notes = GROUPS[group]||[]; els.breedNotes.innerHTML = notes.map(n=>`• ${n}`).join(' ');
 
-      // Gentle mismatch warning
+      // Mismatch hint (non-blocking)
       let warn=''; if(group.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight-based.'; if((group.includes('Guardian')||group.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight-based.'; els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
 
       // Gift meta
@@ -530,9 +537,8 @@
       els.nextHeadline.textContent='—'; els.nextBday.textContent='—'; els.nextBdayDelta.textContent='';
       els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent='';
       els.epi.textContent=''; els.gifts.innerHTML=''; els.giftMeta.textContent='';
-      els.sizeWarn.style.display='none'; document.getElementById('nextPlan').innerHTML='';
-      document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
-      renderHero(); updateBreedNotes();
+      document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
+      els.sizeWarn.style.display='none'; renderHero(); updateBreedNotes();
     });
     els.shareBtn.addEventListener('click', ()=>{
       const p=new URLSearchParams({ n:els.dogName.value||'', d:els.dob.value||'', w:els.adultWeight.value, c:els.chewer.value, g:els.breedGroup.value, r:els.breed.value||'', s:els.smooth.checked?1:0, e:els.showEpi.checked?1:0 });
