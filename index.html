@@ -62,32 +62,41 @@
       z-index:9999; transition:opacity .5s ease; opacity:1;
     }
     .splash.hide{ opacity:0; pointer-events:none }
-    .splash .logoWrap{width:180px;height:180px;border-radius:20px;display:grid;place-items:center}
-    .splash .logoWrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
+    .splash .logoWrap{
+      /* No fixed width/height — renders at natural/original PNG size */
+      display:grid; place-items:center; border-radius:20px;
+      /* keep the drop shadow effect */
+      filter:drop-shadow(0 6px 16px rgba(0,0,0,.45));
+    }
+    .splash .logoWrap img{
+      /* Natural size: no constraints. If image is very large, it can overflow — by request. */
+      width:auto; height:auto; max-width:none; max-height:none;
+      image-rendering:auto;
+    }
   </style>
 
-  <!-- OPTION B: tiny JS logo loader (file-based, no base64). -->
+  <!-- Two-source logo loader (file-based, no base64). -->
   <script>
-    // One source of truth (bump ?v=1 to bust cache after updating the PNG)
-    const LOGO_SRC = "barkday-logo.png?v=2";
+    // Bump versions to bust cache as needed.
+    const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // original, full-size on splash
+    const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
 
-    // Fail-safe splash autohide even if other JS errors occur
+    // Fail-safe splash autohide regardless of other code paths
     (function(){
       const hideSplash = () => {
         const s = document.getElementById("splash");
         if (s) s.classList.add("hide");
       };
       window.addEventListener("load", () => setTimeout(hideSplash, 900));
-      // Also try after DOM is ready (in case load never fires due to a blocked asset)
       document.addEventListener("DOMContentLoaded", () => setTimeout(hideSplash, 1500));
     })();
 
-    // Assign logo once DOM is ready
+    // Assign both logos once DOM is ready
     window.addEventListener("DOMContentLoaded", () => {
       const h = document.getElementById("logoHeader");
       const s = document.getElementById("logoSplash");
-      if (h) h.src = LOGO_SRC;
-      if (s) s.src = LOGO_SRC;
+      if (h) h.src = LOGO_HEADER_SRC;
+      if (s) s.src = LOGO_SPLASH_SRC;
     });
   </script>
 </head>
@@ -483,7 +492,7 @@
       navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
     });
 
-    // Calendar downloads (single, non-duplicated helpers)
+    // Calendar downloads
     $('addCalBtn').addEventListener('click', ()=>{
       if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; }
       const start=new Date(els.nextBday.textContent), end=new Date(start.getTime()+60*60*1000);
