@@ -66,10 +66,23 @@
     .splash .logoWrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
   </style>
 
-  <!-- OPTION B: tiny JS logo loader (file-based, no base64). Make sure barkday-logo.png is next to this file. -->
+  <!-- OPTION B: tiny JS logo loader (file-based, no base64). -->
   <script>
-    // Bump ?v=1 to ?v=2 when you replace the file to bust cache.
+    // One source of truth (bump ?v=1 to bust cache after updating the PNG)
     const LOGO_SRC = "barkday-logo.png?v=1";
+
+    // Fail-safe splash autohide even if other JS errors occur
+    (function(){
+      const hideSplash = () => {
+        const s = document.getElementById("splash");
+        if (s) s.classList.add("hide");
+      };
+      window.addEventListener("load", () => setTimeout(hideSplash, 900));
+      // Also try after DOM is ready (in case load never fires due to a blocked asset)
+      document.addEventListener("DOMContentLoaded", () => setTimeout(hideSplash, 1500));
+    })();
+
+    // Assign logo once DOM is ready
     window.addEventListener("DOMContentLoaded", () => {
       const h = document.getElementById("logoHeader");
       const s = document.getElementById("logoSplash");
@@ -218,9 +231,6 @@
       themeBtn.textContent = now==='light' ? '🌙 Dark' : '☀️ Light';
     });
 
-    // Splash fade
-    window.addEventListener('load', () => setTimeout(()=>document.getElementById('splash')?.classList.add('hide'), 900));
-
     // Shortcuts
     const $ = id => document.getElementById(id);
     const els = {
@@ -286,6 +296,8 @@
     // Utils
     const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
     const daysBetween=(a,b)=>Math.floor((b-a)/(24*60*60*1000));
+    const pad2=n=>String(n).padStart(2,'0');
+    const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+'Z';
 
     // Weight → slope (5→~7.2)
     function slopeFromWeight(lb){ const w=clamp(lb,5,200); if(w<=20) return 5; if(w<=50) return 5+(w-20)*(1/30); if(w<=90) return 6+(w-50)*(1/40); return 7+(w-90)*(0.2/110); }
@@ -306,19 +318,19 @@
       const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
     }
 
-    // Confetti — per your earlier preference: **blue only**
+    // Confetti — blue only
     function confetti(ms=1700){
       const c=document.createElement('canvas'); c.style.position='fixed'; c.style.inset='0'; c.style.pointerEvents='none';
       c.width=innerWidth; c.height=innerHeight; document.body.appendChild(c); const ctx=c.getContext('2d');
-      const colors=['#4aa3ff']; const N=160;
-      const parts=Array.from({length:N},()=>({x:Math.random()*c.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:colors[0],r:Math.random()*Math.PI}));
+      const N=160, color='#4aa3ff';
+      const parts=Array.from({length:N},()=>({x:Math.random()*c.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:color,r:Math.random()*Math.PI}));
       let st=null; (function tick(ts){ if(!st) st=ts; const t=ts-st; ctx.clearRect(0,0,c.width,c.height);
         for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); }
         if(t<ms) requestAnimationFrame(tick); else c.remove();
       })(0);
     }
 
-    // Banded recommendations (seed set; expand later)
+    // Banded recommendations (seed; expand later)
     const AGE_BANDS = [
       { key:'puppy_1_6',min:1,max:6,label:'Puppy I (1–6 dog-years)' },
       { key:'puppy_7_10',min:7,max:10,label:'Puppy II (7–10 dog-years)' },
@@ -344,7 +356,7 @@
                             gear:["Biothane long line; treat pouch","Level-1/2 puzzle; soft tug"]}}
       }
     };
-    const RECO = {}; // placeholder for per-breed or per-age exact points if you choose to expand
+    const RECO = {}; // placeholder for per-breed exact points later
 
     function planFor(group, dogYears){
       const band = bandForDY(Math.round(dogYears));
@@ -414,10 +426,6 @@
     }
     $('loadGifts').addEventListener('click', loadGifts);
 
-    // ICS helpers
-    const pad=n=>String(n).padStart(2,'0');
-    const fmtUTC=d=>d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+pad(d.getUTCSeconds())+'Z';
-
     // Compute (manual)
     function compute(){
       const dobStr=els.dob.value; if(!dobStr){ alert('Please select a birthdate.'); return; }
@@ -475,10 +483,7 @@
       navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
     });
 
-    // Calendar downloads
-    const pad2=n=>String(n).padStart(2,'0');
-    const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+'Z';
-
+    // Calendar downloads (single, non-duplicated helpers)
     $('addCalBtn').addEventListener('click', ()=>{
       if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; }
       const start=new Date(els.nextBday.textContent), end=new Date(start.getTime()+60*60*1000);
