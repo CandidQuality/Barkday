@@ -7,7 +7,7 @@ const RECO_URL        = "data/reco-banded.json?v=1"; // local JSON (expand later
 // ---------- Splash + Logos ----------
 (function(){
   const hideSplash = () => document.getElementById("splash")?.classList.add("hide");
-  window.addEventListener("load", () => setTimeout(hideSplash, 900));
+  window.addEventListener("load", () => setTimeout(hideSplash, 1800));
   document.addEventListener("DOMContentLoaded", () => {
     // Set logos
     const h = document.getElementById("logoHeader");
@@ -129,7 +129,7 @@ function nextDogYearDate(dob, H, lb, smooth){
 }
 
 // ---------- Confetti (multicolor) ----------
-function confetti(ms = 1700){
+function confetti(ms = 3400){
   const c = document.createElement('canvas');
   c.style.position = 'fixed'; c.style.inset = '0'; c.style.pointerEvents = 'none';
   c.width = innerWidth; c.height = innerHeight; document.body.appendChild(c);
