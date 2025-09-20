@@ -4,6 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Barkday™ • Dog → Human Years</title>
+
+  <!-- Share / SEO metadata -->
+  <meta name="description" content="Dog-year birthdays: calculate the next one and get a plan for better care." />
+  <meta property="og:title" content="Barkday™ — Dog-Year Birthdays" />
+  <meta property="og:description" content="Dog-year birthdays: calculate the next one and get a plan for better care." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Barkday™ — Dog-Year Birthdays" />
+  <meta name="twitter:description" content="Dog-year birthdays: calculate the next one and get a plan for better care." />
+
   <style>
     :root{ --bg:#0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734; --shadow:0 6px 24px rgba(0,0,0,.35); }
     :root[data-theme="light"]{ --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --accent:#059669; --danger:#b91c1c; --border:#e2e8f0; --shadow:0 6px 24px rgba(2,6,23,.08); }
@@ -11,10 +21,13 @@
     html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial}
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
-    header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+    header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
     .title{display:flex;gap:12px;align-items:center}
-    .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#0b0c10}
+    .logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;overflow:hidden;background:transparent}
+    .logoImg{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+    .logoFallback{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--accent));display:grid;place-items:center;color:#0b0c10}
     .toggle{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)}
+
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
     h1{font-size:22px;margin:0}
     h2{font-size:18px;margin:0 0 8px}
@@ -40,6 +53,7 @@
     .hero{margin:4px 0 0 44px}
     .warn{background:rgba(255,107,107,.1);border:1px solid var(--danger);color:var(--danger);padding:8px 10px;border-radius:10px;margin:8px 0}
     .primary{outline:2px solid var(--brand);}
+
     /* Plan lanes */
     .plan{margin-top:12px}
     .lane{border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.04))}
@@ -53,17 +67,25 @@
     <header>
       <div class="title">
         <div class="logo" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 7c0-1.38 1.12-2.5 2.5-2.5S12.5 5.62 12.5 7 11.38 9.5 10 9.5 7.5 8.38 7.5 7Zm6-1c0-1.38 1.12-2.5 2.5-2.5S18.5 4.62 18.5 6 17.38 8.5 16 8.5 13.5 7.38 13.5 6Zm-9 6c0-1.38 1.12-2.5 2.5-2.5S9.5 10.62 9.5 12s-1.12 2.5-2.5 2.5S4.5 13.38 4.5 12Zm14 0c0-1.38 1.12-2.5 2.5-2.5S23.5 10.62 23.5 12s-1.12 2.5-2.5 2.5S18.5 13.38 18.5 12Zm-6.5 4c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4Z"/></svg>
+          <!-- Inline base64 logo; replace the tiny placeholder with your real base64 string -->
+          <img class="logoImg"
+               alt="Barkday logo"
+               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAE5JREFUeNpi/P//PwMlgImB4T8GJgYGBh4xMDAw/Gf4z0A0gJgYhhQxwCqGm4E0gNQkQ3g0wQyUAg2g0jEwJYwQk2g0g0g0g8gQb0GQh0gUQKQ2gAAAwB3Qv6JtG0K9wAAAABJRU5ErkJggg=="
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"/>
+          <div class="logoFallback" style="display:none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 7c0-1.38 1.12-2.5 2.5-2.5S12.5 5.62 12.5 7 11.38 9.5 10 9.5 7.5 8.38 7.5 7Zm6-1c0-1.38 1.12-2.5 2.5-2.5S18.5 4.62 18.5 6 17.38 8.5 16 8.5 13.5 7.38 13.5 6Zm-9 6c0-1.38 1.12-2.5 2.5-2.5S9.5 10.62 9.5 12s-1.12 2.5-2.5 2.5S4.5 13.38 4.5 12Zm14 0c0-1.38 1.12-2.5 2.5-2.5S23.5 10.62 23.5 12s-1.12 2.5-2.5 2.5S18.5 13.38 18.5 12Zm-6.5 4c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4Z"/></svg>
+          </div>
         </div>
         <h1>Barkday™</h1>
       </div>
       <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
     </header>
+
     <p id="heroLine" class="muted hero">Let’s find out together what your precious friend’s birthdays are, so we can celebrate every single one.</p>
 
     <section class="card">
       <h2>Dog → Human Years</h2>
-      <p class="muted">Evidence‑based calculator using AVMA/AKC milestones (15/9 rule) with a <strong>weight‑continuous slope</strong> after year 2. Optional UCSD DNA‑methylation curve (≥ 1 yr). <em>Calculate/Reset only — no auto‑recalc.</em></p>
+      <p class="muted">Evidence-based calculator using AVMA/AKC milestones (15/9 rule) with a <strong>weight-continuous slope</strong> after year 2. Optional UCSD DNA-methylation curve (≥ 1 yr). <em>Calculate/Reset only — no auto-recalc.</em></p>
       <div class="divider"></div>
 
       <div class="row">
@@ -79,7 +101,7 @@
         <div>
           <label for="adultWeight">Expected adult weight (lb)</label>
           <input id="adultWeight" type="range" min="5" max="200" step="5" value="55" />
-          <div class="muted">Aging rate uses <em>5‑lb steps</em>. <span id="adultWeightVal">55</span> lb</div>
+          <div class="muted">Aging rate uses <em>5-lb steps</em>. <span id="adultWeightVal">55</span> lb</div>
         </div>
         <div>
           <label for="chewer">Chewer level</label>
@@ -94,13 +116,13 @@
       <div class="row">
         <div>
           <label>Advanced</label>
-          <label class="muted"><input id="showEpigenetic" type="checkbox"/> Show science curve (?) (UCSD DNA‑methylation, ≥1 yr)</label>
+          <label class="muted"><input id="showEpigenetic" type="checkbox"/> Show science curve (?) (UCSD DNA-methylation, ≥1 yr)</label>
           <label class="muted"><input id="smoothMilestones" type="checkbox" checked/> Use smooth milestones (blend around 12 & 24 months)</label>
         </div>
         <div>
           <label for="breed">Breed (optional)</label>
           <input id="breed" type="text" placeholder="e.g., Australian Shepherd" />
-          <div class="muted">Notes only — math stays weight‑based.</div>
+          <div class="muted">Notes only — math stays weight-based.</div>
         </div>
         <div>
           <label for="breedGroup">Breed group</label>
@@ -110,7 +132,7 @@
             <option>Hound</option>
             <option>Terrier</option>
             <option>Toy</option>
-            <option>Non‑Sporting</option>
+            <option>Non-Sporting</option>
             <option>Guardian</option>
             <option>Companion</option>
             <option>Mixed / Other</option>
@@ -139,15 +161,15 @@
       <div class="kpi">
         <div class="pill primary"><div class="headline" id="nextHeadline">—</div><div class="big" id="nextBday">—</div><div class="muted" id="nextBdayDelta"></div></div>
         <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
-        <div class="pill"><h3>Human‑years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
+        <div class="pill"><h3>Human-years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
       </div>
       <p id="profileLine" class="muted" style="margin:8px 0 0">—</p>
       <div id="breedNotes" class="muted" style="margin:6px 0 0"></div>
 
       <div class="row" style="margin-top:10px">
         <button id="addCalBtn" class="btn" type="button">Add to calendar (birthday)</button>
-        <button id="remindBtn" class="btn secondary" type="button">Add 1‑week reminder</button>
-        <button id="addYearSeries" class="btn secondary" type="button">Add next 3 dog‑year birthdays</button>
+        <button id="remindBtn" class="btn secondary" type="button">Add 1-week reminder</button>
+        <button id="addYearSeries" class="btn secondary" type="button">Add next 3 dog-year birthdays</button>
       </div>
 
       <div id="epi" class="muted" style="margin-top:10px"></div>
@@ -172,34 +194,38 @@
     const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
     root.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
     toggleBtn.textContent = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
-    toggleBtn.addEventListener('click', () => { const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now); toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light'; });
+    toggleBtn.addEventListener('click', () => {
+      const now = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now);
+      toggleBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light';
+    });
 
-    // CONSTANTS (hidden URLs)
+    // Hidden constants
     const GIFT_FEED_URL = 'https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json';
 
-    // --- Breed group metadata (desc + examples)
+    // Breed meta (examples under selector)
     const GROUP_META = {
       'Working / Herding': { desc:'High-drive problem solvers; thrive on jobs.', examples:['Border Collie','Australian Shepherd','German Shepherd','Belgian Malinois','Corgi'] },
       'Sporting': { desc:'Endurance + retrieving backgrounds; water-confident.', examples:['Labrador','Golden Retriever','Vizsla','GSP','Setter'] },
       'Hound': { desc:'Scent/sight specialists; independent.', examples:['Beagle','Dachshund','Greyhound','Foxhound','Basset'] },
       'Terrier': { desc:'Tenacious hunters; love dig/chase games.', examples:['JRT','Westie','Airedale','Border Terrier'] },
       'Toy': { desc:'Small frames; fragile joints; big personalities.', examples:['Chihuahua','Pomeranian','Yorkie','Maltese','Papillon'] },
-      'Non‑Sporting': { desc:'Mixed roles; needs vary widely.', examples:['Bulldog','Dalmatian','Poodle (Std)','Boston Terrier'] },
+      'Non-Sporting': { desc:'Mixed roles; needs vary widely.', examples:['Bulldog','Dalmatian','Poodle (Std)','Boston Terrier'] },
       'Guardian': { desc:'Large/giant protectors; joint management matters.', examples:['Rottweiler','Mastiff','Great Dane','Anatolian','Kuvasz'] },
-      'Companion': { desc:'Human‑bonded; thrive on routines.', examples:['Cavapoo','Cockapoo','Shih Tzu','Havanese'] },
+      'Companion': { desc:'Human-bonded; thrive on routines.', examples:['Cavapoo','Cockapoo','Shih Tzu','Havanese'] },
       'Mixed / Other': { desc:'Profile by observed drive & size.', examples:['Mixed-breed','Rescue','Unknown lineage'] }
     };
 
-    // --- Breed notes (display only)
+    // Short guidance lines
     const GROUPS = {
-      'Working / Herding':['High drive: daily jobs/puzzles (herding games, scentwork, obedience chains).','Mental fatigue matters as much as physical; enrichment like snuffle mats and hide‑and‑seek.','Prevent under‑stimulation → boredom behaviors.'],
-      'Sporting':['Endurance + retrieve instincts: structured fetch, dock diving, field games.','Watch weight gain; meal‑prep measured portions.'],
-      'Hound':['Scent/sight tracking: long‑line scent walks, lure coursing where safe.','Strong recall training with high‑value rewards.'],
+      'Working / Herding':['High drive: daily jobs/puzzles (herding games, scentwork, obedience chains).','Mental fatigue matters as much as physical; enrichment like snuffle mats and hide-and-seek.','Prevent under-stimulation → boredom behaviors.'],
+      'Sporting':['Endurance + retrieve instincts: structured fetch, dock diving, field games.','Watch weight gain; meal-prep measured portions.'],
+      'Hound':['Scent/sight tracking: long-line scent walks, lure coursing where safe.','Strong recall training with high-value rewards.'],
       'Terrier':['Channel hunt drive: dig boxes, flirt poles, controlled tug.'],
-      'Toy':['Fragility: low‑impact play; dental care is critical.','Mind thermoregulation (cold/heat).'],
-      'Non‑Sporting':['Varied needs; tailor enrichment to individual energy and health.'],
+      'Toy':['Fragility: low-impact play; dental care is critical.','Mind thermoregulation (cold/heat).'],
+      'Non-Sporting':['Varied needs; tailor enrichment to individual energy and health.'],
       'Guardian':['Impulse control & neutrality training.','Joint support and moderated growth for large/giant frames.'],
-      'Companion':['Human‑bonded: reinforce calm independence to reduce separation stress.'],
+      'Companion':['Human-bonded: reinforce calm independence to reduce separation stress.'],
       'Mixed / Other':['Profile by observed drive (retrieve, scent, herd) rather than labels.']
     };
 
@@ -216,12 +242,12 @@
       loadGifts: el('loadGifts'), giftMeta: el('giftMeta'), gifts: el('gifts'), heroLine: el('heroLine'), profileLine: el('profileLine'), breedNotes: el('breedNotes'), epi: el('epi')
     };
 
-    // Personalized header
+    // Personalized header line
     function possessive(n){ if(!n) return "your precious friend's"; const t=n.trim(); if(!t) return "your precious friend's"; return /s$/i.test(t)? `${t}’` : `${t}’s`; }
     function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${possessive(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
     els.dogName.addEventListener('input', renderHero); renderHero();
 
-    // Live breed/group notes + examples
+    // Breed notes + examples
     function updateBreedNotes(){
       const name = els.dogName.value || 'your dog';
       const breedTxt = (els.breed.value||'').trim();
@@ -241,8 +267,11 @@
     });
     updateBreedNotes();
 
-    // Slider label (5‑lb steps)
-    els.adultWeight.addEventListener('input', ()=> { const v = Math.round(parseInt(els.adultWeight.value,10)/5)*5; els.adultWeight.value = v; els.adultWeightVal.textContent = v; });
+    // Slider label (5-lb steps)
+    els.adultWeight.addEventListener('input', ()=> {
+      const v = Math.round(parseInt(els.adultWeight.value,10)/5)*5;
+      els.adultWeight.value = v; els.adultWeightVal.textContent = v;
+    });
 
     // If gifts are showing, re-filter when relevant controls change
     function reloadGiftsIfShown(){ if(els.gifts && els.gifts.children && els.gifts.children.length>0){ loadGifts(); } }
@@ -258,19 +287,50 @@
     function daysBetween(a,b){ return Math.floor((b - a) / (24*60*60*1000)); }
     function clamp(n,min,max){ return Math.min(Math.max(n,min),max); }
 
-    // Weight‑continuous slope 5→7 (soft 7.2 at 200 lb)
+    // Weight-continuous slope 5→7 (soft 7.2 at 200 lb)
     function slopeFromWeight(lb){ const w = clamp(lb, 5, 200); if(w <= 20) return 5; if(w <= 50) return 5 + (w-20)*(1/30); if(w <= 90) return 6 + (w-50)*(1/40); return 7 + (w-90)*(0.2/110); }
     function smoothBlend(x, center, width){ const t = clamp((x - (center - width/2)) / width, 0, 1); return t*t*(3 - 2*t); }
-    function humanEqYears(tYears, lb, useSmooth){ const R = slopeFromWeight(lb); if(!useSmooth){ if(tYears <= 1) return 15*tYears; if(tYears <= 2) return 15 + 9*(tYears-1); return 24 + R*(tYears-2); } const f1 = smoothBlend(tYears, 1, 0.25); const slope12 = 15 + f1*(9-15); if(tYears <= 2){ const part0 = Math.min(tYears,1)*15; const part1 = tYears>1 ? (tYears-1)*slope12 : 0; return part0 + part1; } const f2 = smoothBlend(tYears, 2, 0.5); const slopePost = 9 + f2*(R-9); const upTo2 = humanEqYears(2, lb, true); return upTo2 + (tYears-2)*slopePost; }
-    function nextDogYearDate(dob, currentHumanEq, lb, useSmooth){ // next integer of DOG‑YEARS (human‑equivalent scale); 15 dog‑birthdays in first calendar year
-      const target = Math.floor(currentHumanEq) + 1; const now = new Date(); const yearsNow = daysBetween(dob, now) / 365.2425; let lo = yearsNow, hi = yearsNow + 5; for(let i=0;i<40;i++){ const mid=(lo+hi)/2; const h=humanEqYears(mid, lb, useSmooth); if(h>=target) hi=mid; else lo=mid; } const t=(lo+hi)/2; return new Date(dob.getTime() + t*365.2425*24*60*60*1000); }
+    function humanEqYears(tYears, lb, useSmooth){
+      const R = slopeFromWeight(lb);
+      if(!useSmooth){
+        if(tYears <= 1) return 15*tYears;
+        if(tYears <= 2) return 15 + 9*(tYears-1);
+        return 24 + R*(tYears-2);
+      }
+      const f1 = smoothBlend(tYears, 1, 0.25); const slope12 = 15 + f1*(9-15);
+      if(tYears <= 2){
+        const part0 = Math.min(tYears,1)*15;
+        const part1 = tYears>1 ? (tYears-1)*slope12 : 0;
+        return part0 + part1;
+      }
+      const f2 = smoothBlend(tYears, 2, 0.5); const slopePost = 9 + f2*(R-9);
+      const upTo2 = humanEqYears(2, lb, true);
+      return upTo2 + (tYears-2)*slopePost;
+    }
+    function nextDogYearDate(dob, currentHumanEq, lb, useSmooth){ // next integer of DOG-YEARS
+      const target = Math.floor(currentHumanEq) + 1;
+      const now = new Date();
+      const yearsNow = daysBetween(dob, now) / 365.2425;
+      let lo = yearsNow, hi = yearsNow + 5;
+      for(let i=0;i<40;i++){
+        const mid=(lo+hi)/2; const h=humanEqYears(mid, lb, useSmooth);
+        if(h>=target) hi=mid; else lo=mid;
+      }
+      const t=(lo+hi)/2;
+      return new Date(dob.getTime() + t*365.2425*24*60*60*1000);
+    }
 
-    // Confetti (multi‑color)
+    // Confetti (multi-color)
     function confetti(durationMs=1700){
-      const canvas = document.createElement('canvas'); canvas.style.position='fixed'; canvas.style.inset='0'; canvas.style.pointerEvents='none'; canvas.width=innerWidth; canvas.height=innerHeight; document.body.appendChild(canvas);
-      const ctx = canvas.getContext('2d'); const colors=['#4aa3ff','#6ae3b2','#ffd166','#ff6b6b','#a78bfa']; const N=160;
+      const canvas = document.createElement('canvas'); canvas.style.position='fixed'; canvas.style.inset='0'; canvas.style.pointerEvents='none';
+      canvas.width=innerWidth; canvas.height=innerHeight; document.body.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      const colors=['#4aa3ff','#6ae3b2','#ffd166','#ff6b6b','#a78bfa']; const N=160;
       const parts = Array.from({length:N},()=>({x:Math.random()*canvas.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:colors[Math.floor(Math.random()*colors.length)],r:Math.random()*Math.PI}));
-      let start=null; function tick(ts){ if(!start) start=ts; const t=ts-start; ctx.clearRect(0,0,canvas.width,canvas.height); for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); } if(t<durationMs) requestAnimationFrame(tick); else canvas.remove(); } requestAnimationFrame(tick);
+      let start=null; function tick(ts){ if(!start) start=ts; const t=ts-start; ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); }
+        if(t<durationMs) requestAnimationFrame(tick); else canvas.remove();
+      } requestAnimationFrame(tick);
     }
 
     // ICS helpers
@@ -278,7 +338,7 @@
     function icsEvent(summary, start, end){ return `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\nBEGIN:VEVENT\nUID:${Date.now()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${summary}\nEND:VEVENT\nEND:VCALENDAR`; }
     function downloadICS(name, ics){ const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
 
-    // Gift loader (improved filtering)
+    // Gift loader (robust filtering)
     async function loadGifts(){
       els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
       try{
@@ -290,13 +350,13 @@
         const chewer = (els.chewer.value||'').toLowerCase();
 
         const getSizes = it => Array.isArray(it.sizes)? it.sizes.map(s=>String(s).toLowerCase())
-                              : it.size? String(it.size).toLowerCase().split(/[\,\s]+/).filter(Boolean)
+                              : it.size? String(it.size).toLowerCase().split(/[, \t]+/).filter(Boolean)
                               : [];
         const getChewer = it => (it.chewer? String(it.chewer).toLowerCase(): 'any');
         const getAgeBounds = it => {
           const minDY = it.minDogYears ?? it.minHumanYears ?? it.min_age ?? null;
           const maxDY = it.maxDogYears ?? it.maxHumanYears ?? it.max_age ?? null;
-          let tag = (it.ageTag||it.tag||'').toString().toLowerCase();
+          const tag = (it.ageTag||it.tag||'').toString().toLowerCase();
           if((minDY==null && maxDY==null) && tag){
             if(tag.includes('puppy')) return [0, 1.6];
             if(tag.includes('adult')) return [1.0, 7.0];
@@ -311,9 +371,11 @@
           const sizes = getSizes(it);
           const sizeMatches = !sizes.length || sizes.includes('any') || sizes.includes(bucket);
           if(!els.ignoreSize.checked && !sizeMatches) ok = false; else if(sizeMatches) score += 1;
+
           const itemChewer = getChewer(it);
           const chewMatches = itemChewer==='any' || itemChewer===chewer;
           if(!els.ignoreChewer.checked && !chewMatches) ok = false; else if(chewMatches) score += 1;
+
           const [minA,maxA] = getAgeBounds(it);
           let ageMatches = true;
           if(!isNaN(dogYears) && !els.ignoreAge.checked){
@@ -321,6 +383,7 @@
             if(maxA!=null) ageMatches = ageMatches && dogYears <= Number(maxA);
           }
           if(!els.ignoreAge.checked && !ageMatches) ok = false; else if(ageMatches) score += 1;
+
           if(ok) results.push({it, score, rnd: Math.random()});
         }
 
@@ -343,7 +406,7 @@
       }
     }
 
-    // ===================== Embedded Recommendation Matrix (DOG‑YEARS)
+    // Recommendation Matrix (DOG-YEARS)
     const RECO = {
       "Working / Herding": {
         1:{ lanes:{
@@ -351,44 +414,44 @@
           health:["Finish core vaccines / boosters if pending","Discuss spay/neuter timing with vet","Baseline hip/elbow discussion for large lines"],
           nutrition:["Transition to adult formula when growth complete","Measure meals; target ideal BCS 4–5/9"],
           exercise:["2 x 30–45 min structured walks","Short herding-style games without over-arousal"],
-          bonding:["Hide‑and‑seek indoors","Name recognition games with family"],
-          gear:["Long‑line (biothane)","Treat pouch with magnet closure"] } },
+          bonding:["Hide-and-seek indoors","Name recognition games with family"],
+          gear:["Long-line (biothane)","Treat pouch with magnet closure"] } },
         2:{ lanes:{
           training:["Loose leash with distractions (add ‘leave it’)","Start duration place/stay to 10–15 min"],
-          health:["Annual exam & dental check","Hip/elbow X‑ray if symptomatic/high‑risk"],
-          nutrition:["Maintain protein 24–28% (dry matter) depending on output","Add omega‑3s if coat/dry skin issues"],
-          exercise:["Daily brain work: 15–20 min scentwork","Two high‑quality fetch sessions/week, flat ground"],
+          health:["Annual exam & dental check","Hip/elbow X-ray if symptomatic/high-risk"],
+          nutrition:["Maintain protein 24–28% (dry matter) depending on output","Add omega-3s if coat/dry skin issues"],
+          exercise:["Daily brain work: 15–20 min scentwork","Two high-quality fetch sessions/week, flat ground"],
           bonding:["Trick chaining (spin→bow→place)","Field trips to calm public spaces"],
-          gear:["Puzzle feeder (level 2)","High‑visibility collar for off‑lead fields"] } },
+          gear:["Puzzle feeder (level 2)","High-visibility collar for off-lead fields"] } },
         4:{ lanes:{
-          training:["Proof off‑lead recall in fenced area","Refine heel with variable pace"],
-          health:["Pro dental cleaning if tartar present","Joint baseline: range‑of‑motion notes"],
+          training:["Proof off-lead recall in fenced area","Refine heel with variable pace"],
+          health:["Pro dental cleaning if tartar present","Joint baseline: range-of-motion notes"],
           nutrition:["Evaluate joint support (glucosamine/chondroitin) for >50 lb"],
-          exercise:["Add low‑impact swim day biweekly","Avoid repetitive high jumps"],
+          exercise:["Add low-impact swim day biweekly","Avoid repetitive high jumps"],
           bonding:["Team task: carry soft pack (≤10% BW) on hikes"],
-          gear:["Swim vest (if new to water)","Soft‑fit pack with chest load"] } },
+          gear:["Swim vest (if new to water)","Soft-fit pack with chest load"] } },
         7:{ lanes:{
           training:["Short, positive refreshers; avoid frustration windows"],
           health:["Senior labs baseline (CBC/Chem/UA)","Arthritis check; start joint plan if stiff"],
           nutrition:["Slight calorie reduction if activity dips","EPA/DHA for joints & cognition"],
-          exercise:["More warm‑ups; surface changes for proprioception"],
+          exercise:["More warm-ups; surface changes for proprioception"],
           bonding:["Scent trails in yard (5–8 hides)"],
-          gear:["Orthopedic bed","Non‑slip indoor runners"] } },
+          gear:["Orthopedic bed","Non-slip indoor runners"] } },
         10:{ lanes:{
-          training:["Cognitive games over high‑impact drills"],
-          health:["Biannual vet checks","Eye/heart screening if breed‑linked"],
+          training:["Cognitive games over high-impact drills"],
+          health:["Biannual vet checks","Eye/heart screening if breed-linked"],
           nutrition:["Senior formula or tailored macros; monitor muscle mass"],
           exercise:["Short, frequent walks; gentle hill work"],
           bonding:["Massage / calm brushing routines"],
           gear:["Lightweight ramp","Support harness for car/steps"] } }
       },
       "Sporting": {
-        1:{ lanes:{ training:["Retrieve manners: hold/drop on cue","Intro steadiness before fetch release"], health:["Heartworm/flea plan","Ear care routine after wet work"], nutrition:["Puppy→adult when plates close"], exercise:["Endurance walks; avoid forced long runs"], bonding:["Dock entry confidence (ramp into water)"], gear:["Bumper dummy","Ear‑drying wipes"] } },
+        1:{ lanes:{ training:["Retrieve manners: hold/drop on cue","Intro steadiness before fetch release"], health:["Heartworm/flea plan","Ear care routine after wet work"], nutrition:["Puppy→adult when plates close"], exercise:["Endurance walks; avoid forced long runs"], bonding:["Dock entry confidence (ramp into water)"], gear:["Bumper dummy","Ear-drying wipes"] } },
         5:{ lanes:{ training:["Blind retrieves (short) with scent assist"], health:["Dental cleaning cadence 12–18 mo"], nutrition:["Monitor treat creep; weigh monthly"], exercise:["Swim intervals vs repetitive fetch"], bonding:["Field search games (3–5 marks)"], gear:["Neoprene vest for cold swims"] } }
       },
       "Toy": {
-        1:{ lanes:{ training:["Handling desensitization (paws/ears/mouth)","Carrier/teacup‑crate comfort"], health:["Patella check plan","Dental brushing every other day"], nutrition:["Small‑breed kibble; avoid hypoglycemia (small meals)"], exercise:["Short play bursts; avoid high jumps"], bonding:["Mat training for cafes"], gear:["Y‑front harness","Soft‑mesh stairs/ramps"] } },
-        8:{ lanes:{ training:["Nosework indoors; no jumping"], health:["Dental every 12 months typical","Tracheal sensitivity watch (collar→harness)"], nutrition:["High‑palatability senior diet if picky"], exercise:["Multiple 10–15 min walks"], bonding:["Lickmats; massage sessions"], gear:["Heated bed (thermo‑safe)"] } }
+        1:{ lanes:{ training:["Handling desensitization (paws/ears/mouth)","Carrier/teacup-crate comfort"], health:["Patella check plan","Dental brushing every other day"], nutrition:["Small-breed kibble; avoid hypoglycemia (small meals)"], exercise:["Short play bursts; avoid high jumps"], bonding:["Mat training for cafes"], gear:["Y-front harness","Soft-mesh stairs/ramps"] } },
+        8:{ lanes:{ training:["Nosework indoors; no jumping"], health:["Dental every 12 months typical","Tracheal sensitivity watch (collar→harness)"], nutrition:["High-palatability senior diet if picky"], exercise:["Multiple 10–15 min walks"], bonding:["Lickmats; massage sessions"], gear:["Heated bed (thermo-safe)"] } }
       }
     };
 
@@ -396,7 +459,8 @@
       const g = RECO[group] || RECO['Mixed / Other'] || {};
       if(g[dogYears]) return g[dogYears];
       const keys = Object.keys(g).map(k=>parseInt(k,10)).sort((a,b)=>a-b);
-      if(!keys.length) return null; let lower=null, upper=null; for(const k of keys){ if(k <= dogYears) lower=k; if(k >= dogYears && upper===null) upper=k; }
+      if(!keys.length) return null; let lower=null, upper=null;
+      for(const k of keys){ if(k <= dogYears) lower=k; if(k >= dogYears && upper===null) upper=k; }
       const chosen = (lower!==null)? lower : upper; return g[chosen]||null;
     }
 
@@ -404,7 +468,7 @@
       const container = document.getElementById('nextPlan'); if(!container) return;
       container.innerHTML = '';
       const heading = document.getElementById('nextPlanHeading');
-      if(heading){ heading.textContent = `Next Birthday Plan — turning ${upcomingDogYears} (dog‑years)`; }
+      if(heading){ heading.textContent = `Next Birthday Plan — turning ${upcomingDogYears} (dog-years)`; }
       const p = planFor(group, upcomingDogYears);
       if(!p){ container.innerHTML = '<div class="muted">Recommendations coming soon for this group.</div>'; return; }
       const order = [ ['training','Training & Enrichment'], ['health','Health & Wellness'], ['nutrition','Diet & Nutrition'], ['exercise','Exercise Needs'], ['bonding','Play & Bonding Ideas'], ['gear','Helpful Gear (optional)'] ];
@@ -430,12 +494,12 @@
       const days = daysBetween(dob, now); const years = days/365.2425; const yrs=Math.floor(years); const months=Math.floor((years%1)*12);
       els.dogAge.textContent = `${yrs}y ${months}m`;
 
-      // Human‑equivalent DOG‑YEARS
-      const H = humanEqYears(years, lb, els.smooth.checked); els.humanYears.textContent = H.toFixed(2); const R = slopeFromWeight(lb); els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight‑continuous)`;
+      // Human-equivalent DOG-YEARS
+      const H = humanEqYears(years, lb, els.smooth.checked); els.humanYears.textContent = H.toFixed(2); const R = slopeFromWeight(lb); els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight-continuous)`;
 
-      // Next dog‑year birthday (DOG‑YEARS integer)
+      // Next dog-year birthday (DOG-YEARS integer)
       const name = els.dogName.value || 'your dog';
-      const upcoming = Math.floor(H)+1; // 15 dog‑birthdays within first calendar year is intended by the 15/9 rule
+      const upcoming = Math.floor(H)+1; // 15 dog-birthdays within first calendar year by design
       els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`;
       const nbd = nextDogYearDate(dob, H, lb, els.smooth.checked); els.nextBday.textContent = nbd.toDateString(); const daysTo = daysBetween(now, nbd); els.nextBdayDelta.textContent = daysTo>0? `${daysTo} days from now` : '';
 
@@ -444,7 +508,7 @@
       const notes = GROUPS[group]||[]; els.breedNotes.innerHTML = notes.map(n=>`• ${n}`).join(' ');
 
       // Gentle mismatch warning
-      let warn=''; if(group.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight‑based.'; if((group.includes('Guardian')||group.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight‑based.'; els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
+      let warn=''; if(group.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight-based.'; if((group.includes('Guardian')||group.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight-based.'; els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
 
       // Gift meta
       els.giftMeta.textContent = `Gift picks for ${name} — by weight ${lb} lb${breedTxt ? ', ' + breedTxt : ''}`;
@@ -459,19 +523,57 @@
 
     // EVENTS
     els.calcBtn.addEventListener('click', compute);
-    els.resetBtn.addEventListener('click', ()=>{ els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; updateWeightLabel(); els.chewer.value='Normal'; els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding'; els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false; els.nextHeadline.textContent='—'; els.nextBday.textContent='—'; els.nextBdayDelta.textContent=''; els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent=''; els.epi.textContent=''; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.sizeWarn.style.display='none'; document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan'; renderHero(); updateBreedNotes(); });
-    els.shareBtn.addEventListener('click', ()=>{ const p=new URLSearchParams({ n:els.dogName.value||'', d:els.dob.value||'', w:els.adultWeight.value, c:els.chewer.value, g:els.breedGroup.value, r:els.breed.value||'', s:els.smooth.checked?1:0, e:els.showEpi.checked?1:0 }); const url=location.origin+location.pathname+'?'+p.toString(); navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url)); });
+    els.resetBtn.addEventListener('click', ()=>{
+      els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; updateWeightLabel(); els.chewer.value='Normal';
+      els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding';
+      els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false;
+      els.nextHeadline.textContent='—'; els.nextBday.textContent='—'; els.nextBdayDelta.textContent='';
+      els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent='';
+      els.epi.textContent=''; els.gifts.innerHTML=''; els.giftMeta.textContent='';
+      els.sizeWarn.style.display='none'; document.getElementById('nextPlan').innerHTML='';
+      document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
+      renderHero(); updateBreedNotes();
+    });
+    els.shareBtn.addEventListener('click', ()=>{
+      const p=new URLSearchParams({ n:els.dogName.value||'', d:els.dob.value||'', w:els.adultWeight.value, c:els.chewer.value, g:els.breedGroup.value, r:els.breed.value||'', s:els.smooth.checked?1:0, e:els.showEpi.checked?1:0 });
+      const url=location.origin+location.pathname+'?'+p.toString();
+      navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
+    });
 
     // ICS buttons
-    els.addCal.addEventListener('click', ()=>{ if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; } const start=new Date(els.nextBday.textContent); const end=new Date(start.getTime()+60*60*1000); const name=els.dogName.value||'Your dog'; downloadICS('barkday.ics', icsEvent(`${name} — Next Dog‑Year Birthday`, start, end)); });
-    els.remind.addEventListener('click', ()=> alert('Reminder integration placeholder: add 1‑week reminder.'));
-    els.addYearSeries.addEventListener('click', ()=>{ if(!els.dob.value){ alert('Calculate first.'); return; } const name=els.dogName.value||'Your dog'; const dob=new Date(els.dob.value); const lb=parseInt(els.adultWeight.value,10); const now=new Date(); const years=daysBetween(dob, now)/365.2425; const H=humanEqYears(years, lb, els.smooth.checked); let cur=nextDogYearDate(dob, H, lb, els.smooth.checked); let dogYears=Math.floor(H)+1; let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n'; for(let i=0;i<3;i++){ const start=cur; const end=new Date(start.getTime()+60*60*1000); ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog‑Year ${dogYears}\nEND:VEVENT\n`; dogYears++; cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked); } ics+='END:VCALENDAR'; downloadICS('barkday_series.ics', ics); });
+    els.addCal.addEventListener('click', ()=>{
+      if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; }
+      const start=new Date(els.nextBday.textContent); const end=new Date(start.getTime()+60*60*1000);
+      const name=els.dogName.value||'Your dog';
+      downloadICS('barkday.ics', icsEvent(`${name} — Next Dog-Year Birthday`, start, end));
+    });
+    els.remind.addEventListener('click', ()=> alert('Reminder integration placeholder: add 1-week reminder.'));
+    els.addYearSeries.addEventListener('click', ()=>{
+      if(!els.dob.value){ alert('Calculate first.'); return; }
+      const name=els.dogName.value||'Your dog'; const dob=new Date(els.dob.value); const lb=parseInt(els.adultWeight.value,10);
+      const now=new Date(); const years=daysBetween(dob, now)/365.2425; const H=humanEqYears(years, lb, els.smooth.checked);
+      let cur=nextDogYearDate(dob, H, lb, els.smooth.checked); let dogYears=Math.floor(H)+1; let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
+      for(let i=0;i<3;i++){
+        const start=cur; const end=new Date(start.getTime()+60*60*1000);
+        ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
+        dogYears++; cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
+      }
+      ics+='END:VCALENDAR'; downloadICS('barkday_series.ics', ics);
+    });
 
     // Gift loader
     els.loadGifts.addEventListener('click', loadGifts);
 
     // QS hydrate (no auto compute)
-    (function initFromQS(){ const q=new URLSearchParams(location.search); if(q.size){ els.dogName.value=q.get('n')||''; els.dob.value=q.get('d')||''; els.adultWeight.value=q.get('w')||55; els.adultWeightVal.textContent=els.adultWeight.value; els.chewer.value=q.get('c')||'Normal'; els.breedGroup.value=q.get('g')||'Working / Herding'; els.breed.value=q.get('r')||''; els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1'; renderHero(); updateBreedNotes(); } })();
+    (function initFromQS(){
+      const q=new URLSearchParams(location.search);
+      if(q.size){
+        els.dogName.value=q.get('n')||''; els.dob.value=q.get('d')||''; els.adultWeight.value=q.get('w')||55; els.adultWeightVal.textContent=els.adultWeight.value;
+        els.chewer.value=q.get('c')||'Normal'; els.breedGroup.value=q.get('g')||'Working / Herding'; els.breed.value=q.get('r')||'';
+        els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1';
+        renderHero(); updateBreedNotes();
+      }
+    })();
   </script>
 </body>
 </html>
