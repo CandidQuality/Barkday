@@ -327,17 +327,45 @@
       const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
     }
 
-    // Confetti — blue only
-    function confetti(ms=1700){
-      const c=document.createElement('canvas'); c.style.position='fixed'; c.style.inset='0'; c.style.pointerEvents='none';
-      c.width=innerWidth; c.height=innerHeight; document.body.appendChild(c); const ctx=c.getContext('2d');
-      const N=160, color='#4aa3ff';
-      const parts=Array.from({length:N},()=>({x:Math.random()*c.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:color,r:Math.random()*Math.PI}));
-      let st=null; (function tick(ts){ if(!st) st=ts; const t=ts-st; ctx.clearRect(0,0,c.width,c.height);
-        for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); }
-        if(t<ms) requestAnimationFrame(tick); else c.remove();
-      })(0);
+   <script>
+// Multicolor confetti (blue-forward palette)
+function confetti(ms = 1700){
+  const c=document.createElement('canvas'); c.style.position='fixed'; c.style.inset='0'; c.style.pointerEvents='none';
+  c.width=innerWidth; c.height=innerHeight; document.body.appendChild(c);
+  const ctx=c.getContext('2d');
+
+  // palette: blue + accent pops
+  const colors=['#4aa3ff','#6ae3b2','#ffd166','#ff6b6b','#a78bfa'];
+  const N=180;
+  const parts=Array.from({length:N},()=>({
+    x:Math.random()*c.width,
+    y:-20-Math.random()*60,
+    vx:(Math.random()-.5)*4,
+    vy:2+Math.random()*3,
+    g:0.05+Math.random()*0.06,
+    s:4+Math.random()*5,
+    c:colors[(Math.random()*colors.length)|0],
+    r:Math.random()*Math.PI
+  }));
+
+  let st=null;
+  (function tick(ts){
+    if(!st) st=ts;
+    const t=ts-st;
+    ctx.clearRect(0,0,c.width,c.height);
+
+    for(const p of parts){
+      p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.06;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);
+      ctx.restore();
     }
+
+    if(t<ms) requestAnimationFrame(tick); else c.remove();
+  })(0);
+}
+</script>
+
 
     // Banded recommendations (seed; expand later)
     const AGE_BANDS = [
