@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "notes": "Dog-year keyed recommendations (1,2,3... are dog-year birthdays, not human years). Lanes: training, health, nutrition, exercise, bonding, gear.",
+  "breeds": {
+    "Australian Shepherd": {
+      "group": "Working / Herding",
+      "weights": { "typical": 55, "range": [35, 70] },
+      "ages": {
+        "1": { "lanes": {
+          "training": ["Name/marker sessions (1–3 min, 3–5×/day)", "Crate = calm naps; positive entries"],
+          "health": ["Puppy vaccines / deworm plan", "Parasite prevention set up"],
+          "nutrition": ["Puppy formula; 3–4 small meals", "Weekly weigh-in; track BCS"],
+          "exercise": ["Free play on soft surfaces", "Short sniff walks on harness"],
+          "bonding": ["Gentle handling (paws/ears/mouth)", "Calm grooming with treats"],
+          "gear": ["Light Y-front harness", "Snuffle/lick mat; puppy teether"]
+        }},
+        "4": { "lanes": {
+          "training": ["Refine heel (variable pace)", "Intro hand-targeting & leave-it"],
+          "exercise": ["Low-impact play; no high jumps"],
+          "health": ["Mouth check; tartar monitoring"]
+        }},
+        "6": { "lanes": {
+          "training": ["Proof cues amid distractions"],
+          "health": ["Baseline joint range-of-motion notes"],
+          "nutrition": ["Consider joint support if >50 lb (consult vet)"]
+        }}
+      }
+    },
+    "Labrador Retriever": {
+      "group": "Sporting",
+      "weights": { "typical": 70, "range": [55, 85] },
+      "ages": {
+        "1": { "lanes": {
+          "training": ["Marker/engagement; name response", "Calm crate entry/exit"],
+          "health": ["Vaccine series; deworm; parasite plan"],
+          "nutrition": ["Puppy formula; measured feedings"],
+          "exercise": ["Short sniff-walks; water confidence (shallow)"],
+          "bonding": ["Handling practice; gentle retrieves"],
+          "gear": ["Flat collar + Y-harness", "Food puzzles (level 1)"]
+        }},
+        "4": { "lanes": {
+          "training": ["Settle on mat 2–4 min"],
+          "nutrition": ["Watch rapid weight gain; adjust calories"]
+        }},
+        "6": { "lanes": {
+          "training": ["Distraction-proofing near water/wildlife"],
+          "health": ["Teeth check; tartar watch"]
+        }},
+        "10": { "lanes": {
+          "health": ["Hip/elbow awareness; keep lean BCS"],
+          "nutrition": ["Consider joint support (≥60 lb; vet-guided)"]
+        }}
+      }
+    },
+    "French Bulldog": {
+      "group": "Non-Sporting",
+      "weights": { "typical": 25, "range": [16, 28] },
+      "ages": {
+        "1": { "lanes": {
+          "training": ["Marker/engagement; short sessions", "Crate = rests; positive entries"],
+          "health": ["Vaccine series; brachy awareness (heat)"],
+          "nutrition": ["Puppy diet; prevent rapid weight gain"],
+          "exercise": ["Very short sniff-walks; avoid heat"],
+          "bonding": ["Gentle handling; muzzle acclimation (positive)"],
+          "gear": ["Well-fitted Y-harness (no neck pressure)"]
+        }},
+        "4": { "lanes": {
+          "training": ["Recall in safe, fenced area only"],
+          "exercise": ["Avoid stairs/jumps; joint-friendly mats"]
+        }},
+        "5": { "lanes": {
+          "health": ["Weight audit; early dental care"],
+          "gear": ["Cooling vest/pad for warm days"]
+        }},
+        "7": { "lanes": {
+          "health": ["Heat sensitivity: strict limits", "Watch for snoring/exertion intolerance"],
+          "nutrition": ["Small, frequent meals if gulping"]
+        }}
+      }
+    }
+  }
+}
