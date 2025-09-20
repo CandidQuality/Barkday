@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Barkday™ • Dog → Human Years</title>
   <meta name="description" content="Dog-year birthdays: calculate the next one and get a plan for better care." />
+
   <style>
     :root{ --bg:#0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734; --shadow:0 6px 24px rgba(0,0,0,.35); }
     :root[data-theme="light"]{ --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --accent:#059669; --danger:#b91c1c; --border:#e2e8f0; --shadow:0 6px 24px rgba(2,6,23,.08); }
@@ -35,7 +36,6 @@
     .big{font-size:24px;font-weight:800}
     .headline{font-size:26px;font-weight:900;line-height:1.15;margin:0 0 4px}
     .primary{outline:2px solid var(--brand);}
-
     .btn{appearance:none;border:1px solid var(--border);background:var(--brand);color:white;padding:10px 14px;border-radius:12px;cursor:pointer}
     .btn.secondary{background:transparent;color:var(--text)}
 
@@ -65,6 +65,18 @@
     .splash .logoWrap{width:180px;height:180px;border-radius:20px;display:grid;place-items:center}
     .splash .logoWrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
   </style>
+
+  <!-- OPTION B: tiny JS logo loader (file-based, no base64). Make sure barkday-logo.png is next to this file. -->
+  <script>
+    // Bump ?v=1 to ?v=2 when you replace the file to bust cache.
+    const LOGO_SRC = "barkday-logo.png?v=1";
+    window.addEventListener("DOMContentLoaded", () => {
+      const h = document.getElementById("logoHeader");
+      const s = document.getElementById("logoSplash");
+      if (h) h.src = LOGO_SRC;
+      if (s) s.src = LOGO_SRC;
+    });
+  </script>
 </head>
 <body>
   <!-- SPLASH -->
@@ -195,10 +207,7 @@
   </div>
 
   <script>
-    // --- Cropped logo (256px optimized, embedded once & reused)
-    const LOGO_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAP4AAAEACAYAAACTecuMAADGtElEQVR42uz9d5xk13Xfi373PqFi5zQ9U9c0r0V7x2plS1Kqf2O0i3jPqJ2Zs4+9w8U+u8t8b1TgqGqKx1g7w0m7G1m3vBfKx1u8z0l1qC9pQ2Hn+...U6vxWKgxmnfO5MC9txO4e6ce8+/hWv+ej30nHF/r8ywEfrUQeNj/B5ttZtq4j1C3AAAAAElFTkSuQmCC";
-
-    // Theme toggle
+    // Theme toggle (persists)
     const root=document.documentElement, themeBtn=document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
     root.setAttribute('data-theme', savedTheme==='light'?'light':'dark');
@@ -208,10 +217,6 @@
       root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now);
       themeBtn.textContent = now==='light' ? '🌙 Dark' : '☀️ Light';
     });
-
-    // Assign logo to splash + header
-    document.getElementById('logoHeader').src = LOGO_B64;
-    document.getElementById('logoSplash').src = LOGO_B64;
 
     // Splash fade
     window.addEventListener('load', () => setTimeout(()=>document.getElementById('splash')?.classList.add('hide'), 900));
@@ -229,12 +234,12 @@
       loadGifts: $('loadGifts'), giftMeta: $('giftMeta'), gifts: $('gifts'), heroLine: $('heroLine'), profileLine: $('profileLine'), breedNotes: $('breedNotes'), epi: $('epi')
     };
 
-    // Personalized hero
+    // Personalized hero line
     const poss = n => !n ? "your precious friend's" : (/\s*$/.test(n)&&/s$/i.test(n.trim())? n.trim()+"’" : n.trim()+"’s");
     function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${poss(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
     els.dogName.addEventListener('input', renderHero); renderHero();
 
-    // Breed examples/notes
+    // Breed examples + notes
     const GROUP_META = {
       'Working / Herding': { desc:'High-drive problem solvers; thrive on jobs.', examples:['Border Collie','Australian Shepherd','German Shepherd','Belgian Malinois','Corgi'] },
       'Sporting': { desc:'Endurance & retrieving; water-confident.', examples:['Labrador','Golden Retriever','Vizsla','GSP','Setter'] },
@@ -301,12 +306,12 @@
       const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
     }
 
-    // Confetti (multi-color)
+    // Confetti — per your earlier preference: **blue only**
     function confetti(ms=1700){
       const c=document.createElement('canvas'); c.style.position='fixed'; c.style.inset='0'; c.style.pointerEvents='none';
       c.width=innerWidth; c.height=innerHeight; document.body.appendChild(c); const ctx=c.getContext('2d');
-      const colors=['#4aa3ff','#6ae3b2','#ffd166','#ff6b6b','#a78bfa']; const N=160;
-      const parts=Array.from({length:N},()=>({x:Math.random()*c.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:colors[(Math.random()*colors.length)|0],r:Math.random()*Math.PI}));
+      const colors=['#4aa3ff']; const N=160;
+      const parts=Array.from({length:N},()=>({x:Math.random()*c.width,y:-20-Math.random()*40,vx:(Math.random()-.5)*4,vy:2+Math.random()*3,g:0.05+Math.random()*0.05,s:4+Math.random()*4,c:colors[0],r:Math.random()*Math.PI}));
       let st=null; (function tick(ts){ if(!st) st=ts; const t=ts-st; ctx.clearRect(0,0,c.width,c.height);
         for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.r+=0.05; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); ctx.restore(); }
         if(t<ms) requestAnimationFrame(tick); else c.remove();
@@ -339,7 +344,7 @@
                             gear:["Biothane long line; treat pouch","Level-1/2 puzzle; soft tug"]}}
       }
     };
-    const RECO = {};
+    const RECO = {}; // placeholder for per-breed or per-age exact points if you choose to expand
 
     function planFor(group, dogYears){
       const band = bandForDY(Math.round(dogYears));
@@ -361,7 +366,7 @@
       }
     }
 
-    // Gift feed (hidden URL)
+    // Gift feed (URL hidden from UI)
     const GIFT_FEED_URL = 'https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json';
     async function loadGifts(){
       els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
@@ -444,8 +449,8 @@
       // Celebrate & plan
       confetti(); renderPlan(group, upcoming);
 
-      // Epigenetic curve (note only)
-      els.epi.textContent = els.showEpi.checked ? 'Science curve shown: UCSD DNA-methylation (≥ 1 yr) — note: for visualization context only; math remains weight-based.' : '';
+      // Epigenetic note (no chart for now)
+      els.epi.textContent = els.showEpi.checked ? 'Science curve: UCSD DNA-methylation (≥ 1 yr). Note: visualization context; math remains weight-based.' : '';
       if(!els.showEpi.checked) els.epi.textContent = '';
 
       // If gifts open, refilter
@@ -469,6 +474,10 @@
       const url=location.origin+location.pathname+'?'+p.toString();
       navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
     });
+
+    // Calendar downloads
+    const pad2=n=>String(n).padStart(2,'0');
+    const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+'Z';
 
     $('addCalBtn').addEventListener('click', ()=>{
       if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; }
