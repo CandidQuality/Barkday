@@ -4,9 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Barkday™ • Dog → Human Years</title>
-
   <meta name="description" content="Dog-year birthdays: calculate the next one and get a plan for better care." />
-
   <style>
     :root{ --bg:#0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734; --shadow:0 6px 24px rgba(0,0,0,.35); }
     :root[data-theme="light"]{ --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#475569; --brand:#2563eb; --accent:#059669; --danger:#b91c1c; --border:#e2e8f0; --shadow:0 6px 24px rgba(2,6,23,.08); }
@@ -72,16 +70,14 @@
   <!-- SPLASH -->
   <div id="splash" class="splash" aria-hidden="true">
     <div class="logoWrap">
-      <img alt="Barkday logo"
-           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAYAAAA6NfyTAAABe0lEQVR4nO2YwU7DMBBFz4mI4gHgAhWbAjiHjRRSdJRrYQSeAAvIQBfwBiS04FmIqAyOg4mfUQ0oVhrbbfjfnuzOz9ESJEmSJEnSu5I53tUB5rj9wbDJzSklsLMvBoPzFNYGl7ErQjqNV5EuzDXEpQxoQDH0LaZaxUmjIFGLhZTpjTToRrkymcoXruZyHKMIzRB1Zs7YcZnMa4S6oKPYDRFPtPCg19xTzohldIQak7Za2HzTQYJpFd1DdgvK4bIpTULAk2cNKImTYHLiEZjZfXcym8lfYkXmYNfYl6F1AKYwTfQPcBWGYZnvwE/KuIbf3Ww36ZJ4VO85IQkXXr2pi/6opJGVUuByV4+eG+cQfrc8iV8Ko35C2wRk14H4JBeJZZao4nTfJ7+b5cZ1Q4pooV5Y5/pg9h5ZrVt9wQy4hcrUJEmSJEmSPvkBXCFnCyrtt64AAAAASUVORK5CYII=" />
+      <img id="logoSplash" alt="Barkday logo" src="" />
     </div>
   </div>
 
   <div class="wrap">
     <header>
       <div class="title">
-        <img class="logoImg" alt="Barkday logo"
-             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAYAAAA6NfyTAAABe0lEQVR4nO2YwU7DMBBFz4mI4gHgAhWbAjiHjRRSdJRrYQSeAAvIQBfwBiS04FmIqAyOg4mfUQ0oVhrbbfjfnuzOz9ESJEmSJEnSu5I53tUB5rj9wbDJzSklsLMvBoPzFNYGl7ErQjqNV5EuzDXEpQxoQDH0LaZaxUmjIFGLhZTpjTToRrkymcoXruZyHKMIzRB1Zs7YcZnMa4S6oKPYDRFPtPCg19xTzohldIQak7Za2HzTQYJpFd1DdgvK4bIpTULAk2cNKImTYHLiEZjZfXcym8lfYkXmYNfYl6F1AKYwTfQPcBWGYZnvwE/KuIbf3Ww36ZJ4VO85IQkXXr2pi/6opJGVUuByV4+eG+cQfrc8iV8Ko35C2wRk14H4JBeJZZao4nTfJ7+b5cZ1Q4pooV5Y5/pg9h5ZrVt9wQy4hcrUJEmSJEmSPvkBXCFnCyrtt64AAAAASUVORK5CYII=" />
+        <img id="logoHeader" class="logoImg" alt="Barkday logo" src="" />
         <h1>Barkday™</h1>
       </div>
       <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">🌙 Dark</button>
@@ -199,6 +195,9 @@
   </div>
 
   <script>
+    // ---- Single base64 logo (256px optimized) reused in both places
+    const LOGO_B64 = "data:image/png;base64,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";
+
     // Theme toggle
     const root = document.documentElement, themeBtn = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
@@ -210,10 +209,14 @@
       themeBtn.textContent = now === 'light' ? '🌙 Dark' : '☀️ Light';
     });
 
-    // Splash fade
+    // Assign logo to both images
+    document.getElementById('logoHeader').src = LOGO_B64;
+    document.getElementById('logoSplash').src = LOGO_B64;
+
+    // Splash fade (shows once we assign the image)
     window.addEventListener('load', () => setTimeout(()=>document.getElementById('splash')?.classList.add('hide'), 900));
 
-    // Elements
+    // Shortcuts
     const $ = id => document.getElementById(id);
     const els = {
       dogName: $('dogName'), dob: $('dob'), adultWeight: $('adultWeight'), adultWeightVal: $('adultWeightVal'),
@@ -272,7 +275,7 @@
     });
     updateBreedNotes();
 
-    // Slider label
+    // Slider label (5-lb steps)
     els.adultWeight.addEventListener('input', ()=>{ const v=Math.round(parseInt(els.adultWeight.value,10)/5)*5; els.adultWeight.value=v; els.adultWeightVal.textContent=v; });
 
     // Utils
@@ -310,7 +313,7 @@
       })(0);
     }
 
-    // Banded recommendations
+    // Banded recos (seeded; expand later)
     const AGE_BANDS = [
       { key:'puppy_1_6',min:1,max:6,label:'Puppy I (1–6 dog-years)' },
       { key:'puppy_7_10',min:7,max:10,label:'Puppy II (7–10 dog-years)' },
@@ -320,39 +323,23 @@
       { key:'senior_61p',min:61,max:999,label:'Senior (61+ dog-years)' }
     ];
     const bandForDY = dy => AGE_BANDS.find(b=>dy>=b.min && dy<=b.max) || AGE_BANDS[AGE_BANDS.length-1];
-
     const RECO_BANDED = {
       "Working / Herding": {
-        puppy_1_6:{lanes:{
-          training:["Name response & marker word (1–3 min, 3–5×/day)","Gentle handling desensitization (paws, ears, mouth)","Start crate = calm naps; short positive entries only","Potty schedule: outside after sleep/eat/play"],
-          health:["Puppy vaccine series; deworm as directed","Parasite prevention; supervise chews","Set up x-pen / safe confinement area"],
-          nutrition:["Puppy diet; 3–4 small meals/day","Weigh weekly; track body condition"],
-          exercise:["Free play on soft surfaces; no forced runs","Short leash intros (1–3 min); sniff & explore","No big jumps; carry on stairs when possible"],
-          bonding:["Controlled socialization; friendly people/dogs","Short grooming/brush sessions with treats"],
-          gear:["Light Y-front harness / flat collar","Snuffle mat, frozen lick mat, puppy-safe teether"]
-        }},
-        puppy_7_10:{lanes:{
-          training:["Recall on 15–30 ft line","Settle on mat (1–3 → 5–7 min)","‘Leave it’ & polite greetings"],
-          health:["Continue series; discuss spay/neuter timing","Teething: supervised chew sessions"],
-          nutrition:["Maintain puppy diet; adjust to growth curve"],
-          exercise:["2–3 short sniff-walks/day (5–15 min)","No repetitive fetch/high jumps"],
-          bonding:["Puzzle feeders 3–4×/week","Very easy nosework (3–5 hides)"],
-          gear:["Biothane long line; treat pouch","Level-1/2 puzzle; soft tug (rules)"]
-        }},
-        puppy_11_15:{lanes:{
-          training:["Loose-leash with distractions (2–3 min reps)","Impulse control: door/food releases, stationing","Short duration stays (5–10 sec → 30–60 sec)"],
-          health:["Baseline exam; dental hygiene plan"],
-          nutrition:["Transition to adult formula when plates close (vet-guided)","Measure meals; BCS 4–5/9"],
-          exercise:["Structured play & decompression","Short swim intros (if comfy), warm up/cool down"],
-          bonding:["Easy trick chain (hand target → spin → mat)"],
-          gear:["Puzzle feeder (level 2)","Hi-vis collar for open fields"]
-        }},
-        young_16_24:{lanes:{training:["Generalize cues in new places"]}},
-        adult_25_60:{lanes:{training:["Maintain recall; daily enrichment 15–20 min"]}},
-        senior_61p:{lanes:{health:["Senior labs baseline; joint care plan"]}}
+        puppy_1_6:{lanes:{ training:["Name/marker 1–3 min, 3–5×/day","Gentle handling (paws/ears/mouth)","Crate = calm naps; short positive entries","Potty schedule after sleep/eat/play"],
+                         health:["Puppy vaccine series; deworm","Parasite prevention","Set up x-pen / safe confinement"],
+                         nutrition:["Puppy diet; 3–4 small meals/day","Weigh weekly; track BCS"],
+                         exercise:["Free play on soft surfaces","Short leash intros; sniff & explore","No big jumps; carry stairs if possible"],
+                         bonding:["Friendly people/dogs socialization","Groom/brush + treats"],
+                         gear:["Light Y-front harness","Snuffle/lick mat; puppy teether"]}},
+        puppy_7_10:{lanes:{ training:["Recall on 15–30 ft line","Settle on mat (1–3 → 5–7 min)","Leave-it & polite greetings"],
+                            health:["Series continues; spay/neuter timing","Teething: supervised chews"],
+                            nutrition:["Maintain puppy diet; growth curve"],
+                            exercise:["2–3 short sniff-walks (5–15 min)","Avoid repetitive fetch/jumps"],
+                            bonding:["Puzzle feeders 3–4×/week","Easy nosework (3–5 hides)"],
+                            gear:["Biothane long line; treat pouch","Level-1/2 puzzle; soft tug"]}}
       }
     };
-    const RECO = {}; // legacy fallback (unused for now)
+    const RECO = {};
 
     function planFor(group, dogYears){
       const band = bandForDY(Math.round(dogYears));
@@ -396,7 +383,6 @@
           const chewOK = chewTag==='any' || chewTag===chewer;
           if(!els.ignoreChewer.checked && !chewOK) ok=false; else if(chewOK) score++;
 
-          // Try dog-year bounds if present; otherwise tags
           const minDY = it.minDogYears ?? null, maxDY = it.maxDogYears ?? null;
           let ageOK = true;
           if(!isNaN(dogYears) && !els.ignoreAge.checked){
@@ -451,7 +437,7 @@
       els.profileLine.textContent = `Profile: ${name}${breedTxt?' — '+breedTxt:''} • Group: ${group} • Weight: ${lb} lb`;
       els.breedNotes.innerHTML = (GROUPS[group]||[]).map(n=>`• ${n}`).join(' ');
 
-      // Mismatch hint
+      // Weight/group hint
       let warn=''; if(group.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight-based.'; if((group.includes('Guardian')||group.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight-based.';
       els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
 
@@ -512,7 +498,7 @@ END:VCALENDAR`;
       ics+='END:VCALENDAR'; const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday_series.ics'; document.body.appendChild(a); a.click(); a.remove();
     });
 
-    // Gifts auto-refilter when controls change and grid is visible
+    // Gifts auto-refilter if visible
     function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
     ['change'].forEach(ev=>{
       els.adultWeight.addEventListener(ev, reloadGiftsIfShown);
