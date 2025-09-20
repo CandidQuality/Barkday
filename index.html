@@ -327,9 +327,9 @@
       const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
     }
 
-   <script>
+  <script>
 // Multicolor confetti (blue-forward palette)
-function confetti(ms = 1700){
+function confetti(ms = 2700){
   const c=document.createElement('canvas'); c.style.position='fixed'; c.style.inset='0'; c.style.pointerEvents='none';
   c.width=innerWidth; c.height=innerHeight; document.body.appendChild(c);
   const ctx=c.getContext('2d');
@@ -365,7 +365,6 @@ function confetti(ms = 1700){
   })(0);
 }
 </script>
-
 
     // Banded recommendations (seed; expand later)
     const AGE_BANDS = [
