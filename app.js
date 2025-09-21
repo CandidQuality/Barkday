@@ -1,6 +1,6 @@
 // very top of app.js
-console.log('[Barkday] app.js loaded v3 (lane-backfill + diagnostics)');
-// ====================== Barkday app.js (complete, upgraded) ======================
+console.log('[Barkday] app.js loaded v4 (auto-map breed→group + lane-backfill + diagnostics)');
+// ====================== Barkday app.js (complete) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
 const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
@@ -14,7 +14,7 @@ const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 // ---------- Splash + Logos ----------
 (function(){
   const hideSplash = () => document.getElementById("splash")?.classList.add("hide");
-  window.addEventListener("load", () => setTimeout(hideSplash, 1800));   // doubled
+  window.addEventListener("load", () => setTimeout(hideSplash, 1800)); // doubled
   document.addEventListener("DOMContentLoaded", () => {
     const h = document.getElementById("logoHeader");
     const s = document.getElementById("logoSplash");
@@ -51,6 +51,10 @@ const els = {
   heroLine: $('heroLine'), profileLine: $('profileLine'), breedNotes: $('breedNotes'), epi: $('epi'),
   nextPlan: $('nextPlan'), nextPlanHeading: $('nextPlanHeading')
 };
+
+// Track if user manually changed group; if true we won't auto-map from breed (Update #1)
+let manualGroupOverride = false;
+els.breedGroup.addEventListener('change', () => { manualGroupOverride = true; });
 
 // ---------- Hero line ----------
 const poss = n => !n ? "your precious friend's" : (/\s*$/.test(n)&&/s$/i.test(n.trim())? n.trim()+"’" : n.trim()+"’s");
@@ -91,7 +95,7 @@ async function loadBreedGroups(){
   try{
     const res = await fetch(BREED_GROUPS_URL, { cache: 'no-store' });
     BREED_GROUPS = await res.json();
-    console.debug('[Barkday] Loaded breed_groups.json', BREED_GROUPS?.length ?? 0);
+    console.debug('[Barkday] breed_groups.json loaded:', BREED_GROUPS?.length ?? 0, 'groups');
   }catch(e){
     console.warn('[Barkday] Could not load breed_groups.json', e);
     BREED_GROUPS = [];
@@ -120,13 +124,13 @@ async function loadReco(){
     ]);
     if (bandedRes.status === 'fulfilled') {
       RECO_BANDED = await bandedRes.value.json();
-      console.debug('[Barkday] Loaded reco-banded.json groups=', Object.keys(RECO_BANDED||{}));
+      console.debug('[Barkday] reco-banded.json groups:', Object.keys(RECO_BANDED||{}));
     }
     if (breedRes.status  === 'fulfilled') {
       const raw = await breedRes.value.json();
       RECO_BREED = normalizeBreedReco(raw);
       rebuildBreedIndex();
-      console.debug('[Barkday] Loaded reco-breed.json breeds=', Object.keys(RECO_BREED||{}).length);
+      console.debug('[Barkday] reco-breed.json breeds:', Object.keys(RECO_BREED||{}).length);
     }
     if (!RECO_BANDED) RECO_BANDED = {};
   }catch(e){
@@ -163,30 +167,55 @@ function getBreedEntry(input){
   return null;
 }
 
-// ---------- Breed notes + examples under selectors ----------
+// Helper: return mapped group name (e.g., "Toy") from typed breed if known (Update #1)
+function mappedGroupFromBreedText(txt){
+  const m = findGroupByBreedName((txt||'').trim());
+  return m ? m.name : null;
+}
+
+// ---------- Breed notes + examples under selectors (Updates #1–#3) ----------
 function updateBreedNotes(){
   const name = els.dogName.value || 'your dog';
   const breedTxt = (els.breed.value||'').trim();
-  const group = els.breedGroup.value;
+
+  // Prefer mapped group from breed when available; otherwise use dropdown
+  const mappedName = mappedGroupFromBreedText(breedTxt);
+  const groupForUI = mappedName || els.breedGroup.value;
+
   const lb = parseInt(els.adultWeight.value,10) || 55;
 
-  // Show examples from external map if we recognize the breed; else fallback meta
+  // Examples: from external map if breed recognized; else fallback meta
   const mapped = findGroupByBreedName(breedTxt);
   if (mapped) {
     els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
   } else {
-    const meta = GROUP_META[group];
+    const meta = GROUP_META[groupForUI];
     els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
   }
 
-  els.profileLine.textContent = `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${group} • Weight: ${lb} lb`;
-  els.breedNotes.innerHTML = (GROUPS[group]||[]).map(n=>`• ${n}`).join(' ');
+  // Profile line always reflects breed + effective group
+  const breedBit = breedTxt ? ` — ${breedTxt}` : '';
+  const groupBit = groupForUI ? ` (${groupForUI})` : '';
+  els.profileLine.textContent = `Profile: ${name}${breedBit}${groupBit} • Weight: ${lb} lb`;
+
+  // Small guideline bullets also use the effective group
+  els.breedNotes.innerHTML = (GROUPS[groupForUI]||[]).map(n=>`• ${n}`).join(' ');
 }
+
+// Wire handlers and soft auto-map on breed typing (Update #1)
 ['input','change'].forEach(ev=>{
   els.breed.addEventListener(ev, updateBreedNotes);
   els.breedGroup.addEventListener(ev, updateBreedNotes);
   els.dogName.addEventListener(ev, updateBreedNotes);
   els.adultWeight.addEventListener(ev, updateBreedNotes);
+});
+els.breed.addEventListener('input', () => {
+  const mg = mappedGroupFromBreedText(els.breed.value);
+  if (mg && !manualGroupOverride) {
+    if ([...els.breedGroup.options].some(o => o.value === mg)) {
+      els.breedGroup.value = mg;
+    }
+  }
 });
 updateBreedNotes();
 
@@ -306,10 +335,8 @@ function mergeLanes(baseObj, overrideObj){
 // ---------- Plan selection (breed-first → merge with banded → else banded) ----------
 function planFor(group, dogYears){
   const band = bandForDY(Math.round(dogYears));
-  // 2) Group-banded fallback (used both as base and as full fallback)
   const byGroup = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
 
-  // 1) Breed-specific (fuzzy) → nearest age
   const breedInput = (els.breed.value || '').trim();
   const breedEntry = getBreedEntry(breedInput);
   if (breedEntry && breedEntry.ages){
@@ -322,7 +349,7 @@ function planFor(group, dogYears){
   }
 
   if (byGroup){
-    console.debug('[Barkday] Plan source=banded fallback', { band: band?.key, group: els.breedGroup.value });
+    console.debug('[Barkday] Plan source=banded fallback', { band: band?.key, group: group });
     return { plan: ensureAllLanes(byGroup), band };
   }
 
@@ -331,9 +358,9 @@ function planFor(group, dogYears){
 }
 
 function renderPlan(group, upcomingDY){
-  const box=$('nextPlan'); box.innerHTML='';
+  const box=els.nextPlan; box.innerHTML='';
   const {plan,band}=planFor(group,upcomingDY);
-  const head=$('nextPlanHeading');
+  const head=els.nextPlanHeading;
   head.textContent = `Next Birthday Plan — ${band?band.label:('turning '+upcomingDY)}`;
 
   const order=[['training','Training & Enrichment'],['health','Health & Wellness'],['nutrition','Diet & Nutrition'],['exercise','Exercise Needs'],['bonding','Play & Bonding Ideas'],['gear','Helpful Gear (optional)']];
@@ -428,9 +455,12 @@ function compute(){
   els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`;
   const nbd=nextDogYearDate(dob,H,lb,els.smooth.checked); els.nextBday.textContent=nbd.toDateString(); const dTo=daysBetween(now, nbd); els.nextBdayDelta.textContent = dTo>0? `${dTo} days from now` : '';
 
-  // Profile/notes
-  const breedTxt=(els.breed.value||'').trim(); const group=els.breedGroup.value;
-  els.profileLine.textContent = `Profile: ${name}${breedTxt?' — '+breedTxt:''} • Group: ${group} • Weight: ${lb} lb`;
+  // Profile/notes — use mapped group when available (Update #4)
+  const breedTxt=(els.breed.value||'').trim();
+  const mappedName = mappedGroupFromBreedText(breedTxt);
+  const group = mappedName || els.breedGroup.value;
+
+  els.profileLine.textContent = `Profile: ${name}${breedTxt?' — '+breedTxt:''}${group?` (${group})`:''} • Weight: ${lb} lb`;
   els.breedNotes.innerHTML = (GROUPS[group]||[]).map(n=>`• ${n}`).join(' ');
 
   // Weight/group hint
@@ -446,6 +476,8 @@ function compute(){
 
   // If gifts open, refilter
   if(els.gifts.children.length) loadGifts();
+
+  console.log('[Barkday] click compute took', performance.now().toFixed(0), 'ms');
 }
 
 // ---------- Buttons ----------
@@ -453,10 +485,11 @@ $('calcBtn').addEventListener('click', compute);
 $('resetBtn').addEventListener('click', ()=>{
   els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; els.adultWeightVal.textContent='55'; els.chewer.value='Normal';
   els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding';
+  manualGroupOverride = false;
   els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false;
   els.nextHeadline.textContent='—'; els.nextBday.textContent='—'; els.nextBdayDelta.textContent='';
   els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent='';
-  document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
+  els.nextPlan.innerHTML=''; els.nextPlanHeading.textContent='Next Birthday Plan';
   els.sizeWarn.style.display='none'; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.epi.textContent='';
   renderHero(); updateBreedNotes();
 });
@@ -513,5 +546,6 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
   els.dogName.value=q.get('n')||''; els.dob.value=q.get('d')||''; els.adultWeight.value=q.get('w')||55; els.adultWeightVal.textContent=els.adultWeight.value;
   els.chewer.value=q.get('c')||'Normal'; els.breedGroup.value=q.get('g')||'Working / Herding'; els.breed.value=q.get('r')||'';
   els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1';
+  manualGroupOverride = false;
   renderHero(); updateBreedNotes();
 })();
