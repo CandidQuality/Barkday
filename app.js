@@ -1,22 +1,24 @@
+// ====================== Barkday app.js (complete) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
 const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
-const GIFT_FEED_URL   = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
-const RECO_URL        = "data/reco-banded.json?v=1"; // local JSON (expand later)
+
+// Data sources
+const GIFT_FEED_URL     = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
+const RECO_BANDED_URL   = "data/reco-banded.json?v=1";
+const RECO_BREED_URL    = "data/reco-breed.json?v=1";
+const BREED_GROUPS_URL  = "data/breed_groups.json?v=1";
 
 // ---------- Splash + Logos ----------
 (function(){
   const hideSplash = () => document.getElementById("splash")?.classList.add("hide");
-  window.addEventListener("load", () => setTimeout(hideSplash, 1800));
+  window.addEventListener("load", () => setTimeout(hideSplash, 1800));   // doubled
   document.addEventListener("DOMContentLoaded", () => {
-    // Set logos
     const h = document.getElementById("logoHeader");
     const s = document.getElementById("logoSplash");
     if (h) h.src = LOGO_HEADER_SRC;
     if (s) s.src = LOGO_SPLASH_SRC;
-
-    // Fail-safe hide even if load stalls
-    setTimeout(hideSplash, 1500);
+    setTimeout(hideSplash, 3000); // doubled fail-safe
   });
 })();
 
@@ -27,7 +29,8 @@ root.setAttribute('data-theme', savedTheme==='light'?'light':'dark');
 themeBtn.textContent = savedTheme==='light' ? '🌙 Dark' : '☀️ Light';
 themeBtn.addEventListener('click', () => {
   const now = root.getAttribute('data-theme')==='light'?'dark':'light';
-  root.setAttribute('data-theme', now); localStorage.setItem('barkday-theme', now);
+  root.setAttribute('data-theme', now);
+  localStorage.setItem('barkday-theme', now);
   themeBtn.textContent = now==='light' ? '🌙 Dark' : '☀️ Light';
 });
 
@@ -35,14 +38,15 @@ themeBtn.addEventListener('click', () => {
 const $ = id => document.getElementById(id);
 const els = {
   dogName: $('dogName'), dob: $('dob'), adultWeight: $('adultWeight'), adultWeightVal: $('adultWeightVal'),
-  chewer: $('chewer'), showEpi: $('showEpigenetic'), smooth: $('smoothMilestones'), breed: $('breed'), breedGroup: $('breedGroup'),
+  chewer: $('chewer'), showEpi: $('showEpigenetic'), smooth: $('smoothMilestones'),
+  breed: $('breed'), breedGroup: $('breedGroup'), breedExamples: $('breedExamples'),
   ignoreAge: $('ignoreAge'), ignoreSize: $('ignoreSize'), ignoreChewer: $('ignoreChewer'),
   calcBtn: $('calcBtn'), resetBtn: $('resetBtn'), shareBtn: $('shareBtn'), sizeWarn: $('sizeWarn'),
   nextHeadline: $('nextHeadline'), nextBday: $('nextBday'), nextBdayDelta: $('nextBdayDelta'),
   dogAge: $('dogAge'), humanYears: $('humanYears'), slopeNote: $('slopeNote'),
   addCal: $('addCalBtn'), remind: $('remindBtn'), addYearSeries: $('addYearSeries'),
-  loadGifts: $('loadGifts'), giftMeta: $('giftMeta'), gifts: $('gifts'), heroLine: $('heroLine'), profileLine: $('profileLine'), breedNotes: $('breedNotes'), epi: $('epi'),
-  breedExamples: $('breedExamples')
+  loadGifts: $('loadGifts'), giftMeta: $('giftMeta'), gifts: $('gifts'),
+  heroLine: $('heroLine'), profileLine: $('profileLine'), breedNotes: $('breedNotes'), epi: $('epi')
 };
 
 // ---------- Hero line ----------
@@ -50,7 +54,7 @@ const poss = n => !n ? "your precious friend's" : (/\s*$/.test(n)&&/s$/i.test(n.
 function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${poss(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
 els.dogName.addEventListener('input', renderHero); renderHero();
 
-// ---------- Breed notes ----------
+// ---------- Static group notes (UI hints under Results) ----------
 const GROUP_META = {
   'Working / Herding': { desc:'High-drive problem solvers; thrive on jobs.', examples:['Border Collie','Australian Shepherd','German Shepherd','Belgian Malinois','Corgi'] },
   'Sporting': { desc:'Endurance & retrieving; water-confident.', examples:['Labrador','Golden Retriever','Vizsla','GSP','Setter'] },
@@ -73,15 +77,64 @@ const GROUPS = {
   'Companion':['Reinforce calm independence; routines.'],
   'Mixed / Other':['Profile by observed drive (retrieve, scent, herd).']
 };
+
+// ---------- External data (breed groups + recos) ----------
+let BREED_GROUPS = [];       // array of group objects (your prior format with id, name, examples, etc.)
+let RECO_BANDED = null;      // banded recommendations by group
+let RECO_BREED  = null;      // per-breed, per-dog-year overrides
+
+async function loadBreedGroups(){
+  try{
+    const res = await fetch(BREED_GROUPS_URL, { cache: 'no-store' });
+    BREED_GROUPS = await res.json();
+  }catch{ BREED_GROUPS = []; }
+}
+async function loadReco(){
+  try{
+    const [bandedRes, breedRes] = await Promise.allSettled([
+      fetch(RECO_BANDED_URL, { cache:'no-store' }),
+      fetch(RECO_BREED_URL,   { cache:'no-store' })
+    ]);
+    if (bandedRes.status === 'fulfilled') RECO_BANDED = await bandedRes.value.json();
+    if (breedRes.status  === 'fulfilled') RECO_BREED  = await breedRes.value.json();
+    if (!RECO_BANDED) RECO_BANDED = {};
+  }catch{
+    RECO_BANDED = RECO_BANDED || {};
+    RECO_BREED  = RECO_BREED  || null;
+  }
+}
+loadBreedGroups();
+loadReco();
+
+// Map a typed breed name to a BREED_GROUPS entry (exact match against examples)
+function findGroupByBreedName(name){
+  if(!name || !BREED_GROUPS.length) return null;
+  const n = name.trim().toLowerCase();
+  for (const g of BREED_GROUPS){
+    const ex = Array.isArray(g.examples)? g.examples : [];
+    if (ex.some(e => String(e).trim().toLowerCase() === n)) return g;
+  }
+  return null;
+}
+
+// ---------- Breed notes + examples under selectors ----------
 function updateBreedNotes(){
   const name = els.dogName.value || 'your dog';
   const breedTxt = (els.breed.value||'').trim();
   const group = els.breedGroup.value;
   const lb = parseInt(els.adultWeight.value,10) || 55;
+
+  // Autodisplay examples if our external map recognizes the breed
+  const mapped = findGroupByBreedName(breedTxt);
+  if (mapped) {
+    els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
+  } else {
+    const meta = GROUP_META[group];
+    els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
+  }
+
   els.profileLine.textContent = `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${group} • Weight: ${lb} lb`;
   els.breedNotes.innerHTML = (GROUPS[group]||[]).map(n=>`• ${n}`).join(' ');
-  const meta = GROUP_META[group];
-  els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
 }
 ['input','change'].forEach(ev=>{
   els.breed.addEventListener(ev, updateBreedNotes);
@@ -128,7 +181,7 @@ function nextDogYearDate(dob, H, lb, smooth){
   const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
 }
 
-// ---------- Confetti (multicolor) ----------
+// ---------- Confetti (multicolor; duration doubled) ----------
 function confetti(ms = 3400){
   const c = document.createElement('canvas');
   c.style.position = 'fixed'; c.style.inset = '0'; c.style.pointerEvents = 'none';
@@ -161,38 +214,7 @@ function confetti(ms = 3400){
   })(0);
 }
 
-// ---------- Recommendations (banded; fetchable) ----------
-let RECO_BANDED = null;
-async function loadReco(){
-  try{
-    const res = await fetch(RECO_URL, { cache:'no-store' });
-    RECO_BANDED = await res.json();
-  }catch{
-    // Fallback minimal seed (same as earlier)
-    RECO_BANDED = {
-      "Working / Herding": {
-        "puppy_1_6": { "lanes": {
-          "training": ["Name/marker 1–3 min, 3–5×/day","Gentle handling (paws/ears/mouth)","Crate = calm naps; short positive entries","Potty schedule after sleep/eat/play"],
-          "health":   ["Puppy vaccine series; deworm","Parasite prevention","Set up x-pen / safe confinement"],
-          "nutrition":["Puppy diet; 3–4 small meals/day","Weigh weekly; track BCS"],
-          "exercise": ["Free play on soft surfaces","Short leash intros; sniff & explore","No big jumps; carry stairs if possible"],
-          "bonding":  ["Friendly people/dogs socialization","Groom/brush + treats"],
-          "gear":     ["Light Y-front harness","Snuffle/lick mat; puppy teether"]
-        }},
-        "puppy_7_10": { "lanes": {
-          "training": ["Recall on 15–30 ft line","Settle on mat (1–3 → 5–7 min)","Leave-it & polite greetings"],
-          "health":   ["Series continues; spay/neuter timing","Teething: supervised chews"],
-          "nutrition":["Maintain puppy diet; growth curve"],
-          "exercise": ["2–3 short sniff-walks (5–15 min)","Avoid repetitive fetch/jumps"],
-          "bonding":  ["Puzzle feeders 3–4×/week","Easy nosework (3–5 hides)"],
-          "gear":     ["Biothane long line; treat pouch","Level-1/2 puzzle; soft tug"]
-        }}
-      }
-    };
-  }
-}
-loadReco();
-
+// ---------- Age bands (fallback by group) ----------
 const AGE_BANDS = [
   { key:'puppy_1_6',min:1,max:6,label:'Puppy I (1–6 dog-years)' },
   { key:'puppy_7_10',min:7,max:10,label:'Puppy II (7–10 dog-years)' },
@@ -203,11 +225,26 @@ const AGE_BANDS = [
 ];
 const bandForDY = dy => AGE_BANDS.find(b=>dy>=b.min && dy<=b.max) || AGE_BANDS[AGE_BANDS.length-1];
 
+// ---------- Plan selection (breed-first → banded → none) ----------
 function planFor(group, dogYears){
   const band = bandForDY(Math.round(dogYears));
-  const plan = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
-  return { plan: plan || null, band };
+  const breedName = (els.breed.value || '').trim();
+
+  // 1) Try exact breed at exact dog-year
+  if (RECO_BREED && breedName && RECO_BREED.breeds && RECO_BREED.breeds[breedName]) {
+    const b = RECO_BREED.breeds[breedName];
+    const entry = b.ages ? b.ages[String(Math.round(dogYears))] : null;
+    if (entry && entry.lanes) return { plan: entry, band };
+  }
+
+  // 2) Fallback by group band
+  const byGroup = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
+  if (byGroup) return { plan: byGroup, band };
+
+  // 3) Nothing found
+  return { plan: null, band };
 }
+
 function renderPlan(group, upcomingDY){
   const box=$('nextPlan'); box.innerHTML='';
   const {plan,band}=planFor(group,upcomingDY);
@@ -234,14 +271,18 @@ async function loadGifts(){
     const results = [];
     for(const it of items){
       let ok = true, score = 0;
+
+      // size
       const sizes = (Array.isArray(it.sizes)? it.sizes : (it.size? String(it.size).split(/[, \t]+/):[])).map(s=>String(s).toLowerCase());
       const sizeOK = !sizes.length || sizes.includes('any') || sizes.includes(bucket);
       if(!els.ignoreSize.checked && !sizeOK) ok=false; else if(sizeOK) score++;
 
+      // chewer
       const chewTag = (it.chewer? String(it.chewer).toLowerCase() : 'any');
       const chewOK = chewTag==='any' || chewTag===chewer;
       if(!els.ignoreChewer.checked && !chewOK) ok=false; else if(chewOK) score++;
 
+      // age (dog-years)
       const minDY = it.minDogYears ?? null, maxDY = it.maxDogYears ?? null;
       let ageOK = true;
       if(!isNaN(dogYears) && !els.ignoreAge.checked){
@@ -257,8 +298,17 @@ async function loadGifts(){
 
       if(ok) results.push({it, score, rnd:Math.random()});
     }
+
+    // Sort & dedupe top picks
     results.sort((a,b)=> (b.score-a.score) || (a.rnd-b.rnd));
-    const top = results.slice(0,12).map(r=>r.it);
+    const seen = new Set();
+    const top = [];
+    for(const r of results){
+      const key = r.it.id || r.it.url || r.it.title;
+      if(!key || seen.has(key)) continue;
+      seen.add(key); top.push(r.it);
+      if(top.length>=12) break;
+    }
 
     const parts=[]; parts.push(`size=${bucket}`); parts.push(`chewer=${chewer||'normal'}`); if(!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
     const ignored=[]; if(els.ignoreSize.checked) ignored.push('size'); if(els.ignoreChewer.checked) ignored.push('chewer'); if(els.ignoreAge.checked) ignored.push('age');
@@ -315,7 +365,7 @@ $('resetBtn').addEventListener('click', ()=>{
   els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false;
   els.nextHeadline.textContent='—'; els.nextBday.textContent='—'; els.nextBdayDelta.textContent='';
   els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent='';
-  $('nextPlan').innerHTML=''; $('nextPlanHeading').textContent='Next Birthday Plan';
+  document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
   els.sizeWarn.style.display='none'; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.epi.textContent='';
   renderHero(); updateBreedNotes();
 });
@@ -374,3 +424,4 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
   els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1';
   renderHero(); updateBreedNotes();
 })();
+// ======================================================================
