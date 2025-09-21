@@ -395,71 +395,105 @@ function renderPlan(group, upcomingDY){
 
 // ---------- Gifts ----------
 async function loadGifts(){
-  els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
-  try{
-    const res = await fetch(GIFT_FEED_URL,{cache:'no-store'}); const items = await res.json();
-    const lb = parseInt(els.adultWeight.value,10);
-    const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant';
+  els.gifts.innerHTML = '';
+  els.giftMeta.textContent = 'Loading…';
+
+  try {
+    const res = await fetch(GIFT_FEED_URL, { cache: 'no-store' });
+    const items = await res.json();
+
+    const lb = parseInt(els.adultWeight.value, 10);
+    const bucket = lb < 20 ? 'toy' : lb < 30 ? 'small' : lb < 50 ? 'medium' : lb < 90 ? 'large' : 'giant';
     const dogYears = parseFloat(els.humanYears.textContent);
-    const chewer = (els.chewer.value||'').toLowerCase();
+    const chewer = (els.chewer.value || '').toLowerCase();
 
     const results = [];
-    for(const it of items){
+
+    for (const it of items) {
       let ok = true, score = 0;
 
       // size
-      const sizes = (Array.isArray(it.sizes)? it.sizes : (it.size? String(it.size).split(/[, \t]+/):[])).map(s=>String(s).toLowerCase());
-      const sizeOK = !sizes.length || sizes.includes('any') ||                sizes.includes(bucket) ||                (bucket === 'toy' && sizes.includes('small'));
-      if(!els.ignoreSize.checked && !sizeOK) ok=false; else if(sizeOK) score++;
+      const sizes = (Array.isArray(it.sizes) ? it.sizes
+                    : (it.size ? String(it.size).split(/[, \t]+/) : []))
+                   .map(s => String(s).toLowerCase());
+      const sizeOK = !sizes.length ||
+                     sizes.includes('any') ||
+                     sizes.includes(bucket) ||
+                     (bucket === 'toy' && sizes.includes('small'));
+      if (!els.ignoreSize.checked && !sizeOK) ok = false; else if (sizeOK) score++;
 
-      // chewer
-     const chewField = it.chew ?? it.chewer; // accept either key
-let chewOK = true;
-if (!els.ignoreChewer.checked) {
-  if (Array.isArray(chewField)) {
-    chewOK = chewField.map(x => String(x).toLowerCase()).includes(chewer);
-  } else if (chewField != null) {
-    chewOK = String(chewField).toLowerCase() === 'any' ||
-             String(chewField).toLowerCase() === chewer;
-  }
-}
-if (!chewOK) ok = false; else score++;
+      // chewer (accept array or single value; allow 'any')
+      const chewField = it.chew ?? it.chewer;
+      let chewOK = true;
+      if (!els.ignoreChewer.checked) {
+        if (Array.isArray(chewField)) {
+          chewOK = chewField.map(x => String(x).toLowerCase()).includes(chewer);
+        } else if (chewField != null) {
+          const val = String(chewField).toLowerCase();
+          chewOK = (val === 'any') || (val === chewer);
+        }
+      }
+      if (!chewOK) ok = false; else score++;
 
-      if(!els.ignoreChewer.checked && !chewOK) ok=false; else if(chewOK) score++;
-
-      // age (dog-years)
+      // age (dog-years), accept minDogYears/maxDogYears or minAge/maxAge
       const minDY = (it.minDogYears ?? it.minAge ?? null);
-const maxDY = (it.maxDogYears ?? it.maxAge ?? null);
-let ageOK = true;
-if (!isNaN(dogYears) && !els.ignoreAge.checked) {
-  if (minDY != null) ageOK = ageOK && dogYears >= Number(minDY);
-  if (maxDY != null) ageOK = ageOK && dogYears <= Number(maxDY);
-  if (minDY == null && maxDY == null && it.tag) {
-    const t = String(it.tag).toLowerCase();
-    if (t.includes('puppy')) ageOK = dogYears <= 15;
-    else if (t.includes('senior')) ageOK = dogYears >= 61;
-  }
-}
-if (!ageOK) ok = false; else score++;
+      const maxDY = (it.maxDogYears ?? it.maxAge ?? null);
+      let ageOK = true;
+      if (!isNaN(dogYears) && !els.ignoreAge.checked) {
+        if (minDY != null) ageOK = ageOK && dogYears >= Number(minDY);
+        if (maxDY != null) ageOK = ageOK && dogYears <= Number(maxDY);
+        if (minDY == null && maxDY == null && it.tag) {
+          const t = String(it.tag).toLowerCase();
+          if (t.includes('puppy'))  ageOK = dogYears <= 15;
+          else if (t.includes('senior')) ageOK = dogYears >= 61;
+        }
+      }
+      if (!ageOK) ok = false; else score++;
 
-
-    // Sort & dedupe top picks
-    results.sort((a,b)=> (b.score-a.score) || (a.rnd-b.rnd));
-    const seen = new Set();
-    const top = [];
-    for(const r of results){
-      const key = r.it.id || r.it.url || r.it.title;
-      if(!key || seen.has(key)) continue;
-      seen.add(key); top.push(r.it);
-      if(top.length>=12) break;
+      // collect
+      if (ok) results.push({ it, score, rnd: Math.random() });
     }
 
-    const parts=[]; parts.push(`size=${bucket}`); parts.push(`chewer=${chewer||'normal'}`); if(!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
-    const ignored=[]; if(els.ignoreSize.checked) ignored.push('size'); if(els.ignoreChewer.checked) ignored.push('chewer'); if(els.ignoreAge.checked) ignored.push('age');
-    els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length? ' • ignored: '+ignored.join(', '):''}`;
-    els.gifts.innerHTML = top.map(it=>`<div class="gift"><h4>${it.title||'Gift'}</h4><div class="muted">${(it.tag||it.ageTag||'').toString()}</div><div style="margin-top:8px"><a class="link" href="${withAffiliate(it.url)}" target="_blank" rel="noopener">View</a></div></div>`).join('');
-  }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; }
+    // Sort & dedupe top picks (higher score first, then random tiebreak)
+    results.sort((a, b) => (b.score - a.score) || (a.rnd - b.rnd));
+    const seen = new Set();
+    const top = [];
+    for (const r of results) {
+      const key = r.it.id || r.it.url || r.it.title;
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      top.push(r.it);
+      if (top.length >= 12) break;
+    }
+
+    // Meta + render
+    const parts = [];
+    parts.push(`size=${bucket}`);
+    parts.push(`chewer=${chewer || 'normal'}`);
+    if (!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
+    const ignored = [];
+    if (els.ignoreSize.checked) ignored.push('size');
+    if (els.ignoreChewer.checked) ignored.push('chewer');
+    if (els.ignoreAge.checked) ignored.push('age');
+
+    els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length ? ' • ignored: ' + ignored.join(', ') : ''}`;
+
+    els.gifts.innerHTML = top.map(it => `
+      <div class="gift">
+        <h4>${it.title || 'Gift'}</h4>
+        <div class="muted">${(it.tag || it.ageTag || '').toString()}</div>
+        <div style="margin-top:8px">
+          <a class="link" href="${withAffiliate(it.url)}" target="_blank" rel="noopener">View</a>
+        </div>
+      </div>
+    `).join('');
+
+  } catch (e) {
+    console.warn('[Barkday] loadGifts error', e);
+    els.giftMeta.textContent = 'Could not load gift ideas.';
+  }
 }
+
 $('loadGifts').addEventListener('click', loadGifts);
 
 // ---------- Compute ----------
