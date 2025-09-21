@@ -9,6 +9,15 @@
   <link rel="preload" as="image" href="barkday-logo2.png?v=2">
   <link rel="stylesheet" href="style.css?v=2" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- PWA manifest + theme color -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111827">
+
+<!-- App icons (optional but nice for browsers) -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  
 </head>
 <body>
   <!-- SPLASH -->
@@ -156,5 +165,14 @@
   <p><em>As an Amazon Associate I earn from qualifying purchases.</em></p>
 </footer>
 
+<!-- Register PWA service worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    // IMPORTANT: capital B matches your repo URL (/Barkday/)
+    navigator.serviceWorker.register('/Barkday/service-worker.js');
+  }
+</script>
+
+  
 </body>
 </html>
