@@ -91,7 +91,6 @@
   { "title": "Low-Impact Puzzle Toy", "url": "https://www.amazon.com/s?k=senior+dog+puzzle+toy", "tag": "puzzle", "sizes": ["small","medium"], "minAge": 7, "chew": ["gentle"] },
   { "title": "Joint Support Treats", "url": "https://www.amazon.com/s?k=dog+joint+support+treats", "tag": "supplement", "sizes": ["small","medium","large","giant"], "minAge": 7, "chew": ["gentle","normal"] },
 
-  /* ----- Added staples ----- */
   { "title": "Flirt Pole (Medium, Replaceable Lures)", "url": "https://www.amazon.com/s?k=flirt+pole+for+dogs", "tag": "enrichment", "sizes": ["small","medium","large"], "minAge": 0.8, "maxAge": 7, "chew": ["normal","power"] },
   { "title": "West Paw Toppl Connector (S+M Set)", "url": "https://www.amazon.com/s?k=west+paw+toppl+connector", "tag": "enrichment", "sizes": ["small","medium"], "minAge": 0.5, "maxAge": 7, "chew": ["normal"] },
   { "title": "Goughnuts Stick (Black)", "url": "https://www.amazon.com/s?k=goughnuts+stick", "tag": "heavy-duty", "sizes": ["medium","large","giant"], "minAge": 1, "maxAge": 10, "chew": ["power"] },
