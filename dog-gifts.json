@@ -1,454 +1,91 @@
 [
-  {
-    "title": "KONG Puppy (Small)",
-    "url": "https://www.amazon.com/s?k=KONG+Puppy+Small",
-    "minAge": 0,
-    "maxAge": 0.5,
-    "chew": [
-      "normal"
-    ],
-    "tag": "puppy"
-  },
-  {
-    "title": "Nylabone Puppy Teething Ring",
-    "url": "https://www.amazon.com/s?k=Nylabone+puppy+teething+ring",
-    "minAge": 0,
-    "maxAge": 0.5,
-    "chew": [
-      "normal"
-    ],
-    "tag": "teething"
-  },
-  {
-    "title": "Benebone Puppy Chew (Soft)",
-    "url": "https://www.amazon.com/s?k=benebone+puppy+soft",
-    "minAge": 0.1,
-    "maxAge": 0.6,
-    "chew": [
-      "normal"
-    ],
-    "tag": "teething"
-  },
-  {
-    "title": "Puppy Snuffle Mat (Small)",
-    "url": "https://www.amazon.com/s?k=puppy+snuffle+mat+small",
-    "minAge": 0,
-    "maxAge": 0.8,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "enrichment"
-  },
-  {
-    "title": "ZippyPaws Mini Plush",
-    "url": "https://www.amazon.com/s?k=ZippyPaws+mini+plush",
-    "minAge": 0,
-    "maxAge": 0.6,
-    "chew": [
-      "normal"
-    ],
-    "tag": "plush"
-  },
-  {
-    "title": "Puppy Rope with Knots",
-    "url": "https://www.amazon.com/s?k=puppy+rope+toy+small",
-    "minAge": 0.2,
-    "maxAge": 0.8,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "tug"
-  },
-  {
-    "title": "Training Treat Pouch + Clicker",
-    "url": "https://www.amazon.com/s?k=dog+training+clicker+pouch",
-    "minAge": 0,
-    "maxAge": 1,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "training"
-  },
-  {
-    "title": "Chuckit! Ultra Ball (M)",
-    "url": "https://www.amazon.com/s?k=Chuckit+Ultra+Ball+medium",
-    "minAge": 0.5,
-    "maxAge": 3,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "fetch"
-  },
-  {
-    "title": "West Paw Zogoflex Hurley",
-    "url": "https://www.amazon.com/s?k=west+paw+hurley",
-    "minAge": 0.5,
-    "maxAge": 7,
-    "chew": [
-      "strong",
-      "super"
-    ],
-    "tag": "durable"
-  },
-  {
-    "title": "Goughnuts Ring (Green)",
-    "url": "https://www.amazon.com/s?k=goughnuts+ring+green",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "super"
-    ],
-    "tag": "heavy-duty"
-  },
-  {
-    "title": "KONG Classic (M)",
-    "url": "https://www.amazon.com/s?k=KONG+Classic+Medium",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "stuffable"
-  },
-  {
-    "title": "Rope Tug (2 Knots)",
-    "url": "https://www.amazon.com/s?k=dog+rope+tug+2+knots",
-    "minAge": 0.5,
-    "maxAge": 4,
-    "chew": [
-      "strong",
-      "super"
-    ],
-    "tag": "tug"
-  },
-  {
-    "title": "Treat Dispensing Ball",
-    "url": "https://www.amazon.com/s?k=dog+treat+dispensing+ball",
-    "minAge": 0.5,
-    "maxAge": 4,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "puzzle"
-  },
-  {
-    "title": "Frisbee (Soft Rubber)",
-    "url": "https://www.amazon.com/s?k=soft+rubber+dog+frisbee",
-    "minAge": 0.5,
-    "maxAge": 4,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "fetch"
-  },
-  {
-    "title": "Lick Mat with Suction",
-    "url": "https://www.amazon.com/s?k=dog+lick+mat",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "calming"
-  },
-  {
-    "title": "Nina Ottosson Puzzle (Level 2)",
-    "url": "https://www.amazon.com/s?k=nina+ottosson+level+2",
-    "minAge": 2,
-    "maxAge": 7,
-    "chew": [
-      "normal"
-    ],
-    "tag": "puzzle"
-  },
-  {
-    "title": "Benebone Wishbone (Nylon)",
-    "url": "https://www.amazon.com/s?k=benebone+wishbone",
-    "minAge": 1,
-    "maxAge": 7,
-    "chew": [
-      "strong",
-      "super"
-    ],
-    "tag": "chew"
-  },
-  {
-    "title": "KONG Extreme (M) Black",
-    "url": "https://www.amazon.com/s?k=KONG+Extreme+Medium",
-    "minAge": 2,
-    "maxAge": 10,
-    "chew": [
-      "super"
-    ],
-    "tag": "stuffable"
-  },
-  {
-    "title": "JW Hol-ee Roller (M)",
-    "url": "https://www.amazon.com/s?k=jw+hol-ee+roller+medium",
-    "minAge": 1.5,
-    "maxAge": 7,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "fetch"
-  },
-  {
-    "title": "Outward Hound Puzzle Brick",
-    "url": "https://www.amazon.com/s?k=outward+hound+puzzle+brick",
-    "minAge": 2,
-    "maxAge": 7,
-    "chew": [
-      "normal"
-    ],
-    "tag": "puzzle"
-  },
-  {
-    "title": "West Paw Toppl (L)",
-    "url": "https://www.amazon.com/s?k=west+paw+toppl+large",
-    "minAge": 1.5,
-    "maxAge": 7,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "enrichment"
-  },
-  {
-    "title": "Tuff Rubber Tire (M/L)",
-    "url": "https://www.amazon.com/s?k=dog+rubber+tire+toy",
-    "minAge": 2,
-    "maxAge": 7,
-    "chew": [
-      "strong",
-      "super"
-    ],
-    "tag": "durable"
-  },
-  {
-    "title": "Dental Chew Sticks",
-    "url": "https://www.amazon.com/s?k=dog+dental+chew+sticks",
-    "minAge": 1,
-    "maxAge": 8,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "dental"
-  },
-  {
-    "title": "Squeakless Plush (No Stuffing)",
-    "url": "https://www.amazon.com/s?k=dog+plush+no+stuffing",
-    "minAge": 1,
-    "maxAge": 6,
-    "chew": [
-      "normal"
-    ],
-    "tag": "plush"
-  },
-  {
-    "title": "Senior Soothing Plush",
-    "url": "https://www.amazon.com/s?k=senior+dog+plush",
-    "minAge": 7,
-    "chew": [
-      "normal"
-    ],
-    "tag": "comfort"
-  },
-  {
-    "title": "Gentle Chew Stick (Soft)",
-    "url": "https://www.amazon.com/s?k=soft+dog+chew+stick",
-    "minAge": 7,
-    "chew": [
-      "normal"
-    ],
-    "tag": "gentle"
-  },
-  {
-    "title": "Lick Mat (Senior)",
-    "url": "https://www.amazon.com/s?k=dog+lick+mat+senior",
-    "minAge": 7,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "calming"
-  },
-  {
-    "title": "Low-Impact Puzzle Toy",
-    "url": "https://www.amazon.com/s?k=senior+dog+puzzle+toy",
-    "minAge": 7,
-    "chew": [
-      "normal"
-    ],
-    "tag": "puzzle"
-  },
-  {
-    "title": "Joint Support Treats",
-    "url": "https://www.amazon.com/s?k=dog+joint+support+treats",
-    "minAge": 7,
-    "chew": [
-      "normal",
-      "strong"
-    ],
-    "tag": "supplement"
-  },
-  {
-    "title": "Snuggle Blanket (Washable)",
-    "url": "https://www.amazon.com/s?k=washable+dog+blanket",
-    "minAge": 7,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "comfort"
-  },
-  {
-    "title": "Slow Feeder Bowl (M)",
-    "url": "https://www.amazon.com/s?k=dog+slow+feeder+bowl+medium",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "feeding"
-  },
-  {
-    "title": "Travel Water Bottle",
-    "url": "https://www.amazon.com/s?k=dog+travel+water+bottle",
-    "minAge": 0.3,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "outdoors"
-  },
-  {
-    "title": "LED Night Collar",
-    "url": "https://www.amazon.com/s?k=dog+led+collar",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "safety"
-  },
-  {
-    "title": "AirTag Collar Holder",
-    "url": "https://www.amazon.com/s?k=airtag+dog+collar+holder",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "safety"
-  },
-  {
-    "title": "Grooming Brush (Slicker)",
-    "url": "https://www.amazon.com/s?k=dog+slicker+brush",
-    "minAge": 0.3,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "grooming"
-  },
-  {
-    "title": "Nail Grinder (Quiet)",
-    "url": "https://www.amazon.com/s?k=dog+nail+grinder+quiet",
-    "minAge": 0.5,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "grooming"
-  },
-  {
-    "title": "Freeze-Dried Training Treats",
-    "url": "https://www.amazon.com/s?k=freeze+dried+dog+training+treats",
-    "minAge": 0.2,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "treats"
-  },
-  {
-    "title": "Poop Bag Dispenser + Bags",
-    "url": "https://www.amazon.com/s?k=dog+poop+bag+dispenser",
-    "minAge": 0.2,
-    "maxAge": 10,
-    "chew": [
-      "normal",
-      "strong",
-      "super"
-    ],
-    "tag": "walks"
-  },
-  {
-    "title": "Chuckit! Ultra Ball (L)",
-    "url": "https://www.amazon.com/s?k=Chuckit+Ultra+Ball+large",
-    "minAge": 1,
-    "maxAge": 7,
-    "chew": [
-      "strong"
-    ],
-    "tag": "fetch"
-  },
-  {
-    "title": "KONG Extreme (L) Black",
-    "url": "https://www.amazon.com/s?k=KONG+Extreme+Large",
-    "minAge": 2,
-    "maxAge": 10,
-    "chew": [
-      "super"
-    ],
-    "tag": "stuffable"
-  },
-  {
-    "title": "West Paw Jive (L)",
-    "url": "https://www.amazon.com/s?k=west+paw+jive+large",
-    "minAge": 1,
-    "maxAge": 7,
-    "chew": [
-      "strong",
-      "super"
-    ],
-    "tag": "fetch"
-  },
-  {
-    "title": "Benebone Maplestick (L)",
-    "url": "https://www.amazon.com/s?k=benebone+maplestick+large",
-    "minAge": 2,
-    "maxAge": 7,
-    "chew": [
-      "strong"
-    ],
-    "tag": "chew"
-  }
+  { "title": "KONG Puppy (S)", "url": "https://www.amazon.com/s?k=KONG+Puppy+Small", "tag": "puppy", "sizes": ["small"], "minAge": 0, "maxAge": 0.5, "chew": ["normal"] },
+  { "title": "KONG Puppy (M)", "url": "https://www.amazon.com/s?k=KONG+Puppy+Medium", "tag": "puppy", "sizes": ["medium"], "minAge": 0, "maxAge": 0.5, "chew": ["normal"] },
+  { "title": "KONG Puppy (L/XL)", "url": "https://www.amazon.com/s?k=KONG+Puppy+Large", "tag": "puppy", "sizes": ["large","giant"], "minAge": 0, "maxAge": 0.5, "chew": ["normal"] },
+
+  { "title": "Nylabone Puppy Teething Ring", "url": "https://www.amazon.com/s?k=Nylabone+puppy+teething+ring", "tag": "teething", "sizes": ["small","medium"], "minAge": 0, "maxAge": 0.5, "chew": ["normal"] },
+  { "title": "Benebone Puppy (Soft)", "url": "https://www.amazon.com/s?k=benebone+puppy+soft", "tag": "teething", "sizes": ["small","medium"], "minAge": 0.1, "maxAge": 0.6, "chew": ["normal"] },
+  { "title": "Puppy Snuffle Mat (S)", "url": "https://www.amazon.com/s?k=puppy+snuffle+mat+small", "tag": "enrichment", "sizes": ["small"], "minAge": 0, "maxAge": 0.8, "chew": ["normal","strong"] },
+  { "title": "ZippyPaws Mini Plush", "url": "https://www.amazon.com/s?k=ZippyPaws+mini+plush", "tag": "plush", "sizes": ["small"], "minAge": 0, "maxAge": 0.6, "chew": ["normal"] },
+  { "title": "Puppy Rope with Knots (S/M)", "url": "https://www.amazon.com/s?k=puppy+rope+toy+small", "tag": "tug", "sizes": ["small","medium"], "minAge": 0.2, "maxAge": 0.8, "chew": ["normal","strong"] },
+
+  { "title": "Training Pouch + Clicker", "url": "https://www.amazon.com/s?k=dog+training+clicker+pouch", "tag": "training", "sizes": ["small","medium","large","giant"], "minAge": 0, "maxAge": 1, "chew": ["normal","strong","super"] },
+  { "title": "Freeze-Dried Training Treats", "url": "https://www.amazon.com/s?k=freeze+dried+dog+training+treats", "tag": "treats", "sizes": ["small","medium","large","giant"], "minAge": 0.2, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Soft Treat Pouch (Magnetic)", "url": "https://www.amazon.com/s?k=dog+training+treat+pouch+magnetic", "tag": "training", "sizes": ["small","medium","large","giant"], "minAge": 0, "maxAge": 10, "chew": ["normal"] },
+
+  { "title": "KONG Classic (M)", "url": "https://www.amazon.com/s?k=KONG+Classic+Medium", "tag": "stuffable", "sizes": ["medium"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "KONG Extreme (M) Black", "url": "https://www.amazon.com/s?k=KONG+Extreme+Medium", "tag": "stuffable", "sizes": ["medium"], "minAge": 2, "maxAge": 10, "chew": ["super"] },
+  { "title": "KONG Extreme (L/XL) Black", "url": "https://www.amazon.com/s?k=KONG+Extreme+Large", "tag": "stuffable", "sizes": ["large","giant"], "minAge": 2, "maxAge": 10, "chew": ["super"] },
+  { "title": "West Paw Toppl (L)", "url": "https://www.amazon.com/s?k=west+paw+toppl+large", "tag": "enrichment", "sizes": ["large","giant"], "minAge": 1.5, "maxAge": 7, "chew": ["normal","strong"] },
+
+  { "title": "Chuckit! Ultra Ball (S)", "url": "https://www.amazon.com/s?k=Chuckit+Ultra+Ball+small", "tag": "fetch", "sizes": ["small"], "minAge": 0.5, "maxAge": 3, "chew": ["normal"] },
+  { "title": "Chuckit! Ultra Ball (M)", "url": "https://www.amazon.com/s?k=Chuckit+Ultra+Ball+medium", "tag": "fetch", "sizes": ["medium"], "minAge": 0.5, "maxAge": 3, "chew": ["normal","strong"] },
+  { "title": "Chuckit! Ultra Ball (L/XL)", "url": "https://www.amazon.com/s?k=Chuckit+Ultra+Ball+large", "tag": "fetch", "sizes": ["large","giant"], "minAge": 1, "maxAge": 7, "chew": ["strong"] },
+  { "title": "Frisbee (Soft Rubber)", "url": "https://www.amazon.com/s?k=soft+rubber+dog+frisbee", "tag": "fetch", "sizes": ["small","medium","large"], "minAge": 0.5, "maxAge": 4, "chew": ["normal","strong"] },
+  { "title": "JW Hol-ee Roller (M)", "url": "https://www.amazon.com/s?k=jw+hol-ee+roller+medium", "tag": "fetch", "sizes": ["small","medium"], "minAge": 1.5, "maxAge": 7, "chew": ["normal","strong"] },
+
+  { "title": "West Paw Zogoflex Hurley", "url": "https://www.amazon.com/s?k=west+paw+hurley", "tag": "durable", "sizes": ["small","medium","large"], "minAge": 0.5, "maxAge": 7, "chew": ["strong","super"] },
+  { "title": "West Paw Jive (L)", "url": "https://www.amazon.com/s?k=west+paw+jive+large", "tag": "fetch", "sizes": ["large","giant"], "minAge": 1, "maxAge": 7, "chew": ["strong","super"] },
+  { "title": "Goughnuts Ring (Green)", "url": "https://www.amazon.com/s?k=goughnuts+ring+green", "tag": "heavy-duty", "sizes": ["medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["super"] },
+  { "title": "Tuff Rubber Tire (M/L)", "url": "https://www.amazon.com/s?k=dog+rubber+tire+toy", "tag": "durable", "sizes": ["medium","large","giant"], "minAge": 2, "maxAge": 7, "chew": ["strong","super"] },
+  { "title": "Rope Tug (2 Knots)", "url": "https://www.amazon.com/s?k=dog+rope+tug+2+knots", "tag": "tug", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 4, "chew": ["strong","super"] },
+
+  { "title": "Nina Ottosson Puzzle (Level 1)", "url": "https://www.amazon.com/s?k=nina+ottosson+level+1", "tag": "puzzle", "sizes": ["small","medium","large"], "minAge": 1, "maxAge": 7, "chew": ["normal"] },
+  { "title": "Nina Ottosson Puzzle (Level 2)", "url": "https://www.amazon.com/s?k=nina+ottosson+level+2", "tag": "puzzle", "sizes": ["small","medium","large"], "minAge": 2, "maxAge": 7, "chew": ["normal"] },
+  { "title": "Outward Hound Puzzle Brick", "url": "https://www.amazon.com/s?k=outward+hound+puzzle+brick", "tag": "puzzle", "sizes": ["small","medium","large"], "minAge": 2, "maxAge": 7, "chew": ["normal"] },
+  { "title": "Treat Dispensing Ball", "url": "https://www.amazon.com/s?k=dog+treat+dispensing+ball", "tag": "puzzle", "sizes": ["small","medium","large"], "minAge": 0.5, "maxAge": 4, "chew": ["normal","strong"] },
+
+  { "title": "Lick Mat (Standard)", "url": "https://www.amazon.com/s?k=dog+lick+mat", "tag": "calming", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong"] },
+  { "title": "Lick Mat (Senior)", "url": "https://www.amazon.com/s?k=dog+lick+mat+senior", "tag": "calming", "sizes": ["small","medium","large"], "minAge": 7, "chew": ["normal","strong"] },
+
+  { "title": "Benebone Wishbone (Nylon)", "url": "https://www.amazon.com/s?k=benebone+wishbone", "tag": "chew", "sizes": ["medium","large","giant"], "minAge": 1, "maxAge": 7, "chew": ["strong","super"] },
+  { "title": "Benebone Maplestick (L)", "url": "https://www.amazon.com/s?k=benebone+maplestick+large", "tag": "chew", "sizes": ["large","giant"], "minAge": 2, "maxAge": 7, "chew": ["strong"] },
+  { "title": "Natural Rubber Chew (S/M)", "url": "https://www.amazon.com/s?k=natural+rubber+dog+chew+toy", "tag": "chew", "sizes": ["small","medium"], "minAge": 0.8, "maxAge": 6, "chew": ["strong"] },
+
+  { "title": "Squeakless Plush (No Stuffing)", "url": "https://www.amazon.com/s?k=dog+plush+no+stuffing", "tag": "plush", "sizes": ["small","medium","large"], "minAge": 1, "maxAge": 6, "chew": ["normal"] },
+  { "title": "Crinkle Plush (Flat)", "url": "https://www.amazon.com/s?k=dog+crinkle+plush+flat", "tag": "plush", "sizes": ["small","medium"], "minAge": 0.8, "maxAge": 6, "chew": ["normal"] },
+
+  { "title": "Slow Feeder Bowl (S)", "url": "https://www.amazon.com/s?k=dog+slow+feeder+bowl+small", "tag": "feeding", "sizes": ["small"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Slow Feeder Bowl (M)", "url": "https://www.amazon.com/s?k=dog+slow+feeder+bowl+medium", "tag": "feeding", "sizes": ["medium"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Slow Feeder Bowl (L)", "url": "https://www.amazon.com/s?k=dog+slow+feeder+bowl+large", "tag": "feeding", "sizes": ["large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+
+  { "title": "Travel Water Bottle", "url": "https://www.amazon.com/s?k=dog+travel+water+bottle", "tag": "outdoors", "sizes": ["small","medium","large","giant"], "minAge": 0.3, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Collapsible Travel Bowl (2-pack)", "url": "https://www.amazon.com/s?k=collapsible+dog+bowl", "tag": "outdoors", "sizes": ["small","medium","large","giant"], "minAge": 0.3, "maxAge": 10, "chew": ["normal"] },
+  { "title": "LED Night Collar", "url": "https://www.amazon.com/s?k=dog+led+collar", "tag": "safety", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "AirTag Collar Holder", "url": "https://www.amazon.com/s?k=airtag+dog+collar+holder", "tag": "safety", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+
+  { "title": "Harness (Y-Front, S/M)", "url": "https://www.amazon.com/s?k=dog+harness+front+clip+small", "tag": "walks", "sizes": ["small","medium"], "minAge": 0.4, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Harness (Y-Front, L/XL)", "url": "https://www.amazon.com/s?k=dog+harness+front+clip+large", "tag": "walks", "sizes": ["large","giant"], "minAge": 0.7, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Hands-Free Leash (Adjustable)", "url": "https://www.amazon.com/s?k=hands+free+dog+leash+adjustable", "tag": "walks", "sizes": ["small","medium","large"], "minAge": 0.6, "maxAge": 10, "chew": ["normal","strong"] },
+
+  { "title": "Cooling Mat (Gel, M)", "url": "https://www.amazon.com/s?k=dog+cooling+mat+medium", "tag": "comfort", "sizes": ["medium"], "minAge": 0.6, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Cooling Mat (Gel, L/XL)", "url": "https://www.amazon.com/s?k=dog+cooling+mat+large", "tag": "comfort", "sizes": ["large","giant"], "minAge": 0.6, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Snuggle Blanket (Washable)", "url": "https://www.amazon.com/s?k=washable+dog+blanket", "tag": "comfort", "sizes": ["small","medium","large","giant"], "minAge": 7, "chew": ["normal","strong","super"] },
+
+  { "title": "Orthopedic Bed (Egg-Crate, M)", "url": "https://www.amazon.com/s?k=orthopedic+dog+bed+medium", "tag": "comfort", "sizes": ["medium"], "minAge": 5, "maxAge": 12, "chew": ["normal"] },
+  { "title": "Orthopedic Bed (Egg-Crate, L/XL)", "url": "https://www.amazon.com/s?k=orthopedic+dog+bed+large", "tag": "comfort", "sizes": ["large","giant"], "minAge": 5, "maxAge": 12, "chew": ["normal"] },
+
+  { "title": "Grooming Brush (Slicker)", "url": "https://www.amazon.com/s?k=dog+slicker+brush", "tag": "grooming", "sizes": ["small","medium","large","giant"], "minAge": 0.3, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Deshedding Tool (M)", "url": "https://www.amazon.com/s?k=dog+deshedding+tool+medium", "tag": "grooming", "sizes": ["medium"], "minAge": 0.8, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Deshedding Tool (L/XL)", "url": "https://www.amazon.com/s?k=dog+deshedding+tool+large", "tag": "grooming", "sizes": ["large","giant"], "minAge": 0.8, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Nail Grinder (Quiet)", "url": "https://www.amazon.com/s?k=dog+nail+grinder+quiet", "tag": "grooming", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Toothbrush & Enzymatic Gel", "url": "https://www.amazon.com/s?k=dog+toothbrush+enzymatic+gel", "tag": "dental", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Dental Chew Sticks", "url": "https://www.amazon.com/s?k=dog+dental+chew+sticks", "tag": "dental", "sizes": ["small","medium","large","giant"], "minAge": 1, "maxAge": 8, "chew": ["normal","strong"] },
+
+  { "title": "Puzzle Bowl (S/M)", "url": "https://www.amazon.com/s?k=dog+puzzle+bowl+small", "tag": "feeding", "sizes": ["small","medium"], "minAge": 0.5, "maxAge": 8, "chew": ["normal"] },
+  { "title": "Puzzle Bowl (L)", "url": "https://www.amazon.com/s?k=dog+puzzle+bowl+large", "tag": "feeding", "sizes": ["large"], "minAge": 0.5, "maxAge": 8, "chew": ["normal"] },
+
+  { "title": "Poop Bag Dispenser + Bags", "url": "https://www.amazon.com/s?k=dog+poop+bag+dispenser", "tag": "walks", "sizes": ["small","medium","large","giant"], "minAge": 0.2, "maxAge": 10, "chew": ["normal","strong","super"] },
+  { "title": "Reflective Raincoat (S/M)", "url": "https://www.amazon.com/s?k=dog+raincoat+small+reflective", "tag": "outdoors", "sizes": ["small","medium"], "minAge": 0.5, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Reflective Raincoat (L/XL)", "url": "https://www.amazon.com/s?k=dog+raincoat+large+reflective", "tag": "outdoors", "sizes": ["large","giant"], "minAge": 0.7, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Winter Coat (Insulated, M)", "url": "https://www.amazon.com/s?k=insulated+dog+coat+medium", "tag": "outdoors", "sizes": ["medium"], "minAge": 0.8, "maxAge": 10, "chew": ["normal"] },
+  { "title": "Winter Coat (Insulated, L/XL)", "url": "https://www.amazon.com/s?k=insulated+dog+coat+large", "tag": "outdoors", "sizes": ["large","giant"], "minAge": 0.8, "maxAge": 10, "chew": ["normal"] },
+
+  { "title": "GPS Tag (AirTag Mount Only)", "url": "https://www.amazon.com/s?k=dog+airtag+holder+durable", "tag": "tech", "sizes": ["small","medium","large","giant"], "minAge": 0.6, "maxAge": 10, "chew": ["normal","strong"] },
+  { "title": "LED Clip-On Light (2-pack)", "url": "https://www.amazon.com/s?k=led+clip+on+dog+light", "tag": "safety", "sizes": ["small","medium","large","giant"], "minAge": 0.5, "maxAge": 10, "chew": ["normal"] },
+
+  { "title": "Senior Soothing Plush", "url": "https://www.amazon.com/s?k=senior+dog+plush", "tag": "comfort", "sizes": ["small","medium","large"], "minAge": 7, "chew": ["normal"] },
+  { "title": "Gentle Chew Stick (Soft)", "url": "https://www.amazon.com/s?k=soft+dog+chew+stick", "tag": "gentle", "sizes": ["small","medium"], "minAge": 7, "chew": ["normal"] },
+  { "title": "Low-Impact Puzzle Toy", "url": "https://www.amazon.com/s?k=senior+dog+puzzle+toy", "tag": "puzzle", "sizes": ["small","medium"], "minAge": 7, "chew": ["normal"] },
+  { "title": "Joint Support Treats", "url": "https://www.amazon.com/s?k=dog+joint+support+treats", "tag": "supplement", "sizes": ["small","medium","large","giant"], "minAge": 7, "chew": ["normal","strong"] }
 ]
