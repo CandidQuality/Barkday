@@ -161,15 +161,70 @@ loadBreedGroups();
 loadReco();
 
 // Map typed breed → BREED_GROUPS entry (exact match against examples)
-function findGroupByBreedName(name){
-  if(!name || !BREED_GROUPS.length) return null;
-  const n = name.trim().toLowerCase();
-  for (const g of BREED_GROUPS){
-    const ex = Array.isArray(g.examples)? g.examples : [];
-    if (ex.some(e => String(e).trim().toLowerCase() === n)) return g;
+// --- put this near the other helpers/indices ---
+
+// Lightweight canonical aliases for common short names / nicknames
+const BREED_ALIASES = {
+  "lab": "Labrador Retriever",
+  "labrador": "Labrador Retriever",
+  "gsd": "German Shepherd",
+  "german shepherd dog": "German Shepherd",
+  "aussie": "Australian Shepherd",
+  "rottie": "Rottweiler",
+  "frenchie": "French Bulldog"
+};
+
+// Normalize a typed breed into a canonical display name if we can.
+function getCanonicalBreedName(input){
+  if (!input) return null;
+  const q = String(input).trim().toLowerCase();
+
+  // 1) explicit alias map
+  if (BREED_ALIASES[q]) return BREED_ALIASES[q];
+
+  // 2) use the breed-name map built from reco-breed.json keys (already built in rebuildBreedIndex)
+  if (BREED_NAME_MAP[q]) return BREED_NAME_MAP[q];
+
+  // 3) prefix fuzzy: user input is a prefix of a known canonical name
+  for (const key in BREED_NAME_MAP){
+    if (key.startsWith(q)) return BREED_NAME_MAP[key];
   }
   return null;
 }
+
+// Fuzzy group lookup: try exact, alias→canonical, and prefix/inclusion matches
+function findGroupByBreedName(name){
+  if (!name || !BREED_GROUPS.length) return null;
+
+  const typed = String(name).trim();
+  const typedLC = typed.toLowerCase();
+
+  // If we can canonicalize “lab” → “Labrador Retriever”, do it up front
+  const canonical = getCanonicalBreedName(typed) || typed;
+  const canonicalLC = canonical.toLowerCase();
+
+  for (const g of BREED_GROUPS){
+    const ex = Array.isArray(g.examples) ? g.examples : [];
+    // Exact (case-insensitive)
+    if (ex.some(e => String(e).trim().toLowerCase() === canonicalLC)) return g;
+
+    // Prefix fuzzy (either side) to handle "Labrador" vs "Labrador Retriever"
+    if (ex.some(e => {
+      const elc = String(e).trim().toLowerCase();
+      return elc.startsWith(canonicalLC) || canonicalLC.startsWith(elc) ||
+             elc.startsWith(typedLC)     || typedLC.startsWith(elc);
+    })) return g;
+
+    // Inclusion fallback (rare, but helpful for multi-word variants)
+    if (ex.some(e => {
+      const elc = String(e).trim().toLowerCase();
+      return elc.includes(canonicalLC) || canonicalLC.includes(elc) ||
+             elc.includes(typedLC)     || typedLC.includes(elc);
+    })) return g;
+  }
+  return null;
+}
+
 
 // Fuzzy breed lookup from RECO_BREED
 function getBreedEntry(input){
