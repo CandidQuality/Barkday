@@ -1,6 +1,6 @@
-// very top of app.js
 console.log('[Barkday] app.js loaded v3 (aliases externalized)');
 // ====================== Barkday app.js (complete, upgraded) ======================
+
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
 const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
@@ -11,6 +11,11 @@ const RECO_BANDED_URL   = "data/reco-banded.json?v=2";
 const RECO_BREED_URL    = "data/reco-breed.json?v=2";
 const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 const BREED_ALIASES_URL = "data/breed_aliases.json?v=1"; // NEW: external aliases
+
+// --- Affiliate Config (Amazon live; Chewy placeholder) ---
+const AMAZON_TAG = "candidquality-20";               // your live Amazon Associates tag
+const CHEWY_IMPACT_BASE = "";                        // leave empty until Chewy approves (e.g., "https://chewy.pxf.io/c/XXXX/XXXX/XXXX")
+const CHEWY_ENABLED = !!CHEWY_IMPACT_BASE;           // auto-toggle when you paste your Chewy Impact base
 
 // ---------- Splash + Logos ----------
 (function(){
@@ -401,6 +406,69 @@ function renderPlan(group, upcomingDY){
   }
 }
 
+/* =========================
+   Affiliate link builders + disclosure
+   ========================= */
+
+// --- Affiliate link builders ---
+function buildAmazonLink(asinOrUrl, tag = AMAZON_TAG) {
+  try {
+    const isUrl = /^https?:\/\//i.test(asinOrUrl);
+    const url = new URL(isUrl ? asinOrUrl : `https://www.amazon.com/dp/${encodeURIComponent(asinOrUrl)}`);
+    if (tag) url.searchParams.set("tag", tag);
+    return url.toString();
+  } catch (e) {
+    console.warn("[AmazonLink] bad input:", asinOrUrl, e);
+    return "#";
+  }
+}
+function buildChewyLinkOrFallback(chewyProductUrl) {
+  try {
+    if (!CHEWY_ENABLED) return chewyProductUrl; // plain non-affiliate until you’re live
+    const url = new URL(CHEWY_IMPACT_BASE);
+    // Most Chewy/Impact campaign links accept "u" for the final destination.
+    url.searchParams.set("u", chewyProductUrl);
+    return url.toString();
+  } catch (e) {
+    console.warn("[ChewyLink] bad input:", chewyProductUrl, e);
+    return chewyProductUrl || "#";
+  }
+}
+function hrefForGiftItem(it) {
+  const src = String(it.url || "").trim();
+  if (/amazon\./i.test(src)) return buildAmazonLink(src);       // adds ?tag=candidquality-20
+  if (/chewy\./i.test(src))  return buildChewyLinkOrFallback(src);
+  return src || "#";
+}
+function decorateAffiliateAnchor(aEl) {
+  if (!aEl) return;
+  aEl.target = "_blank";
+  aEl.rel = "nofollow sponsored noopener";
+}
+
+// --- FTC / program disclosure (rendered under results only after gifts are requested) ---
+function getAffiliateDisclosureHTML() {
+  const amazonPart = "As an Amazon Associate I may earn from qualifying purchases";
+  const chewyPart  = "and as a Chewy Affiliate I may earn a commission from qualifying purchases";
+  const both = CHEWY_ENABLED ? `${amazonPart} ${chewyPart}` : amazonPart;
+
+  return `
+    <div id="affiliate-disclosure" role="note" aria-label="Affiliate Disclosure" style="
+      margin-top:20px;padding:12px 14px;border-top:1px solid #e0e0e0;
+      font-size:.92rem;line-height:1.4;color:#4b5563;">
+      <strong>Disclosure:</strong> Some of the links above are affiliate links.
+      ${both}, at no additional cost to you. This helps support the site.
+      Thank you for your support.
+    </div>
+  `;
+}
+function insertDisclosureUnder(containerEl) {
+  if (!containerEl || document.getElementById("affiliate-disclosure")) return;
+  const wrap = document.createElement("div");
+  wrap.innerHTML = getAffiliateDisclosureHTML().trim();
+  containerEl.appendChild(wrap.firstElementChild);
+}
+
 // ---------- Gifts ----------
 async function loadGifts(){
   els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
@@ -456,8 +524,44 @@ async function loadGifts(){
     const parts=[]; parts.push(`size=${bucket}`); parts.push(`chewer=${chewer||'normal'}`); if(!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
     const ignored=[]; if(els.ignoreSize.checked) ignored.push('size'); if(els.ignoreChewer.checked) ignored.push('chewer'); if(els.ignoreAge.checked) ignored.push('age');
     els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length? ' • ignored: '+ignored.join(', '):''}`;
-    els.gifts.innerHTML = top.map(it=>`<div class="gift"><h4>${it.title||'Gift'}</h4><div class="muted">${(it.tag||it.ageTag||'').toString()}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
-  }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; console.warn('[Barkday] gifts load error', e); }
+
+    // Render cards with affiliate-safe anchors
+    els.gifts.innerHTML = '';
+    for (const it of top) {
+      const href = hrefForGiftItem(it);  // route through affiliate builders
+      const card = document.createElement('div');
+      card.className = 'gift';
+
+      const title = document.createElement('h4');
+      title.textContent = it.title || 'Gift';
+      card.appendChild(title);
+
+      const meta = document.createElement('div');
+      meta.className = 'muted';
+      meta.textContent = (it.tag||it.ageTag||'').toString();
+      card.appendChild(meta);
+
+      const linkWrap = document.createElement('div');
+      linkWrap.style.marginTop = '8px';
+
+      const a = document.createElement('a');
+      a.className = 'link';
+      a.href = href;
+      a.textContent = 'View';
+      decorateAffiliateAnchor(a); // rel="nofollow sponsored noopener"
+      linkWrap.appendChild(a);
+
+      card.appendChild(linkWrap);
+      els.gifts.appendChild(card);
+    }
+
+    // Show FTC/program disclosure once gifts are shown
+    insertDisclosureUnder(els.gifts);
+
+  }catch(e){
+    els.giftMeta.textContent='Could not load gift ideas.';
+    console.warn('[Barkday] gifts load error', e);
+  }
 }
 $('loadGifts').addEventListener('click', loadGifts);
 
