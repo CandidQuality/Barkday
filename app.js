@@ -7,7 +7,7 @@ const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
 const GIFT_FEED_URL     = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
 const RECO_BANDED_URL   = "data/reco-banded.json?v=1";
 const RECO_BREED_URL    = "data/reco-breed.json?v=1";
-const BREED_GROUPS_URL  = "data/breed_groups.json?v=1";
+const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 
 // ---------- Splash + Logos ----------
 (function(){
