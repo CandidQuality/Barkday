@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://candidquality.github.io/barkday/sitemap.xml
