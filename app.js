@@ -11,6 +11,23 @@ const RECO_BANDED_URL   = "data/reco-banded.json?v=2";
 const RECO_BREED_URL    = "data/reco-breed.json?v=2";
 const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 
+// ---------- Affiliate Helper ----------
+const AFFILIATE_TAG = "candidquality-20";
+function withAffiliate(url) {
+  if (!AFFILIATE_TAG) return url;
+  try {
+    const u = new URL(url);
+    if (!/amazon\./i.test(u.hostname)) return url;
+    if (!u.searchParams.has("tag")) u.searchParams.set("tag", AFFILIATE_TAG);
+    return u.toString();
+  } catch {
+    return url.includes("?") 
+      ? `${url}&tag=${encodeURIComponent(AFFILIATE_TAG)}`
+      : `${url}?tag=${encodeURIComponent(AFFILIATE_TAG)}`;
+  }
+}
+
+
 // ---------- Splash + Logos ----------
 (function(){
   const hideSplash = () => document.getElementById("splash")?.classList.add("hide");
@@ -431,7 +448,7 @@ async function loadGifts(){
     const parts=[]; parts.push(`size=${bucket}`); parts.push(`chewer=${chewer||'normal'}`); if(!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
     const ignored=[]; if(els.ignoreSize.checked) ignored.push('size'); if(els.ignoreChewer.checked) ignored.push('chewer'); if(els.ignoreAge.checked) ignored.push('age');
     els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length? ' • ignored: '+ignored.join(', '):''}`;
-    els.gifts.innerHTML = top.map(it=>`<div class="gift"><h4>${it.title||'Gift'}</h4><div class="muted">${(it.tag||it.ageTag||'').toString()}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
+    els.gifts.innerHTML = top.map(it=>`<div class="gift"><h4>${it.title||'Gift'}</h4><div class="muted">${(it.tag||it.ageTag||'').toString()}</div><div style="margin-top:8px"><a class="link" href="${withAffiliate(it.url)}" target="_blank" rel="noopener">View</a></div></div>`).join('');
   }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; }
 }
 $('loadGifts').addEventListener('click', loadGifts);
