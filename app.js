@@ -1,12 +1,12 @@
-// ====================== Barkday app.js (complete) ======================
+// ====================== Barkday app.js (complete, upgraded) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
 const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
 
-// Data sources
+// Data sources (cache-busted to v2)
 const GIFT_FEED_URL     = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
-const RECO_BANDED_URL   = "data/reco-banded.json?v=1";
-const RECO_BREED_URL    = "data/reco-breed.json?v=1";
+const RECO_BANDED_URL   = "data/reco-banded.json?v=2";
+const RECO_BREED_URL    = "data/reco-breed.json?v=2";
 const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 
 // ---------- Splash + Logos ----------
@@ -79,15 +79,30 @@ const GROUPS = {
 };
 
 // ---------- External data (breed groups + recos) ----------
-let BREED_GROUPS = [];       // array of group objects (your prior format with id, name, examples, etc.)
+let BREED_GROUPS = [];       // prior format array with id/name/examples/etc.
 let RECO_BANDED = null;      // banded recommendations by group
 let RECO_BREED  = null;      // per-breed, per-dog-year overrides
+let BREED_NAME_MAP = {};     // lowercased alias → canonical breed name
 
 async function loadBreedGroups(){
   try{
     const res = await fetch(BREED_GROUPS_URL, { cache: 'no-store' });
     BREED_GROUPS = await res.json();
   }catch{ BREED_GROUPS = []; }
+}
+function normalizeBreedReco(raw){
+  if (!raw) return {};
+  return raw.breeds ? raw.breeds : raw; // accept {breeds:{...}} or direct map
+}
+function rebuildBreedIndex(){
+  BREED_NAME_MAP = {};
+  if (!RECO_BREED) return;
+  for (const k of Object.keys(RECO_BREED)) BREED_NAME_MAP[k.toLowerCase()] = k;
+  // lightweight aliases (expand later)
+  const add = (alias, canon) => { if (RECO_BREED[canon]) BREED_NAME_MAP[alias.toLowerCase()] = canon; };
+  add("aussie", "Australian Shepherd");
+  add("lab", "Labrador Retriever");
+  add("frenchie", "French Bulldog");
 }
 async function loadReco(){
   try{
@@ -96,23 +111,41 @@ async function loadReco(){
       fetch(RECO_BREED_URL,   { cache:'no-store' })
     ]);
     if (bandedRes.status === 'fulfilled') RECO_BANDED = await bandedRes.value.json();
-    if (breedRes.status  === 'fulfilled') RECO_BREED  = await breedRes.value.json();
+    if (breedRes.status  === 'fulfilled') {
+      const raw = await breedRes.value.json();
+      RECO_BREED = normalizeBreedReco(raw);
+      rebuildBreedIndex();
+    }
     if (!RECO_BANDED) RECO_BANDED = {};
   }catch{
     RECO_BANDED = RECO_BANDED || {};
     RECO_BREED  = RECO_BREED  || null;
+    rebuildBreedIndex();
   }
 }
 loadBreedGroups();
 loadReco();
 
-// Map a typed breed name to a BREED_GROUPS entry (exact match against examples)
+// Map typed breed → BREED_GROUPS entry (exact match against examples)
 function findGroupByBreedName(name){
   if(!name || !BREED_GROUPS.length) return null;
   const n = name.trim().toLowerCase();
   for (const g of BREED_GROUPS){
     const ex = Array.isArray(g.examples)? g.examples : [];
     if (ex.some(e => String(e).trim().toLowerCase() === n)) return g;
+  }
+  return null;
+}
+
+// Fuzzy breed lookup from RECO_BREED
+function getBreedEntry(input){
+  if (!input || !RECO_BREED) return null;
+  const q = input.trim().toLowerCase();
+  // exact alias/case-insensitive
+  if (BREED_NAME_MAP[q]) return RECO_BREED[BREED_NAME_MAP[q]];
+  // prefix match
+  for (const key in BREED_NAME_MAP){
+    if (key.startsWith(q)) return RECO_BREED[BREED_NAME_MAP[key]];
   }
   return null;
 }
@@ -124,7 +157,7 @@ function updateBreedNotes(){
   const group = els.breedGroup.value;
   const lb = parseInt(els.adultWeight.value,10) || 55;
 
-  // Autodisplay examples if our external map recognizes the breed
+  // Show examples from external map if we recognize the breed; else fallback meta
   const mapped = findGroupByBreedName(breedTxt);
   if (mapped) {
     els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
@@ -225,19 +258,34 @@ const AGE_BANDS = [
 ];
 const bandForDY = dy => AGE_BANDS.find(b=>dy>=b.min && dy<=b.max) || AGE_BANDS[AGE_BANDS.length-1];
 
-// ---------- Plan selection (breed-first → banded → none) ----------
+// ---------- Nearest dog-year lookup ----------
+function nearestAgeEntry(agesObj, dogYears){
+  if (!agesObj) return null;
+  const want = Math.round(dogYears);
+  const keys = Object.keys(agesObj).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+  if (!keys.length) return null;
+  if (agesObj[String(want)]) return agesObj[String(want)];
+  const le = keys.filter(k=>k<=want);
+  if (le.length) return agesObj[String(le[le.length-1])];
+  // otherwise closest absolute
+  let best = keys[0], bd = Math.abs(keys[0]-want);
+  for (const k of keys){ const d=Math.abs(k-want); if (d<bd){ bd=d; best=k; } }
+  return agesObj[String(best)];
+}
+
+// ---------- Plan selection (breed-first (fuzzy+nearest) → banded → none) ----------
 function planFor(group, dogYears){
   const band = bandForDY(Math.round(dogYears));
-  const breedName = (els.breed.value || '').trim();
 
-  // 1) Try exact breed at exact dog-year
-  if (RECO_BREED && breedName && RECO_BREED.breeds && RECO_BREED.breeds[breedName]) {
-    const b = RECO_BREED.breeds[breedName];
-    const entry = b.ages ? b.ages[String(Math.round(dogYears))] : null;
+  // 1) Breed-specific (fuzzy) → nearest age
+  const breedInput = (els.breed.value || '').trim();
+  const breedEntry = getBreedEntry(breedInput);
+  if (breedEntry && breedEntry.ages){
+    const entry = nearestAgeEntry(breedEntry.ages, dogYears);
     if (entry && entry.lanes) return { plan: entry, band };
   }
 
-  // 2) Fallback by group band
+  // 2) Group-banded fallback
   const byGroup = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
   if (byGroup) return { plan: byGroup, band };
 
