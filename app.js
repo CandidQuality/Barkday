@@ -1,6 +1,6 @@
 // very top of app.js
-console.log('[Barkday] app.js loaded v3+diag');
-// ====================== Barkday app.js (complete, with diagnostics) ======================
+console.log('[Barkday] app.js loaded v4+diag');
+// ====================== Barkday app.js (complete, v4) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
 const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
@@ -172,10 +172,18 @@ const GROUP_SYNONYMS = {
   'Terrier': ['Terrier'],
   'Toy': ['Toy']
 };
-function mapGroupKey(uiKey) {
+
+function candidateGroupKeys(uiKey){
+  return GROUP_SYNONYMS[uiKey] || [uiKey];
+}
+
+/** Try each candidate group until one has the requested bandKey. */
+function pickMappedGroupForBand(uiKey, bandKey){
   const keys = Object.keys(RECO_BANDED || {});
-  const candidates = GROUP_SYNONYMS[uiKey] || [uiKey];
-  for (const k of candidates) if (keys.includes(k)) return k;
+  const cands = candidateGroupKeys(uiKey);
+  for (const k of cands){
+    if (keys.includes(k) && RECO_BANDED[k] && RECO_BANDED[k][bandKey]) return k;
+  }
   return null;
 }
 
@@ -301,46 +309,51 @@ function nearestAgeEntry(agesObj, dogYears){
   return agesObj[String(best)];
 }
 
-// ---------- Plan selection (breed-first → banded (mapped) → none) ----------
-function planFor(group, dogYears){
+// ---------- Plan selection (breed-first → inferred/banded → UI-mapped → none) ----------
+function planFor(uiGroup, dogYears){
   const band = bandForDY(Math.round(dogYears));
 
+  const breedInput = (els.breed.value || '').trim();
   console.log('[Barkday planFor] breed=%o group=%o dogYears=%o bandKey=%o',
-    (els.breed.value || '').trim(), group, Math.round(dogYears), band.key);
+    breedInput, uiGroup, Math.round(dogYears), band.key);
 
   // 1) Breed-specific (fuzzy) → nearest age
-  const breedInput = (els.breed.value || '').trim();
   const breedEntry = getBreedEntry(breedInput);
   if (breedEntry && breedEntry.ages){
-    // Log canonical if we found a mapping
-    const canonical = BREED_NAME_MAP[(breedInput||'').toLowerCase()];
-    if (canonical) console.log('  • matched breed canonical =', canonical);
+    const canon = BREED_NAME_MAP[(breedInput||'').toLowerCase()];
+    if (canon) console.log('  • matched breed canonical =', canon);
     const entry = nearestAgeEntry(breedEntry.ages, dogYears);
     if (entry && entry.lanes) {
       const matchedAge = Object.keys(breedEntry.ages).find(k => breedEntry.ages[k] === entry) || 'nearest';
       console.log('→ using', 'breed-specific', 'matchedAge=', matchedAge);
       return { plan: entry, band };
     }
-  } else {
-    if (breedInput) console.log('  • no breed-specific entry for:', breedInput);
+  } else if (breedInput) {
+    console.log('  • no breed-specific entry for:', breedInput);
   }
 
-  // 2) Group-banded fallback (map UI group → JSON key)
-  const mappedKey = mapGroupKey(group);
-  if (mappedKey) {
-    console.log('  • mapped group →', mappedKey);
-    const byGroup = RECO_BANDED[mappedKey] ? RECO_BANDED[mappedKey][band.key] : null;
-    if (byGroup) {
-      console.log('→ using', 'banded', `(key=${band.key})`);
-      return { plan: byGroup, band };
-    } else {
-      console.log('  • band not found for', mappedKey, 'bandKey=', band.key);
+  // 2) Prefer inferred group from BREED_GROUPS by typed breed (if available)
+  const inferred = findGroupByBreedName(breedInput)?.name || null;
+  if (inferred) {
+    const pickInf = pickMappedGroupForBand(inferred, band.key);
+    console.log('  • inferred group =', inferred, '→ pick =', pickInf || '(none)');
+    if (pickInf && RECO_BANDED[pickInf] && RECO_BANDED[pickInf][band.key]) {
+      console.log('→ using', 'banded (inferred)', `(group=${pickInf}, key=${band.key})`);
+      return { plan: RECO_BANDED[pickInf][band.key], band };
     }
-  } else {
-    console.log('  • could not map UI group to reco-banded keys');
   }
 
-  // 3) Nothing found
+  // 3) Otherwise use UI group mapping, but try all candidates until one has the band
+  const pickUI = pickMappedGroupForBand(uiGroup, band.key);
+  if (pickUI) {
+    console.log('  • mapped group →', pickUI);
+    console.log('→ using', 'banded', `(group=${pickUI}, key=${band.key})`);
+    return { plan: RECO_BANDED[pickUI][band.key], band };
+  } else {
+    console.log('  • could not map/find band for UI group', uiGroup, 'bandKey=', band.key);
+  }
+
+  // 4) Nothing found
   console.log('→ using', 'none');
   return { plan: null, band };
 }
