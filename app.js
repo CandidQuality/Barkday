@@ -433,7 +433,7 @@ async function loadGifts(){
           chewOK = (val === 'any') || (val === chewer);
         }
       }
-      if (!chewOK) ok = false; else score++;
+      if (!chewOK) ok = false; else score++; // ← keep only this one; remove the duplicate block
 
       // age (dog-years), accept minDogYears/maxDogYears or minAge/maxAge
       const minDY = (it.minDogYears ?? it.minAge ?? null);
@@ -450,11 +450,11 @@ async function loadGifts(){
       }
       if (!ageOK) ok = false; else score++;
 
-      // collect
+      // collect passing items
       if (ok) results.push({ it, score, rnd: Math.random() });
     }
 
-    // Sort & dedupe top picks (higher score first, then random tiebreak)
+    // Sort & dedupe after the loop
     results.sort((a, b) => (b.score - a.score) || (a.rnd - b.rnd));
     const seen = new Set();
     const top = [];
@@ -476,7 +476,8 @@ async function loadGifts(){
     if (els.ignoreChewer.checked) ignored.push('chewer');
     if (els.ignoreAge.checked) ignored.push('age');
 
-    els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length ? ' • ignored: ' + ignored.join(', ') : ''}`;
+    els.giftMeta.textContent =
+      `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length ? ' • ignored: ' + ignored.join(', ') : ''}`;
 
     els.gifts.innerHTML = top.map(it => `
       <div class="gift">
@@ -493,6 +494,7 @@ async function loadGifts(){
     els.giftMeta.textContent = 'Could not load gift ideas.';
   }
 }
+
 
 $('loadGifts').addEventListener('click', loadGifts);
 
