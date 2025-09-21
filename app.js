@@ -1,5 +1,5 @@
 // very top of app.js
-console.log('[Barkday] app.js loaded v2');
+console.log('[Barkday] app.js loaded v2+logs');
 // ====================== Barkday app.js (complete, upgraded) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
@@ -90,7 +90,11 @@ async function loadBreedGroups(){
   try{
     const res = await fetch(BREED_GROUPS_URL, { cache: 'no-store' });
     BREED_GROUPS = await res.json();
-  }catch{ BREED_GROUPS = []; }
+    console.log('[Barkday] breed_groups.json loaded:', Array.isArray(BREED_GROUPS) ? BREED_GROUPS.length+' groups' : typeof BREED_GROUPS);
+  }catch(e){
+    console.warn('[Barkday] failed to load breed_groups.json', e);
+    BREED_GROUPS = [];
+  }
 }
 function normalizeBreedReco(raw){
   if (!raw) return {};
@@ -105,6 +109,7 @@ function rebuildBreedIndex(){
   add("aussie", "Australian Shepherd");
   add("lab", "Labrador Retriever");
   add("frenchie", "French Bulldog");
+  console.log('[Barkday] breed index rebuilt:', Object.keys(BREED_NAME_MAP).length, 'keys');
 }
 async function loadReco(){
   try{
@@ -119,7 +124,10 @@ async function loadReco(){
       rebuildBreedIndex();
     }
     if (!RECO_BANDED) RECO_BANDED = {};
-  }catch{
+    console.log('[Barkday] reco-banded keys:', Object.keys(RECO_BANDED||{}));
+    console.log('[Barkday] reco-breed breeds:', RECO_BREED ? Object.keys(RECO_BREED).length : 0);
+  }catch(e){
+    console.warn('[Barkday] failed to load reco files', e);
     RECO_BANDED = RECO_BANDED || {};
     RECO_BREED  = RECO_BREED  || null;
     rebuildBreedIndex();
@@ -189,7 +197,7 @@ els.adultWeight.addEventListener('input', ()=>{
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
 const daysBetween=(a,b)=>Math.floor((b-a)/(24*60*60*1000));
 const pad2=n=>String(n).padStart(2,'0');
-const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+'Z';
+const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+'Z';
 
 // Weight → slope (5→~7.2)
 function slopeFromWeight(lb){
@@ -279,19 +287,30 @@ function nearestAgeEntry(agesObj, dogYears){
 function planFor(group, dogYears){
   const band = bandForDY(Math.round(dogYears));
 
+  // DEBUG: input snapshot
+  console.log('[Barkday planFor] breed=%o group=%o dogYears=%o',
+    (els.breed.value || '').trim(), group, Math.round(dogYears));
+
   // 1) Breed-specific (fuzzy) → nearest age
   const breedInput = (els.breed.value || '').trim();
   const breedEntry = getBreedEntry(breedInput);
   if (breedEntry && breedEntry.ages){
     const entry = nearestAgeEntry(breedEntry.ages, dogYears);
-    if (entry && entry.lanes) return { plan: entry, band };
+    if (entry && entry.lanes) {
+      console.log('→ using', 'breed-specific');
+      return { plan: entry, band };
+    }
   }
 
   // 2) Group-banded fallback
   const byGroup = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
-  if (byGroup) return { plan: byGroup, band };
+  if (byGroup) {
+    console.log('→ using', 'banded', `(key=${band.key})`);
+    return { plan: byGroup, band };
+  }
 
   // 3) Nothing found
+  console.log('→ using', 'none');
   return { plan: null, band };
 }
 
