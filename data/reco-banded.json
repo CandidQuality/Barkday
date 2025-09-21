@@ -1,126 +1,83 @@
 {
-  "Working / Herding": {
-    "puppy_1_6": {
-      "lanes": {
-        "training": [
-          "Name/marker 1–3 min, 3–5×/day",
-          "Crate = calm naps; positive entries"
-        ],
-        "health": [
-          "Puppy vaccines; deworm; parasite plan"
-        ],
-        "nutrition": [
-          "Puppy diet; 3–4 meals/day",
-          "Weekly weigh-in; track BCS"
-        ],
-        "exercise": [
-          "Free play on soft surfaces",
-          "Short sniff walks on harness"
-        ],
-        "bonding": [
-          "Gentle handling; calm grooming"
-        ],
-        "gear": [
-          "Light Y-front harness",
-          "Snuffle/lick mat; puppy teether"
-        ]
-      }
-    },
-    "puppy_7_10": {
-      "lanes": {
-        "training": [
-          "Recall on 15–30 ft line",
-          "Settle on mat 1–3 → 5–7 min"
-        ],
-        "health": [
-          "Teething watch; supervised chews"
-        ],
-        "nutrition": [
-          "Maintain puppy diet; growth curve"
-        ],
-        "exercise": [
-          "2–3 short sniff-walks (5–15 min)",
-          "Avoid repetitive fetch/jumps"
-        ],
-        "bonding": [
-          "Puzzle feeders 3–4×/week"
-        ],
-        "gear": [
-          "Biothane long line; treat pouch"
-        ]
-      }
-    }
+  "Working": {
+    "name": "Working Group",
+    "notes": "This group includes breeds like Doberman Pinschers, Boxers, and Great Danes. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Working group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Working group adult care placeholder." },
+      { "dogYear": 50, "advice": "Working group senior care placeholder." }
+    ]
+  },
+  "Herding": {
+    "name": "Herding Group",
+    "notes": "This group includes breeds like Border Collies, German Shepherds, and Corgis. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Herding group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Herding group adult care placeholder." },
+      { "dogYear": 50, "advice": "Herding group senior care placeholder." }
+    ]
   },
   "Sporting": {
-    "puppy_1_6": {
-      "lanes": {
-        "training": [
-          "Engagement; name response"
-        ],
-        "health": [
-          "Vaccine series; parasite prevention"
-        ],
-        "nutrition": [
-          "Puppy diet; measured feedings"
-        ],
-        "exercise": [
-          "Short sniff walks; water confidence (shallow)"
-        ],
-        "bonding": [
-          "Gentle retrieves; handling practice"
-        ],
-        "gear": [
-          "Flat collar + Y-harness",
-          "Food puzzles (lvl 1)"
-        ]
-      }
-    },
-    "puppy_7_10": {
-      "lanes": {
-        "training": [
-          "Loose-leash basics; leave-it"
-        ],
-        "exercise": [
-          "Retrieve games on soft ground (few reps)"
-        ],
-        "nutrition": [
-          "Watch rapid weight gain; adjust calories"
-        ]
-      }
-    }
+    "name": "Sporting Group",
+    "notes": "This group includes breeds like Retrievers, Spaniels, and Setters. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Sporting group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Sporting group adult care placeholder." },
+      { "dogYear": 50, "advice": "Sporting group senior care placeholder." }
+    ]
+  },
+  "Hound": {
+    "name": "Hound Group",
+    "notes": "This group includes breeds like Beagles, Greyhounds, and Dachshunds. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Hound group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Hound group adult care placeholder." },
+      { "dogYear": 50, "advice": "Hound group senior care placeholder." }
+    ]
+  },
+  "Terrier": {
+    "name": "Terrier Group",
+    "notes": "This group includes breeds like Bull Terriers, Scotties, and Westies. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Terrier group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Terrier group adult care placeholder." },
+      { "dogYear": 50, "advice": "Terrier group senior care placeholder." }
+    ]
+  },
+  "Toy": {
+    "name": "Toy Group",
+    "notes": "This group includes breeds like Chihuahuas, Pugs, and Shih Tzus. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Toy group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Toy group adult care placeholder." },
+      { "dogYear": 50, "advice": "Toy group senior care placeholder." }
+    ]
   },
   "Non-Sporting": {
-    "puppy_1_6": {
-      "lanes": {
-        "training": [
-          "Short, positive sessions; crate calm"
-        ],
-        "health": [
-          "Vaccine series"
-        ],
-        "nutrition": [
-          "Puppy diet; avoid rapid gains"
-        ],
-        "exercise": [
-          "Very short walks; avoid heat (brachy aware)"
-        ],
-        "bonding": [
-          "Muzzle acclimation (positive)"
-        ],
-        "gear": [
-          "Well-fitted Y-harness"
-        ]
-      }
-    },
-    "puppy_7_10": {
-      "lanes": {
-        "training": [
-          "Settle 1–2 min"
-        ],
-        "exercise": [
-          "Indoor play sessions; frequent water breaks"
-        ]
-      }
-    }
+    "name": "Non-Sporting Group",
+    "notes": "This group includes breeds like Bulldogs, Dalmatians, and Poodles. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Non-Sporting group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Non-Sporting group adult care placeholder." },
+      { "dogYear": 50, "advice": "Non-Sporting group senior care placeholder." }
+    ]
+  },
+  "Foundation Stock": {
+    "name": "Foundation Stock Service",
+    "notes": "These are developing breeds not yet in a full AKC group. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Foundation Stock puppy care placeholder." },
+      { "dogYear": 10, "advice": "Foundation Stock adult care placeholder." },
+      { "dogYear": 50, "advice": "Foundation Stock senior care placeholder." }
+    ]
+  },
+  "Miscellaneous": {
+    "name": "Miscellaneous Class",
+    "notes": "Breeds in transition to full AKC recognition. Full milestone plans are coming soon.",
+    "milestones": [
+      { "dogYear": 1, "advice": "Miscellaneous group general puppy care placeholder." },
+      { "dogYear": 10, "advice": "Miscellaneous group adult care placeholder." },
+      { "dogYear": 50, "advice": "Miscellaneous group senior care placeholder." }
+    ]
   }
 }
