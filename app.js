@@ -409,30 +409,39 @@ async function loadGifts(){
 
       // size
       const sizes = (Array.isArray(it.sizes)? it.sizes : (it.size? String(it.size).split(/[, \t]+/):[])).map(s=>String(s).toLowerCase());
-      const sizeOK = !sizes.length || sizes.includes('any') || sizes.includes(bucket);
+      const sizeOK = !sizes.length || sizes.includes('any') ||                sizes.includes(bucket) ||                (bucket === 'toy' && sizes.includes('small'));
       if(!els.ignoreSize.checked && !sizeOK) ok=false; else if(sizeOK) score++;
 
       // chewer
-      const chewTag = (it.chewer? String(it.chewer).toLowerCase() : 'any');
-      const chewOK = chewTag==='any' || chewTag===chewer;
+     const chewField = it.chew ?? it.chewer; // accept either key
+let chewOK = true;
+if (!els.ignoreChewer.checked) {
+  if (Array.isArray(chewField)) {
+    chewOK = chewField.map(x => String(x).toLowerCase()).includes(chewer);
+  } else if (chewField != null) {
+    chewOK = String(chewField).toLowerCase() === 'any' ||
+             String(chewField).toLowerCase() === chewer;
+  }
+}
+if (!chewOK) ok = false; else score++;
+
       if(!els.ignoreChewer.checked && !chewOK) ok=false; else if(chewOK) score++;
 
       // age (dog-years)
-      const minDY = it.minDogYears ?? null, maxDY = it.maxDogYears ?? null;
-      let ageOK = true;
-      if(!isNaN(dogYears) && !els.ignoreAge.checked){
-        if(minDY!=null) ageOK = ageOK && dogYears >= Number(minDY);
-        if(maxDY!=null) ageOK = ageOK && dogYears <= Number(maxDY);
-        if(minDY==null && maxDY==null && it.tag){
-          const t=String(it.tag).toLowerCase();
-          if(t.includes('puppy')) ageOK = dogYears<=15;
-          else if(t.includes('senior')) ageOK = dogYears>=61;
-        }
-      }
-      if(!els.ignoreAge.checked && !ageOK) ok=false; else if(ageOK) score++;
+      const minDY = (it.minDogYears ?? it.minAge ?? null);
+const maxDY = (it.maxDogYears ?? it.maxAge ?? null);
+let ageOK = true;
+if (!isNaN(dogYears) && !els.ignoreAge.checked) {
+  if (minDY != null) ageOK = ageOK && dogYears >= Number(minDY);
+  if (maxDY != null) ageOK = ageOK && dogYears <= Number(maxDY);
+  if (minDY == null && maxDY == null && it.tag) {
+    const t = String(it.tag).toLowerCase();
+    if (t.includes('puppy')) ageOK = dogYears <= 15;
+    else if (t.includes('senior')) ageOK = dogYears >= 61;
+  }
+}
+if (!ageOK) ok = false; else score++;
 
-      if(ok) results.push({it, score, rnd:Math.random()});
-    }
 
     // Sort & dedupe top picks
     results.sort((a,b)=> (b.score-a.score) || (a.rnd-b.rnd));
