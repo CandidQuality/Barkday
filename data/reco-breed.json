@@ -1,82 +1,508 @@
 {
-  "schemaVersion": 1,
-  "notes": "Dog-year keyed recommendations (1,2,3... are dog-year birthdays, not human years). Lanes: training, health, nutrition, exercise, bonding, gear.",
   "breeds": {
-    "Australian Shepherd": {
-      "group": "Working / Herding",
-      "weights": { "typical": 55, "range": [35, 70] },
-      "ages": {
-        "1": { "lanes": {
-          "training": ["Name/marker sessions (1–3 min, 3–5×/day)", "Crate = calm naps; positive entries"],
-          "health": ["Puppy vaccines / deworm plan", "Parasite prevention set up"],
-          "nutrition": ["Puppy formula; 3–4 small meals", "Weekly weigh-in; track BCS"],
-          "exercise": ["Free play on soft surfaces", "Short sniff walks on harness"],
-          "bonding": ["Gentle handling (paws/ears/mouth)", "Calm grooming with treats"],
-          "gear": ["Light Y-front harness", "Snuffle/lick mat; puppy teether"]
-        }},
-        "4": { "lanes": {
-          "training": ["Refine heel (variable pace)", "Intro hand-targeting & leave-it"],
-          "exercise": ["Low-impact play; no high jumps"],
-          "health": ["Mouth check; tartar monitoring"]
-        }},
-        "6": { "lanes": {
-          "training": ["Proof cues amid distractions"],
-          "health": ["Baseline joint range-of-motion notes"],
-          "nutrition": ["Consider joint support if >50 lb (consult vet)"]
-        }}
-      }
-    },
     "Labrador Retriever": {
-      "group": "Sporting",
-      "weights": { "typical": 70, "range": [55, 85] },
       "ages": {
-        "1": { "lanes": {
-          "training": ["Marker/engagement; name response", "Calm crate entry/exit"],
-          "health": ["Vaccine series; deworm; parasite plan"],
-          "nutrition": ["Puppy formula; measured feedings"],
-          "exercise": ["Short sniff-walks; water confidence (shallow)"],
-          "bonding": ["Handling practice; gentle retrieves"],
-          "gear": ["Flat collar + Y-harness", "Food puzzles (level 1)"]
+        "2": { "lanes": {
+          "training": ["Soft bumper holds; name→recall party"],
+          "health": ["Puppy series complete; ear care after baths"],
+          "nutrition": ["Puppy formula; use meals for training"],
+          "exercise": ["Shallow water intro; very short fetch"],
+          "bonding": ["Towel-dry fun; gentle brush"],
+          "gear": ["Soft bumpers; snuffle mat"]
         }},
         "4": { "lanes": {
-          "training": ["Settle on mat 2–4 min"],
-          "nutrition": ["Watch rapid weight gain; adjust calories"]
+          "training": ["Retrieve to hand (soft toys)", "Recall on long line around distractions"],
+          "health": ["Ear checks after swims; nail care"],
+          "nutrition": ["Measured portions; weight watch"],
+          "exercise": ["Water fetch in safe shallows", "Pattern fielding on leash"],
+          "bonding": ["Hide bumpers in grass", "Calm brush time"],
+          "gear": ["Floating bumper; long line; drying robe"]
         }},
-        "6": { "lanes": {
-          "training": ["Distraction-proofing near water/wildlife"],
-          "health": ["Teeth check; tartar watch"]
+        "8": { "lanes": {
+          "training": ["Hold → give; heel basics with turns"],
+          "health": ["Growth watch; joint-friendly footing"],
+          "nutrition": ["Maintain puppy diet; adjust calories to growth"],
+          "exercise": ["Short retrieve sets with rests"],
+          "bonding": ["Find-it scent games"],
+          "gear": ["Place board; whistle"]
         }},
-        "10": { "lanes": {
-          "health": ["Hip/elbow awareness; keep lean BCS"],
-          "nutrition": ["Consider joint support (≥60 lb; vet-guided)"]
+        "12": { "lanes": {
+          "training": ["Steady at heel to the line", "Intro multiple-mark memories"],
+          "health": ["Discuss adult transition timing"],
+          "nutrition": ["Transition toward adult per vet"],
+          "exercise": ["Field patterning with rests"],
+          "bonding": ["Team retrieve routines"],
+          "gear": ["Cooling mat; high-viz bumper"]
+        }},
+        "18": { "lanes": {
+          "training": ["Memory marks; steadiness", "Distraction resistance in new places"],
+          "health": ["Warm-up/cool-down habit; ear care after swims"],
+          "nutrition": ["Adult performance diet in season"],
+          "exercise": ["Longer field sessions; weekly swim day"],
+          "bonding": ["Weekend hike with bumper intervals"],
+          "gear": ["Water-safe vest; reflective leash"]
+        }},
+        "24": { "lanes": {
+          "training": ["Complex marks/blinds", "Generalize to new grounds/water"],
+          "health": ["Dental; joint screening"],
+          "nutrition": ["Performance feed in heavy training"],
+          "exercise": ["Daily cardio: swim + drills", "Strength/core twice weekly"],
+          "bonding": ["Structured family fetch"],
+          "gear": ["Waterproof collar; first-aid kit"]
+        }},
+        "30": { "lanes": {
+          "training": ["Maintain steadiness under sound", "Blind retrieves if trained"],
+          "health": ["Foot checks post-field work"],
+          "nutrition": ["Adjust kcals off-season"],
+          "exercise": ["Cardio + brain work mix daily"],
+          "bonding": ["Field practice days"],
+          "gear": ["LED collar light; cooling vest"]
+        }},
+        "40": { "lanes": {
+          "training": ["Short technical refreshers", "Simple scent indications"],
+          "health": ["Prevent overuse with rest cycles"],
+          "nutrition": ["Recovery nutrition after big days"],
+          "exercise": ["Intervals + skill blocks"],
+          "bonding": ["New enrichment monthly"],
+          "gear": ["Paw balm; high-viz gear"]
+        }},
+        "50": { "lanes": {
+          "training": ["Low-impact holds; easy wins"],
+          "health": ["Pre-senior joint check; dental if needed"],
+          "nutrition": ["Omega-3s for joints"],
+          "exercise": ["Soft-ground fetch (short sets)", "Decompression walks"],
+          "bonding": ["Weekly massage session"],
+          "gear": ["Orthopedic bed; car ramp"]
+        }},
+        "61": { "lanes": {
+          "training": ["Nosework hides at floor level"],
+          "health": ["Senior panel; mobility plan"],
+          "nutrition": ["Senior diet; hydration toppers"],
+          "exercise": ["Short swims if comfy; sniff walks"],
+          "bonding": ["Calm brush/massage"],
+          "gear": ["Warm coat post-water; non-slip rugs"]
         }}
       }
     },
-    "French Bulldog": {
-      "group": "Non-Sporting",
-      "weights": { "typical": 25, "range": [16, 28] },
+
+    "German Shepherd": {
       "ages": {
-        "1": { "lanes": {
-          "training": ["Marker/engagement; short sessions", "Crate = rests; positive entries"],
-          "health": ["Vaccine series; brachy awareness (heat)"],
-          "nutrition": ["Puppy diet; prevent rapid weight gain"],
-          "exercise": ["Very short sniff-walks; avoid heat"],
-          "bonding": ["Gentle handling; muzzle acclimation (positive)"],
-          "gear": ["Well-fitted Y-harness (no neck pressure)"]
+        "2": { "lanes": {
+          "training": ["Marker games; crate/mat relax", "Calm guest/door simulations"],
+          "health": ["Puppy series; avoid stair/jump strain"],
+          "nutrition": ["Large-breed puppy formula"],
+          "exercise": ["Short leash strolls; sniff breaks"],
+          "bonding": ["Puzzle feeders; calm observation"],
+          "gear": ["Y-harness; flat collar; crate"]
         }},
         "4": { "lanes": {
-          "training": ["Recall in safe, fenced area only"],
-          "exercise": ["Avoid stairs/jumps; joint-friendly mats"]
+          "training": ["Recall on long line; door neutrality", "Heel beginnings with turns"],
+          "health": ["Teeth brushing routine; paw/ear care"],
+          "nutrition": ["Measured meals; growth watch"],
+          "exercise": ["Short fetch sets; ground cavaletti"],
+          "bonding": ["Scent search (scatter kibble)"],
+          "gear": ["Long line; place platform"]
         }},
-        "5": { "lanes": {
-          "health": ["Weight audit; early dental care"],
-          "gear": ["Cooling vest/pad for warm days"]
+        "8": { "lanes": {
+          "training": ["Down-stay 45–60 s; recall proofing"],
+          "health": ["Growth plate caution", "Paw conditioning"],
+          "nutrition": ["Maintain puppy diet; adjust kcals"],
+          "exercise": ["Structured play + rest"],
+          "bonding": ["Hide-and-seek; puzzle rotation"],
+          "gear": ["Cooling mat; whistle"]
         }},
-        "7": { "lanes": {
-          "health": ["Heat sensitivity: strict limits", "Watch for snoring/exertion intolerance"],
-          "nutrition": ["Small, frequent meals if gulping"]
+        "12": { "lanes": {
+          "training": ["Heel with halts/turns", "Place to 90 s; polite greetings"],
+          "health": ["Discuss adult transition timing"],
+          "nutrition": ["Transition per vet; omega-3s if advised"],
+          "exercise": ["Fetch with rests; distance platform sends"],
+          "bonding": ["Light pack carry ≤10% BW"],
+          "gear": ["Reflective gear; reward pouch"]
+        }},
+        "18": { "lanes": {
+          "training": ["Duration 2–3 min; neutrality in public"],
+          "health": ["Hip/elbow screen discussion", "Warm-up/cool-down"],
+          "nutrition": ["Adult diet; monthly BCS"],
+          "exercise": ["Daily purposeful walk 45 min", "Swim day weekly"],
+          "bonding": ["Tracking lines; structured fetch"],
+          "gear": ["Hands-free leash; cooling vest"]
+        }},
+        "24": { "lanes": {
+          "training": ["Distance downs/recalls", "Task work (carry pack, close door)"],
+          "health": ["Annual bloodwork; dental as needed"],
+          "nutrition": ["Measured portions; athletic build"],
+          "exercise": ["Run/hike + brain games"],
+          "bonding": ["Job rotation: scent/task/hike"],
+          "gear": ["Working harness; LED collar"]
+        }},
+        "30": { "lanes": {
+          "training": ["Advanced obedience maintenance", "Proof recalls under high distraction"],
+          "health": ["Joint support plan; foot care"],
+          "nutrition": ["Performance vs. maintenance diet"],
+          "exercise": ["Cardio + scent work mix"],
+          "bonding": ["New trail exploration"],
+          "gear": ["First-aid kit in car"]
+        }},
+        "40": { "lanes": {
+          "training": ["Short technical refreshers", "Cooperative care polishing"],
+          "health": ["Prevent overuse with rest cycles"],
+          "nutrition": ["Recovery nutrition after hard days"],
+          "exercise": ["Intervals + skill blocks"],
+          "bonding": ["Enrichment set monthly"],
+          "gear": ["Cooling vest; paw balm"]
+        }},
+        "50": { "lanes": {
+          "training": ["Low-impact scent games", "Easy shaping sessions"],
+          "health": ["Pre-senior arthritis check"],
+          "nutrition": ["Omega-3s; calorie tune"],
+          "exercise": ["Soft-ground cardio; decompression"],
+          "bonding": ["Massage; lick mats"],
+          "gear": ["Orthopedic bed; ramps"]
+        }},
+        "61": { "lanes": {
+          "training": ["Cooperative care (nails, ears)", "Nosework boxes at low height"],
+          "health": ["Senior panel; pain management"],
+          "nutrition": ["Senior diet; hydration toppers"],
+          "exercise": ["Short, frequent walks; swims if comfy"],
+          "bonding": ["Calm grooming; foraging games"],
+          "gear": ["Non-slip mats; car ramp"]
         }}
       }
-    }
+    },
+
+    "Golden Retriever": {
+      "ages": {
+        "2": { "lanes": {
+          "training": ["Soft retrieves; recall games"],
+          "health": ["Puppy care; ear care after baths"],
+          "nutrition": ["Puppy diet; training from meals"],
+          "exercise": ["Short play bursts; shallow water intro"],
+          "bonding": ["Towel-dry fun; gentle brush"],
+          "gear": ["Soft bumpers; snuffle mat"]
+        }},
+        "4": { "lanes": {
+          "training": ["Retrieve to hand; ‘give’", "Heel basics with turns"],
+          "health": ["Ear checks; nail care"],
+          "nutrition": ["Measured portions; avoid chub"],
+          "exercise": ["Water fetch in safe shallows"],
+          "bonding": ["Hide bumpers in grass"],
+          "gear": ["Floating bumper; long line; drying robe"]
+        }},
+        "8":  { "lanes": { "training": ["Delivery to hand; steadiness"], "health": ["Growth watch"], "nutrition": ["Maintain puppy diet"], "exercise": ["Field patterning with rests"], "bonding": ["Find-it scent lines"], "gear": ["Whistle; cooling mat"] }},
+        "12": { "lanes": { "training": ["Multiple-mark memories"], "health": ["Discuss adult transition"], "nutrition": ["Transition to adult per vet"], "exercise": ["Field sessions with breaks"], "bonding": ["Family fetch routines"], "gear": ["Water-safe vest"] }},
+        "18": { "lanes": { "training": ["Steadiness; new grounds/water"], "health": ["Warm-up/cool-down"], "nutrition": ["Performance diet in season"], "exercise": ["Weekly swim day"], "bonding": ["Hike + bumper intervals"], "gear": ["High-viz bumpers"] }},
+        "24": { "lanes": { "training": ["Complex marks/blinds"], "health": ["Dental; joint screen"], "nutrition": ["Adjust kcals off-season"], "exercise": ["Daily cardio + drills"], "bonding": ["Field practice days"], "gear": ["Waterproof collar; first-aid kit"] }},
+        "30": { "lanes": { "training": ["Maintain steadiness under sound"], "health": ["Foot/ear checks post-field"], "nutrition": ["Recovery nutrition"], "exercise": ["Cardio + brain work mix"], "bonding": ["Structured family fetch"], "gear": ["LED light; cooling vest"] }},
+        "40": { "lanes": { "training": ["Short technical refreshers"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s for joints"], "exercise": ["Intervals + skill blocks"], "bonding": ["New enrichment monthly"], "gear": ["Paw balm"] }},
+        "50": { "lanes": { "training": ["Low-impact holds; easy wins"], "health": ["Pre-senior joint check"], "nutrition": ["Calorie tune; hydration"], "exercise": ["Soft-ground sessions"], "bonding": ["Massage session weekly"], "gear": ["Orthopedic bed; car ramp"] }},
+        "61": { "lanes": { "training": ["Nosework hides"], "health": ["Senior panel; joint plan"], "nutrition": ["Senior diet"], "exercise": ["Short swims; sniff walks"], "bonding": ["Calm brush/massage"], "gear": ["Warm coat; non-slip rugs"] }}
+      }
+    },
+
+    "French Bulldog": {
+      "ages": {
+        "2": { "lanes": {
+          "training": ["Confidence games; mat relax"],
+          "health": ["Heat caution; short sessions", "Cooperative care for folds/ears"],
+          "nutrition": ["Puppy diet; small measured meals"],
+          "exercise": ["Very short play; avoid heat"],
+          "bonding": ["Mini puzzles; cuddle time"],
+          "gear": ["Breath-friendly harness; cooling mat"]
+        }},
+        "4":  { "lanes": { "training": ["Loose-lead in shade; recall in yard"], "health": ["Airway watch with vet guidance"], "nutrition": ["Measured meals; low-fat treats"], "exercise": ["Short shaded strolls; rest often"], "bonding": ["Short trick sessions; lick mat"], "gear": ["Cooling bandana"] }},
+        "8":  { "lanes": { "training": ["Polite greetings; settle"], "health": ["Skin fold cleaning routine"], "nutrition": ["Portion control"], "exercise": ["Indoor obstacle play (low)"], "bonding": ["Calm puzzle time"], "gear": ["Reflective leash"] }},
+        "12": { "lanes": { "training": ["Trick chains ending in settle"], "health": ["Weight/joint/skin checks"], "nutrition": ["Adult diet; hydration reminders"], "exercise": ["Multiple micro-walks daily"], "bonding": ["Couch cuddle; gentle bodywork"], "gear": ["Padded harness"] }},
+        "18": { "lanes": { "training": ["Mat relax near visitors"], "health": ["Heat avoidance plan"], "nutrition": ["Strict portions"], "exercise": ["Indoor fetch corridors"], "bonding": ["Calm puzzle rotation"], "gear": ["Cooling vest"] }},
+        "24": { "lanes": { "training": ["Neutrality in public"], "health": ["Allergy/skin watch"], "nutrition": ["Hydration; wet toppers"], "exercise": ["Short, frequent strolls"], "bonding": ["Grooming desensitization"], "gear": ["Soft raincoat"] }},
+        "30": { "lanes": { "training": ["Confidence refreshers"], "health": ["Spine/airway watch"], "nutrition": ["Calorie tune"], "exercise": ["Indoor enrichment focus"], "bonding": ["Lick-mat wind-downs"], "gear": ["Orthopedic bed"] }},
+        "40": { "lanes": { "training": ["Very short shaping sessions"], "health": ["Avoid heat entirely"], "nutrition": ["Hydration support"], "exercise": ["Micro-walks only"], "bonding": ["Cuddle + calm puzzles"], "gear": ["Non-slip rugs"] }},
+        "50": { "lanes": { "training": ["Cooperative care"], "health": ["Pain/comfort plan if needed"], "nutrition": ["Softened kibble if needed"], "exercise": ["Indoor foraging"], "bonding": ["Gentle brushing"], "gear": ["Ramps/steps"] }},
+        "61": { "lanes": { "training": ["Floor-level nose games"], "health": ["Senior airway/spine watch"], "nutrition": ["Senior diet"], "exercise": ["Very short strolls"], "bonding": ["Lick mats; cuddle"], "gear": ["Heated pad (supervised)"] }}
+      }
+    },
+
+    "Poodle": {
+      "ages": {
+        "2": { "lanes": {
+          "training": ["Marker games; trick intro"],
+          "health": ["Puppy care; coat handling early"],
+          "nutrition": ["Puppy diet; small training treats"],
+          "exercise": ["Short play; no hard jumps"],
+          "bonding": ["Grooming table confidence"],
+          "gear": ["Slicker brush; gentle comb"]
+        }},
+        "4":  { "lanes": { "training": ["Recall on long line; heel basics"], "health": ["Ear care; nail routine"], "nutrition": ["Measured meals"], "exercise": ["Leash walks with sniff time"], "bonding": ["Trick chains"], "gear": ["Treat pouch; long line"] }},
+        "8":  { "lanes": { "training": ["Stay 45–60 s; polite greetings"], "health": ["Coat schedule habituation"], "nutrition": ["Maintain puppy diet"], "exercise": ["Short fetch/tug intervals"], "bonding": ["Puzzle rotation"], "gear": ["Place platform"] }},
+        "12": { "lanes": { "training": ["Generalize cues to busier spots"], "health": ["Transition timing with vet"], "nutrition": ["Transition to adult"], "exercise": ["Walks 30+ min"], "bonding": ["New trick monthly"], "gear": ["Reflective gear"] }},
+        "18": { "lanes": { "training": ["Rally/agility foundations"], "health": ["Warm-up/cool-down"], "nutrition": ["Adult diet; coat support as needed"], "exercise": ["Cardio + brain mix"], "bonding": ["Scent games"], "gear": ["Cooling mat"] }},
+        "24": { "lanes": { "training": ["Advanced tricks; distance cues"], "health": ["Dental; joint watch"], "nutrition": ["Measured kcals"], "exercise": ["Daily walks + puzzles"], "bonding": ["Family games"], "gear": ["Hands-free leash"] }},
+        "30": { "lanes": { "training": ["Public neutrality"], "health": ["Body condition scoring quarterly"], "nutrition": ["Treat accounting"], "exercise": ["Hike/swim days if enjoyed"], "bonding": ["Decompression walks"], "gear": ["Portable water bowl"] }},
+        "40": { "lanes": { "training": ["Short technical refreshers"], "health": ["Coat/skin checks"], "nutrition": ["Omega-3s if needed"], "exercise": ["Intervals on soft ground"], "bonding": ["Calm grooming time"], "gear": ["Orthopedic bed (prep)"] }},
+        "50": { "lanes": { "training": ["Low-impact shaping"], "health": ["Pre-senior dental/joint plan"], "nutrition": ["Hydration toppers"], "exercise": ["Short, frequent walks"], "bonding": ["Massage; snuffle mats"], "gear": ["Non-slip rugs"] }},
+        "61": { "lanes": { "training": ["Nosework boxes; easy tricks"], "health": ["Senior panel; mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Flat terrain strolls"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+      }
+    },
+
+    "Bulldog": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Confidence games; mat relax"], "health": ["Heat caution; airway awareness"], "nutrition": ["Puppy diet; small meals"], "exercise": ["Very short play; avoid heat"], "bonding": ["Calm puzzles"], "gear": ["Cooling mat; breath-friendly harness"] }},
+        "4":  { "lanes": { "training": ["Loose-lead in shade"], "health": ["Skin fold cleaning; nail care"], "nutrition": ["Measured portions"], "exercise": ["Indoor play circuits"], "bonding": ["Short trick sessions"], "gear": ["Soft harness"] }},
+        "8":  { "lanes": { "training": ["Recall in fenced yard"], "health": ["Back/joint watch"], "nutrition": ["Maintain puppy diet"], "exercise": ["Micro-walks"], "bonding": ["Lick mats"], "gear": ["Cooling vest"] }},
+        "12": { "lanes": { "training": ["Trick chains → settle"], "health": ["Weight watch; heat management"], "nutrition": ["Transition per vet"], "exercise": ["Multiple short strolls"], "bonding": ["Couch cuddle; grooming"], "gear": ["Non-slip rugs"] }},
+        "18": { "lanes": { "training": ["Neutrality near visitors"], "health": ["Allergy/skin plan"], "nutrition": ["Hydration support"], "exercise": ["Indoor fetch corridors"], "bonding": ["Calm puzzle rotation"], "gear": ["Orthopedic bed"] }},
+        "24": { "lanes": { "training": ["Cooperative care"], "health": ["Joint comfort plan"], "nutrition": ["Calorie tune"], "exercise": ["Very gentle walks"], "bonding": ["Massage"], "gear": ["Ramps/steps"] }},
+        "30": { "lanes": { "training": ["Very short shaping"], "health": ["Spine/airway watch"], "nutrition": ["Softened food if needed"], "exercise": ["Foraging games"], "bonding": ["Cuddle focus"], "gear": ["Heated pad (supervised)"] }},
+        "40": { "lanes": { "training": ["Choice-based care"], "health": ["Pain management if needed"], "nutrition": ["Hydration toppers"], "exercise": ["Micro-walks only"], "bonding": ["Lick mats"], "gear": ["Warm coat"] }},
+        "50": { "lanes": { "training": ["Easy puzzle refreshers"], "health": ["Senior checkups"], "nutrition": ["Senior diet"], "exercise": ["Indoor enrichment"], "bonding": ["Brush & cuddle"], "gear": ["Non-slip runners"] }},
+        "61": { "lanes": { "training": ["Floor-level nose games"], "health": ["Comfort/warmth priority"], "nutrition": ["Soft snacks"], "exercise": ["Very short strolls"], "bonding": ["Quiet companionship"], "gear": ["Orthopedic bed; ramps"] }}
+      }
+    },
+
+    "Beagle": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Name response jackpots", "Crate/mat sniff-to-settle"], "health": ["Puppy care; ear hygiene"], "nutrition": ["Puppy diet; tiny rewards"], "exercise": ["Short sniffari; gentle chases"], "bonding": ["Hide kibble trails"], "gear": ["Harness; starter long line"] }},
+        "4":  { "lanes": { "training": ["Recall party on long line", "Loose-lead with scent stops on cue"], "health": ["Ear checks; nail care"], "nutrition": ["Measured meals; hydration"], "exercise": ["Nosework boxes; simple trails"], "bonding": ["Find-it games; snuffle cool-downs"], "gear": ["15 m long line; treat pouch"] }},
+        "8":  { "lanes": { "training": ["Proof recall; leave-it on scents"], "health": ["Tick/flea prevention"], "nutrition": ["Transition to adult per vet"], "exercise": ["Scent trails 5–8 min; rest"], "bonding": ["Decompression walks"], "gear": ["Tracking harness; reflective line"] }},
+        "12": { "lanes": { "training": ["Stay with mild distractions"], "health": ["Back care if long-back type"], "nutrition": ["Adult diet; treat accounting"], "exercise": ["Leash hikes with find-it breaks"], "bonding": ["Multi-container scent puzzles"], "gear": ["GPS tag if roaming risk"] }},
+        "18": { "lanes": { "training": ["Trail recalls with staged distractors"], "health": ["Ear/skin checks; paw care"], "nutrition": ["Adjust kcals to mileage"], "exercise": ["Long sniff walks; DIY searches"], "bonding": ["Nosework class"], "gear": ["High-viz collar/lead; cooling vest"] }},
+        "24": { "lanes": { "training": ["Stay/recall in fields on long line"], "health": ["Dental cleaning plan"], "nutrition": ["Measured portions"], "exercise": ["Varied sniff routes"], "bonding": ["Camping long-line freedom"], "gear": ["Hands-free belt leash"] }},
+        "30": { "lanes": { "training": ["Field recalls; proof stays with scent temptations"], "health": ["Quarterly body condition score"], "nutrition": ["Hydration on hot days"], "exercise": ["Hill work as tolerated"], "bonding": ["Rainy-day scent games"], "gear": ["Portable water kit"] }},
+        "40": { "lanes": { "training": ["Technical refreshers; easy wins"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s for coat/skin"], "exercise": ["Intervals of walk + search"], "bonding": ["Quiet cuddle ritual"], "gear": ["Paw balm"] }},
+        "50": { "lanes": { "training": ["Low-impact scent puzzles"], "health": ["Pre-senior joint plan"], "nutrition": ["Calorie tune"], "exercise": ["Short shaded walks"], "bonding": ["Massage/brush time"], "gear": ["Non-slip rugs"] }},
+        "61": { "lanes": { "training": ["Floor-level noses; mat relax"], "health": ["Senior screen; joint plan"], "nutrition": ["Senior diet; soft snacks"], "exercise": ["Short, shaded sniff walks"], "bonding": ["Low-effort foraging"], "gear": ["Raised bowls if helpful"] }}
+      }
+    },
+
+    "Rottweiler": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Calm neutrality; place training"], "health": ["Puppy care; joint protection"], "nutrition": ["Large-breed puppy diet"], "exercise": ["Short structured play"], "bonding": ["Gentle handling"], "gear": ["Y-harness; crate"] }},
+        "4":  { "lanes": { "training": ["Impulse control at doors/greetings"], "health": ["Teeth brushing routine"], "nutrition": ["Measured meals"], "exercise": ["Leash walks; avoid high jumps"], "bonding": ["Puzzle feeders"], "gear": ["Long line; treat pouch"] }},
+        "8":  { "lanes": { "training": ["Recall in fenced area"], "health": ["Growth plate caution"], "nutrition": ["Maintain puppy diet"], "exercise": ["Low-impact fetch"], "bonding": ["Scent scavenger hunts"], "gear": ["Cooling mat"] }},
+        "12": { "lanes": { "training": ["Heel basics; polite greetings"], "health": ["Vet check for adult transition"], "nutrition": ["Transition per vet"], "exercise": ["Short drills + rests"], "bonding": ["Trick chains"], "gear": ["Reflective gear"] }},
+        "18": { "lanes": { "training": ["Neutral exposures; distance cues"], "health": ["Joint baseline notes"], "nutrition": ["Adult diet; weight watch"], "exercise": ["Purposeful walk 30–45 min"], "bonding": ["Scent patrol routes"], "gear": ["Working harness"] }},
+        "24": { "lanes": { "training": ["Advanced tasks; public neutrality"], "health": ["Annual dental; joint plan"], "nutrition": ["Joint support if indicated"], "exercise": ["Cross-train (swim/hike)"], "bonding": ["Work-to-earn jobs"], "gear": ["LED collar; cooling vest"] }},
+        "30": { "lanes": { "training": ["Distance stays/recalls"], "health": ["Foot care; heat caution"], "nutrition": ["Measured kcals"], "exercise": ["Cardio + brain mix"], "bonding": ["New trick quarterly"], "gear": ["First-aid kit in car"] }},
+        "40": { "lanes": { "training": ["Short precision refreshers"], "health": ["Prevent overuse; rest"], "nutrition": ["Omega-3s"], "exercise": ["Intervals + scent work"], "bonding": ["Family hikes"], "gear": ["Paw balm; high-viz gear"] }},
+        "50": { "lanes": { "training": ["Cooperative care polish"], "health": ["Pre-senior screening"], "nutrition": ["Hydration toppers"], "exercise": ["Soft-ground sessions"], "bonding": ["Massage/brush"], "gear": ["Orthopedic bed"] }},
+        "61": { "lanes": { "training": ["Nosework boxes"], "health": ["Senior joint plan"], "nutrition": ["Senior diet"], "exercise": ["Short strolls; swims if comfy"], "bonding": ["Calm foraging"], "gear": ["Ramps; non-slip mats"] }}
+      }
+    },
+
+    "Dachshund": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Confidence games; mat work"], "health": ["Back-friendly handling; avoid jumps"], "nutrition": ["Puppy diet"], "exercise": ["Short play; sniff walks"], "bonding": ["Gentle brush; cuddle"], "gear": ["Harness (no neck pull); ramps"] }},
+        "4":  { "lanes": { "training": ["Loose-lead with breaks; recall to mat"], "health": ["Back care habit; lift safely"], "nutrition": ["Measured meals"], "exercise": ["Short strolls; low obstacles"], "bonding": ["Lick mats"], "gear": ["Soft carrier for stairs"] }},
+        "8":  { "lanes": { "training": ["Stay 45–60 s; polite greetings"], "health": ["Nail care; warmth if cool"], "nutrition": ["Maintain puppy diet"], "exercise": ["Indoor scent games"], "bonding": ["Short trick sessions"], "gear": ["Place platform"] }},
+        "12": { "lanes": { "training": ["Trick chains avoiding jumps"], "health": ["Transition per vet"], "nutrition": ["Strict portions"], "exercise": ["Multiple micro-walks"], "bonding": ["Massage (gentle)"], "gear": ["Non-slip rugs; warm sweater"] }},
+        "18": { "lanes": { "training": ["Neutral public exposure"], "health": ["Weight watch (back)"], "nutrition": ["Adult diet"], "exercise": ["Easy terrain walks"], "bonding": ["Calm puzzle time"], "gear": ["Ramps/steps"] }},
+        "24": { "lanes": { "training": ["Settle in public"], "health": ["Prevent back strain"], "nutrition": ["Hydration reminders"], "exercise": ["Indoor games; short strolls"], "bonding": ["Couch cuddle"], "gear": ["Orthopedic bed"] }},
+        "30": { "lanes": { "training": ["Very short shaping"], "health": ["Pain watch plan"], "nutrition": ["Softened food if needed"], "exercise": ["Foraging games"], "bonding": ["Quiet companionship"], "gear": ["Heated pad (supervised)"] }},
+        "40": { "lanes": { "training": ["Cooperative care"], "health": ["Back comfort plan"], "nutrition": ["Hydration toppers"], "exercise": ["Flat routes"], "bonding": ["Gentle brushing"], "gear": ["Non-slip runners"] }},
+        "50": { "lanes": { "training": ["Low-impact puzzles"], "health": ["Senior screening"], "nutrition": ["Senior diet"], "exercise": ["Micro-walks"], "bonding": ["Lick mats; cuddle"], "gear": ["Ramps; steps"] }},
+        "61": { "lanes": { "training": ["Floor-level nosework"], "health": ["Comfort priority"], "nutrition": ["Soft snacks"], "exercise": ["Very short strolls"], "bonding": ["Warm lap time"], "gear": ["Orthopedic bed"] }}
+      }
+    },
+
+    "German Shorthaired Pointer": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Marker games; recall party"], "health": ["Puppy care; joint friendly footing"], "nutrition": ["Puppy diet"], "exercise": ["Short play; no repetitive jumps"], "bonding": ["Towel-dry fun"], "gear": ["Soft bumpers"] }},
+        "4":  { "lanes": { "training": ["Retrieve to hand; heel basics"], "health": ["Ear/nail care"], "nutrition": ["Measured meals"], "exercise": ["Short water fetch"], "bonding": ["Hide bumpers in grass"], "gear": ["Long line; drying robe"] }},
+        "8":  { "lanes": { "training": ["Delivery to hand; steadiness"], "health": ["Warm-up/cool-down"], "nutrition": ["Maintain puppy diet"], "exercise": ["Field patterning"], "bonding": ["Find-it scent lines"], "gear": ["Whistle"] }},
+        "12": { "lanes": { "training": ["Multiple-mark memories"], "health": ["Adult transition timing"], "nutrition": ["Transition per vet"], "exercise": ["Field sessions with breaks"], "bonding": ["Hike + retrieve intervals"], "gear": ["Cooling mat"] }},
+        "18": { "lanes": { "training": ["Steady at heel to line"], "health": ["Ear care after swims"], "nutrition": ["Performance diet in season"], "exercise": ["Longer field sessions"], "bonding": ["Weekend field practice"], "gear": ["High-viz bumpers"] }},
+        "24": { "lanes": { "training": ["Complex marks/blinds"], "health": ["Dental; joint watch"], "nutrition": ["Adjust kcals off-season"], "exercise": ["Daily cardio + drills"], "bonding": ["Tracking days"], "gear": ["Waterproof collar"] }},
+        "30": { "lanes": { "training": ["Generalize to new grounds"], "health": ["Foot checks"], "nutrition": ["Recovery nutrition"], "exercise": ["Cardio/brain mix"], "bonding": ["Family fetch (structured)"], "gear": ["LED collar"] }},
+        "40": { "lanes": { "training": ["Short technical refreshers"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s"], "exercise": ["Intervals + skill blocks"], "bonding": ["New enrichment monthly"], "gear": ["Paw balm"] }},
+        "50": { "lanes": { "training": ["Low-impact holds"], "health": ["Pre-senior check"], "nutrition": ["Hydration toppers"], "exercise": ["Soft-ground sessions"], "bonding": ["Massage"], "gear": ["Orthopedic bed"] }},
+        "61": { "lanes": { "training": ["Floor-level nosework"], "health": ["Senior panel; mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Short swims; sniff walks"], "bonding": ["Calm brush"], "gear": ["Ramps; non-slip rugs"] }}
+      }
+    },
+
+    "Shiba Inu": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Name games; handler focus"], "health": ["Puppy care; coat handling"], "nutrition": ["Puppy diet; measured"], "exercise": ["Short play bursts"], "bonding": ["Grooming desensitization"], "gear": ["Slicker brush"] }},
+        "4":  { "lanes": { "training": ["Recall indoors; long-line yard"], "health": ["Nail/teeth routine"], "nutrition": ["Measured portions"], "exercise": ["Leash walks with decompression"], "bonding": ["Puzzle rotation"], "gear": ["Treat pouch; long line"] }},
+        "8":  { "lanes": { "training": ["Stay 45–60 s; polite greetings"], "health": ["Coat blow-out care"], "nutrition": ["Maintain puppy diet"], "exercise": ["Sniff walks"], "bonding": ["Calm settle training"], "gear": ["Place platform"] }},
+        "12": { "lanes": { "training": ["Generalize cues in quiet public"], "health": ["Adult transition timing"], "nutrition": ["Transition to adult"], "exercise": ["Walks 30+ min"], "bonding": ["New trick monthly"], "gear": ["Reflective gear"] }},
+        "18": { "lanes": { "training": ["Neutrality near dogs/people"], "health": ["Weight watch"], "nutrition": ["Adult diet; treat accounting"], "exercise": ["Hike days; sniff routes"], "bonding": ["Scent games"], "gear": ["Cooling mat (summer)"] }},
+        "24": { "lanes": { "training": ["Distance cues; impulse control"], "health": ["Dental; joint watch"], "nutrition": ["Measured kcals"], "exercise": ["Daily cardio + brain"], "bonding": ["Decompression walks"], "gear": ["Hands-free leash"] }},
+        "30": { "lanes": { "training": ["Public neutrality refreshers"], "health": ["Coat/skin checks"], "nutrition": ["Hydration plan"], "exercise": ["Intervals on soft ground"], "bonding": ["Quiet adventures"], "gear": ["Portable bowl"] }},
+        "40": { "lanes": { "training": ["Short shaping sessions"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s if needed"], "exercise": ["Short mixed sessions"], "bonding": ["Calm grooming"], "gear": ["Orthopedic bed (prep)"] }},
+        "50": { "lanes": { "training": ["Low-impact nosework"], "health": ["Pre-senior screening"], "nutrition": ["Hydration toppers"], "exercise": ["Short, frequent walks"], "bonding": ["Massage; snuffle mats"], "gear": ["Non-slip rugs"] }},
+        "61": { "lanes": { "training": ["Easy tricks; cooperative care"], "health": ["Senior panel; mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Flat terrain strolls"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+      }
+    },
+
+    "Pembroke Welsh Corgi": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Name games; mat relax"], "health": ["Back-friendly handling"], "nutrition": ["Puppy diet"], "exercise": ["Short play; no jumps"], "bonding": ["Grooming confidence"], "gear": ["Ramps/steps"] }},
+        "4":  { "lanes": { "training": ["Recall on long line; heel basics"], "health": ["Nail/teeth routine"], "nutrition": ["Measured meals"], "exercise": ["Leash walks; sniff time"], "bonding": ["Puzzle rotation"], "gear": ["Place board"] }},
+        "8":  { "lanes": { "training": ["Stay 45–60 s; polite greetings"], "health": ["Back care; weight watch"], "nutrition": ["Maintain puppy diet"], "exercise": ["Low obstacles only"], "bonding": ["Trick chains"], "gear": ["Cooling mat"] }},
+        "12": { "lanes": { "training": ["Generalize cues; door manners"], "health": ["Adult transition timing"], "nutrition": ["Transition per vet"], "exercise": ["Walks 30–40 min"], "bonding": ["Hide-and-seek"], "gear": ["Reflective gear"] }},
+        "18": { "lanes": { "training": ["Distance cues; impulse control"], "health": ["Back watch; BCS monthly"], "nutrition": ["Adult diet; treat accounting"], "exercise": ["Purposeful walk 30–45 min"], "bonding": ["Scent games"], "gear": ["Hands-free leash"] }},
+        "24": { "lanes": { "training": ["Advanced down-stays"], "health": ["Dental; joint/back plan"], "nutrition": ["Measured kcals"], "exercise": ["Daily cardio + brain work"], "bonding": ["New trick quarterly"], "gear": ["LED collar"] }},
+        "30": { "lanes": { "training": ["Neutrality in public"], "health": ["Footing care (slick floors)"], "nutrition": ["Hydration plan"], "exercise": ["Soft-ground sessions"], "bonding": ["Decompression walks"], "gear": ["Portable water bowl"] }},
+        "40": { "lanes": { "training": ["Short shaping"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s if needed"], "exercise": ["Short mixed sessions"], "bonding": ["Calm grooming"], "gear": ["Orthopedic bed (prep)"] }},
+        "50": { "lanes": { "training": ["Low-impact puzzles"], "health": ["Pre-senior screen; back plan"], "nutrition": ["Hydration toppers"], "exercise": ["Short walks; flat terrain"], "bonding": ["Massage; snuffle mats"], "gear": ["Non-slip rugs"] }},
+        "61": { "lanes": { "training": ["Easy tricks; cooperative care"], "health": ["Senior panel; mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Micro-walks; indoor foraging"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+      }
+    },
+
+    "Siberian Husky": {
+      "ages": {
+        "2":  { "lanes": { "training": ["Name→recall; handler focus"], "health": ["Puppy care; heat caution"], "nutrition": ["Puppy diet"], "exercise": ["Short play; no hard runs"], "bonding": ["Grooming deshed routine"], "gear": ["Y-harness"] }},
+        "4":  { "lanes": { "training": ["Recall on long line; loose-lead"], "health": ["Paw pad care"], "nutrition": ["Measured meals"], "exercise": ["Short shaded walks"], "bonding": ["Puzzle rotation"], "gear": ["Cooling mat"] }},
+        "8":  { "lanes": { "training": ["Stay 45–60 s"], "health": ["Coat/skin watch"], "nutrition": ["Maintain puppy diet"], "exercise": ["Sniff hikes"], "bonding": ["Settle training"], "gear": ["Place platform"] }},
+        "12": { "lanes": { "training": ["Generalize cues outdoors"], "health": ["Adult transition timing"], "nutrition": ["Transition per vet"], "exercise": ["Walks 30–45 min"], "bonding": ["Scent games"], "gear": ["Reflective gear"] }},
+        "18": { "lanes": { "training": ["Neutrality; impulse control"], "health": ["Warm-up/cool-down"], "nutrition": ["Adult diet; hydration"], "exercise": ["Endurance walks or canicross (cool temps)"], "bonding": ["Long decompression walks"], "gear": ["Pulling harness (sport)"] }},
+        "24": { "lanes": { "training": ["Distance recalls; whistle cues"], "health": ["Joint screen if heavy mileage"], "nutrition": ["Calorie tune by season"], "exercise": ["Long hikes/canicross (cool)"], "bonding": ["Adventure days"], "gear": ["LED collar; GPS tag"] }},
+        "30": { "lanes": { "training": ["Public neutrality refreshers"], "health": ["Foot care; heat avoidance"], "nutrition": ["Electrolytes per vet in heat"], "exercise": ["Intervals on cool days"], "bonding": ["New trail exploration"], "gear": ["Cooling vest"] }},
+        "40": { "lanes": { "training": ["Short shaping sessions"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s if needed"], "exercise": ["Short mixed sessions"], "bonding": ["Calm grooming"], "gear": ["Orthopedic bed (prep)"] }},
+        "50": { "lanes": { "training": ["Nosework boxes; easy tricks"], "health": ["Pre-senior screen"], "nutrition": ["Hydration toppers"], "exercise": ["Short, frequent walks"], "bonding": ["Massage; snuffle mats"], "gear": ["Non-slip rugs"] }},
+        "61": { "lanes": { "training": ["Cooperative care"], "health": ["Senior mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Flat terrain strolls"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+      }
+    },
+
+    "Boxer": { "ages": {
+      "2":  { "lanes": { "training": ["Impulse control; handler focus"], "health": ["Puppy care; heat caution"], "nutrition": ["Puppy diet"], "exercise": ["Short play bursts"], "bonding": ["Puzzle feeders"], "gear": ["Y-harness"] }},
+      "4":  { "lanes": { "training": ["Loose-lead; recall on line"], "health": ["Teeth/nail routine"], "nutrition": ["Measured meals"], "exercise": ["Short walks; sniff time"], "bonding": ["Trick chains"], "gear": ["Treat pouch"] }},
+      "8":  { "lanes": { "training": ["Stay 45–60 s; polite greetings"], "health": ["Joint watch"], "nutrition": ["Maintain puppy diet"], "exercise": ["Low-impact fetch"], "bonding": ["Calm settle"], "gear": ["Place platform"] }},
+      "12": { "lanes": { "training": ["Generalize cues; neutrality"], "health": ["Adult transition timing"], "nutrition": ["Transition per vet"], "exercise": ["Walks 30–40 min"], "bonding": ["Hide-and-seek"], "gear": ["Reflective gear"] }},
+      "18": { "lanes": { "training": ["Distance cues; recall proofing"], "health": ["Warm-up/cool-down"], "nutrition": ["Adult diet"], "exercise": ["Cardio days + rests"], "bonding": ["Family games"], "gear": ["Cooling vest"] }},
+      "24": { "lanes": { "training": ["Advanced impulse control"], "health": ["Dental; joint watch"], "nutrition": ["Body condition scoring"], "exercise": ["Daily cardio + brain work"], "bonding": ["New trick quarterly"], "gear": ["LED collar"] }},
+      "30": { "lanes": { "training": ["Public neutrality"], "health": ["Foot care"], "nutrition": ["Hydration plan"], "exercise": ["Soft-ground sessions"], "bonding": ["Decompression walks"], "gear": ["Portable bowl"] }},
+      "40": { "lanes": { "training": ["Short shaping"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s"], "exercise": ["Short mixed sessions"], "bonding": ["Calm grooming"], "gear": ["Orthopedic bed (prep)"] }},
+      "50": { "lanes": { "training": ["Low-impact puzzles"], "health": ["Pre-senior screen"], "nutrition": ["Hydration toppers"], "exercise": ["Short walks"], "bonding": ["Massage; snuffle mats"], "gear": ["Non-slip rugs"] }},
+      "61": { "lanes": { "training": ["Cooperative care"], "health": ["Senior mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Flat terrain strolls"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+    }},
+
+    "Border Collie": { "ages": {
+      "2":  { "lanes": { "training": ["Marker games; trick intro"], "health": ["Puppy care; joint friendly footing"], "nutrition": ["Puppy diet"], "exercise": ["Short shaping; no stock"], "bonding": ["Grooming confidence"], "gear": ["Target platform"] }},
+      "4":  { "lanes": { "training": ["Recall party; heel basics"], "health": ["Nail/teeth routine"], "nutrition": ["Measured meals"], "exercise": ["Directional cone games"], "bonding": ["Puzzle rotation"], "gear": ["Long line"] }},
+      "8":  { "lanes": { "training": ["Down-stay 45–60 s"], "health": ["Growth caution"], "nutrition": ["Maintain puppy diet"], "exercise": ["Cavaletti at ground level"], "bonding": ["Hide-and-seek"], "gear": ["Whistle"] }},
+      "12": { "lanes": { "training": ["Distance cues; door manners"], "health": ["Adult transition timing"], "nutrition": ["Transition per vet"], "exercise": ["Walks 30–45 min"], "bonding": ["Trick chains"], "gear": ["Cooling vest"] }},
+      "18": { "lanes": { "training": ["Herding foundations (pro)"], "health": ["Fitness baseline"], "nutrition": ["Adult diet; omega-3s"], "exercise": ["Purposeful work sessions"], "bonding": ["Scent games"], "gear": ["Hands-free leash"] }},
+      "24": { "lanes": { "training": ["Advanced distance downs"], "health": ["Dental; joint watch"], "nutrition": ["Measured kcals"], "exercise": ["Daily cardio + brain work"], "bonding": ["Complex trick quarterly"], "gear": ["LED collar"] }},
+      "30": { "lanes": { "training": ["Public neutrality"], "health": ["Foot care"], "nutrition": ["Hydration plan"], "exercise": ["Intervals; soft ground"], "bonding": ["New trail adventures"], "gear": ["Portable bowl"] }},
+      "40": { "lanes": { "training": ["Short precision refreshers"], "health": ["Overuse prevention"], "nutrition": ["Omega-3s"], "exercise": ["Short mixed sessions"], "bonding": ["Calm grooming"], "gear": ["Orthopedic bed (prep)"] }},
+      "50": { "lanes": { "training": ["Low-impact puzzles"], "health": ["Pre-senior screen"], "nutrition": ["Hydration toppers"], "exercise": ["Short walks"], "bonding": ["Massage; snuffle mats"], "gear": ["Non-slip rugs"] }},
+      "61": { "lanes": { "training": ["Cooperative care"], "health": ["Senior mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Flat strolls"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+    }},
+
+    "Chihuahua": { "ages": {
+      "2":  { "lanes": { "training": ["Confidence games; tiny sits/downs"], "health": ["Hypoglycemia watch; warmth"], "nutrition": ["Small-breed puppy diet"], "exercise": ["Short play; no rough wrestle"], "bonding": ["Grooming desensitization"], "gear": ["Soft harness; ramps"] }},
+      "4":  { "lanes": { "training": ["Loose-lead in quiet areas"], "health": ["Dental routine start"], "nutrition": ["Measured tiny portions"], "exercise": ["Indoor play circuits"], "bonding": ["Mini puzzle toys"], "gear": ["Light rain/sweater"] }},
+      "8":  { "lanes": { "training": ["Stay 30–45 s; recall indoors"], "health": ["Patella watch"], "nutrition": ["Maintain puppy diet"], "exercise": ["Gentle fetch (soft toys)"], "bonding": ["Lap settle"], "gear": ["Place mat"] }},
+      "12": { "lanes": { "training": ["Confidence walks on safe surfaces"], "health": ["Adult transition timing"], "nutrition": ["Transition per vet"], "exercise": ["Multiple micro-walks"], "bonding": ["Short tricks"], "gear": ["Reflective leash"] }},
+      "18": { "lanes": { "training": ["Neutrality near larger dogs"], "health": ["Weight watch"], "nutrition": ["Adult small-breed diet"], "exercise": ["Short frequent walks"], "bonding": ["Calm cuddle"], "gear": ["Soft carrier"] }},
+      "24": { "lanes": { "training": ["Tricks/platform games"], "health": ["Dental checks often"], "nutrition": ["Measured kcals"], "exercise": ["Indoor fetch corridors"], "bonding": ["Puzzle rotation"], "gear": ["Padded harness"] }},
+      "30": { "lanes": { "training": ["Public confidence refreshers"], "health": ["Warm/dry management"], "nutrition": ["Hydration support"], "exercise": ["Very short strolls"], "bonding": ["Lap time"], "gear": ["Heated pad (supervised)"] }},
+      "40": { "lanes": { "training": ["Short shaping sessions"], "health": ["Allergy/skin watch"], "nutrition": ["Omega-3s if needed"], "exercise": ["Micro-walks"], "bonding": ["Calm grooming"], "gear": ["Orthopedic bed (prep)"] }},
+      "50": { "lanes": { "training": ["Low-impact puzzles"], "health": ["Pre-senior screen"], "nutrition": ["Softened kibble if needed"], "exercise": ["Indoor foraging"], "bonding": ["Lick mats"], "gear": ["Non-slip rugs"] }},
+      "61": { "lanes": { "training": ["Cooperative care"], "health": ["Senior mobility plan"], "nutrition": ["Senior diet"], "exercise": ["Flat terrain strolls"], "bonding": ["Cuddle/brush"], "gear": ["Ramps/steps"] }}
+    }},
+
+    "Pomeranian": { "ages": {} },
+    "Shih Tzu": { "ages": {} },
+    "Yorkshire Terrier": { "ages": {} },
+    "Miniature Schnauzer": { "ages": {} },
+    "Standard Schnauzer": { "ages": {} },
+    "Giant Schnauzer": { "ages": {} },
+    "Great Dane": { "ages": {} },
+    "Weimaraner": { "ages": {} },
+    "Irish Setter": { "ages": {} },
+    "Australian Shepherd": { "ages": {} },
+    "Greyhound": { "ages": {} },
+    "Samoyed": { "ages": {} },
+    "Dalmatian": { "ages": {} },
+    "Bernese Mountain Dog": { "ages": {} },
+    "St. Bernard": { "ages": {} },
+    "Boston Terrier": { "ages": {} },
+    "Basset Hound": { "ages": {} },
+    "Akita": { "ages": {} },
+    "Alaskan Malamute": { "ages": {} },
+    "Collie": { "ages": {} },
+    "Tibetan Mastiff": { "ages": {} },
+    "Bichon Frise": { "ages": {} },
+    "Dogo Argentino": { "ages": {} },
+
+    "English Pointer": { "ages": {} },
+    "Australian Cattle Dog": { "ages": {} },
+    "Chihuahua (Long Coat)": { "ages": {} },
+
+    "Pug": { "ages": {} },
+    "Maltese": { "ages": {} },
+    "Havanese": { "ages": {} },
+    "Boxer (Brindle)": { "ages": {} },
+    "Border Collie (Smooth Coat)": { "ages": {} },
+    "Shih Tzu (American)": { "ages": {} },
+    "Pomeranian (Fox Face)": { "ages": {} },
+    "Yorkshire Terrier (Silky)": { "ages": {} },
+    "Miniature Schnauzer (Black)": { "ages": {} },
+    "Standard Schnauzer (Pepper & Salt)": { "ages": {} },
+    "Giant Schnauzer (Black)": { "ages": {} },
+    "Great Dane (Harlequin)": { "ages": {} },
+    "Weimaraner (Blue)": { "ages": {} },
+    "Irish Setter (Red)": { "ages": {} },
+    "Australian Shepherd (Red Merle)": { "ages": {} },
+    "Siberian Husky": { "ages": {} },
+    "Italian Greyhound": { "ages": {} },
+    "Cane Corso": { "ages": {} },
+    "Cavalier King Charles Spaniel": { "ages": {} },
+    "Chow Chow": { "ages": {} },
+    "Whippet": { "ages": {} },
+    "Staffordshire Bull Terrier": { "ages": {} },
+
+    "Belgian Malinois": { "ages": {} },
+    "English Springer Spaniel": { "ages": {} },
+    "Newfoundland": { "ages": {} },
+    "Papillon": { "ages": {} },
+    "Scottish Terrier": { "ages": {} },
+    "Vizsla": { "ages": {} },
+    "Jack Russell Terrier": { "ages": {} },
+    "Portuguese Water Dog": { "ages": {} },
+    "Chinese Shar-Pei": { "ages": {} },
+    "Norwegian Elkhound": { "ages": {} },
+    "Basenji": { "ages": {} },
+    "American Pit Bull Terrier": { "ages": {} },
+    "Airedale Terrier": { "ages": {} },
+    "English Cocker Spaniel": { "ages": {} },
+    "Bloodhound": { "ages": {} },
+    "Keeshond": { "ages": {} },
+    "Lhasa Apso": { "ages": {} },
+    "Flat-Coated Retriever": { "ages": {} },
+    "Japanese Chin": { "ages": {} },
+    "Korean Jindo": { "ages": {} },
+    "Anatolian Shepherd": { "ages": {} },
+    "Saluki": { "ages": {} },
+    "Irish Wolfhound": { "ages": {} },
+    "Great Pyrenees": { "ages": {} },
+    "Belgian Tervuren": { "ages": {} },
+
+    "American Eskimo Dog": { "ages": {} },
+    "Afghan Hound": { "ages": {} },
+    "Coton de Tulear": { "ages": {} },
+    "Chinese Crested": { "ages": {} },
+    "American Foxhound": { "ages": {} },
+    "Pharaoh Hound": { "ages": {} },
+    "Norfolk Terrier": { "ages": {} },
+    "Norwich Terrier": { "ages": {} },
+    "Sealyham Terrier": { "ages": {} },
+    "Skye Terrier": { "ages": {} },
+    "Welsh Terrier": { "ages": {} },
+    "Wire Fox Terrier": { "ages": {} },
+    "Dandie Dinmont Terrier": { "ages": {} },
+    "Otterhound": { "ages": {} },
+    "Finnish Spitz": { "ages": {} },
+    "Icelandic Sheepdog": { "ages": {} },
+    "Polish Lowland Sheepdog": { "ages": {} },
+    "Sloughi": { "ages": {} },
+    "Xoloitzcuintli (Mexican Hairless Dog)": { "ages": {} },
+    "Neapolitan Mastiff": { "ages": {} },
+    "Kuvasz": { "ages": {} },
+    "Komondor": { "ages": {} },
+    "Belgian Sheepdog (Groenendael)": { "ages": {} },
+    "Belgian Laekenois": { "ages": {} },
+    "Spinone Italiano": { "ages": {} }
   }
 }
