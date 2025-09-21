@@ -1,165 +1,333 @@
-const BREED_ALIASES = {
-  // Retrievers & Poodles
-  "lab": "Labrador Retriever",
-  "labrador": "Labrador Retriever",
-  "labs": "Labrador Retriever",
-  "golden": "Golden Retriever",
-  "goldie": "Golden Retriever",
-  "goldens": "Golden Retriever",
-  "flatcoat": "Flat-Coated Retriever",
-  "flat-coated": "Flat-Coated Retriever",
-  "toller": "Nova Scotia Duck Tolling Retriever",
-  "chesapeake": "Chesapeake Bay Retriever",
-  "chessie": "Chesapeake Bay Retriever",
-  "poodle": "Poodle",
-  "toy poodle": "Poodle",
-  "mini poodle": "Poodle",
-  "standard poodle": "Poodle",
-
-  // Shepherds / Herding
-  "gsd": "German Shepherd",
-  "german shepherd dog": "German Shepherd",
-  "german shepherd": "German Shepherd",
-  "aussie": "Australian Shepherd",
-  "border": "Border Collie",
-  "collie rough": "Collie",
-  "rough collie": "Collie",
-  "pembroke corgi": "Pembroke Welsh Corgi",
-  "corgi": "Pembroke Welsh Corgi",
-  "acd": "Australian Cattle Dog",
-  "blue heeler": "Australian Cattle Dog",
-  "red heeler": "Australian Cattle Dog",
-  "heeler": "Australian Cattle Dog",
-  "mal": "Belgian Malinois",
-  "mali": "Belgian Malinois",
-  "malinois": "Belgian Malinois",
-  "terv": "Belgian Tervuren",
-  "groenendael": "Belgian Sheepdog",
-  "swissy": "Great Swiss Mountain Dog",
-  "pyr shep": "Pyrenean Shepherd",
-  "pyrenean shep": "Pyrenean Shepherd",
-  "anatolian": "Anatolian Shepherd Dog",
-
-  // Working / Guardian
-  "rottie": "Rottweiler",
-  "rott": "Rottweiler",
-  "doberman": "Doberman Pinscher",
-  "dobie": "Doberman Pinscher",
-  "dane": "Great Dane",
-  "corso": "Cane Corso",
-  "mastiff": "Mastiff",
-  "bull mastiff": "Bullmastiff",
-  "newf": "Newfoundland",
-  "newfie": "Newfoundland",
-  "saint": "Saint Bernard",
-  "st bernard": "Saint Bernard",
-  "pyrenees": "Great Pyrenees",
-  "pyr": "Great Pyrenees",
-  "akita inu": "Akita",
-  "malamute": "Alaskan Malamute",
-  "sammy": "Samoyed",
-  "sammydog": "Samoyed",
-
-  // Bullies / Terriers (note: “pitbull” usage varies; mapping to AmStaff here)
-  "amstaff": "American Staffordshire Terrier",
-  "pitbull": "American Staffordshire Terrier",
-  "pit bull": "American Staffordshire Terrier",
-  "pit": "American Staffordshire Terrier",
-  "pittie": "American Staffordshire Terrier",
-  "pitty": "American Staffordshire Terrier",
-  "staffy": "Staffordshire Bull Terrier",
-  "staffie": "Staffordshire Bull Terrier",
-  "jack russell": "Jack Russell Terrier",
-  "jrt": "Jack Russell Terrier",
-  "westie": "West Highland White Terrier",
-  "scottie": "Scottish Terrier",
-  "airedale": "Airedale Terrier",
-  "wire fox": "Wire Fox Terrier",
-  "smooth fox": "Smooth Fox Terrier",
-
-  // Hounds
-  "beag": "Beagle",
-  "doxie": "Dachshund",
-  "weenie dog": "Dachshund",
-  "sausage dog": "Dachshund",
-  "blood": "Bloodhound",
-  "bassett": "Basset Hound",
-  "ridgeback": "Rhodesian Ridgeback",
-  "grey": "Greyhound",
-  "greys": "Greyhound",
-  "whip": "Whippet",
-  "iggy": "Italian Greyhound",
-  "russian wolfhound": "Borzoi",
-
-  // Sporting / Gun dogs
-  "gsp": "German Shorthaired Pointer",
-  "gwp": "German Wirehaired Pointer",
-  "pointer": "Pointer",
-  "springer": "English Springer Spaniel",
-  "cocker": "Cocker Spaniel",
-  "english cocker": "English Cocker Spaniel",
-  "field spaniel": "Field Spaniel",
-  "clumber": "Clumber Spaniel",
-  "spinone": "Spinone Italiano",
-  "lagotto": "Lagotto Romagnolo",
-  "vizsla": "Vizsla",
-  "weim": "Weimaraner",
-  "brittany": "Brittany Spaniel",
-  "irish setter": "Irish Setter",
-  "english setter": "English Setter",
-  "llewellin": "English Setter",
-  "gordon setter": "Gordon Setter",
-
-  // Toys / Companions
-  "chi": "Chihuahua",
-  "shihtzu": "Shih Tzu",
-  "yorkie": "Yorkshire Terrier",
-  "pom": "Pomeranian",
-  "min pin": "Miniature Pinscher",
-  "pap": "Papillon",
-  "lhasa": "Lhasa Apso",
-  "malt": "Maltese",
-  "havanese": "Havanese",
-  "eskie": "American Eskimo Dog",
-  "cavalier": "Cavalier King Charles Spaniel",
-  "toy poodle": "Poodle",
-
-  // Spitz / Primitives
-  "chow": "Chow Chow",
-  "shar pei": "Chinese Shar-Pei",
-  "basenji": "Basenji",
-  "pharaoh": "Pharaoh Hound",
-  "xolo": "Xoloitzcuintli",
-  "mexican hairless": "Xoloitzcuintli",
-  "keesh": "Keeshond",
-
-  // Terriers small/other
-  "rat terrier": "Rat Terrier",
-  "cairn": "Cairn Terrier",
-  "border terrier": "Border Terrier",
-  "bull terrier": "Bull Terrier",
-
-  // Sighthounds repeated (explicit names)
-  "saluki": "Saluki",
-  "borzoi": "Borzoi",
-
-  // Set alternates & plurals (safe)
-  "pomerenian": "Pomeranian",
-  "rottweiler": "Rottweiler",
-  "boxer": "Boxer",
-  "husky": "Siberian Husky",
-  "sibe": "Siberian Husky",
-
-  // Misc helpful spellings
-  "sheltie": "Shetland Sheepdog",
-  "berner": "Bernese Mountain Dog",
-  "mini schnauzer": "Miniature Schnauzer",
-  "standard schnauzer": "Standard Schnauzer",
-  "giant schnauzer": "Giant Schnauzer",
-  "west highland": "West Highland White Terrier",
-  "english bulldog": "Bulldog",
-  "frenchie": "French Bulldog",
-  "boston": "Boston Terrier",
-  "pug": "Pug",
-  "shih tzu": "Shih Tzu"
-};
+{
+  "Labrador Retriever": [
+    "lab",
+    "labrador",
+    "labs"
+  ],
+  "Golden Retriever": [
+    "golden",
+    "goldens",
+    "goldie"
+  ],
+  "Flat-Coated Retriever": [
+    "flat-coated",
+    "flatcoat"
+  ],
+  "Nova Scotia Duck Tolling Retriever": [
+    "toller"
+  ],
+  "Chesapeake Bay Retriever": [
+    "chesapeake",
+    "chessie"
+  ],
+  "Poodle": [
+    "mini poodle",
+    "poodle",
+    "standard poodle",
+    "toy poodle"
+  ],
+  "German Shepherd": [
+    "german shepherd",
+    "german shepherd dog",
+    "gsd"
+  ],
+  "Australian Shepherd": [
+    "aussie"
+  ],
+  "Border Collie": [
+    "border"
+  ],
+  "Collie": [
+    "collie rough",
+    "rough collie"
+  ],
+  "Pembroke Welsh Corgi": [
+    "corgi",
+    "pembroke corgi"
+  ],
+  "Australian Cattle Dog": [
+    "acd",
+    "blue heeler",
+    "heeler",
+    "red heeler"
+  ],
+  "Belgian Malinois": [
+    "mal",
+    "mali",
+    "malinois"
+  ],
+  "Belgian Tervuren": [
+    "terv"
+  ],
+  "Belgian Sheepdog": [
+    "groenendael"
+  ],
+  "Great Swiss Mountain Dog": [
+    "swissy"
+  ],
+  "Pyrenean Shepherd": [
+    "pyr shep",
+    "pyrenean shep"
+  ],
+  "Anatolian Shepherd Dog": [
+    "anatolian"
+  ],
+  "Rottweiler": [
+    "rott",
+    "rottie",
+    "rottweiler"
+  ],
+  "Doberman Pinscher": [
+    "doberman",
+    "dobie"
+  ],
+  "Great Dane": [
+    "dane"
+  ],
+  "Cane Corso": [
+    "corso"
+  ],
+  "Mastiff": [
+    "mastiff"
+  ],
+  "Bullmastiff": [
+    "bull mastiff"
+  ],
+  "Newfoundland": [
+    "newf",
+    "newfie"
+  ],
+  "Saint Bernard": [
+    "saint",
+    "st bernard"
+  ],
+  "Great Pyrenees": [
+    "pyr",
+    "pyrenees"
+  ],
+  "Akita": [
+    "akita inu"
+  ],
+  "Alaskan Malamute": [
+    "malamute"
+  ],
+  "Samoyed": [
+    "sammy",
+    "sammydog"
+  ],
+  "American Staffordshire Terrier": [
+    "amstaff",
+    "pit",
+    "pit bull",
+    "pitbull",
+    "pittie",
+    "pitty"
+  ],
+  "Staffordshire Bull Terrier": [
+    "staffie",
+    "staffy"
+  ],
+  "Jack Russell Terrier": [
+    "jack russell",
+    "jrt"
+  ],
+  "West Highland White Terrier": [
+    "west highland",
+    "westie"
+  ],
+  "Scottish Terrier": [
+    "scottie"
+  ],
+  "Airedale Terrier": [
+    "airedale"
+  ],
+  "Wire Fox Terrier": [
+    "wire fox"
+  ],
+  "Smooth Fox Terrier": [
+    "smooth fox"
+  ],
+  "Beagle": [
+    "beag"
+  ],
+  "Dachshund": [
+    "doxie",
+    "sausage dog",
+    "weenie dog"
+  ],
+  "Bloodhound": [
+    "blood"
+  ],
+  "Basset Hound": [
+    "bassett"
+  ],
+  "Rhodesian Ridgeback": [
+    "ridgeback"
+  ],
+  "Greyhound": [
+    "grey",
+    "greys"
+  ],
+  "Whippet": [
+    "whip"
+  ],
+  "Italian Greyhound": [
+    "iggy"
+  ],
+  "Borzoi": [
+    "borzoi",
+    "russian wolfhound"
+  ],
+  "German Shorthaired Pointer": [
+    "gsp"
+  ],
+  "German Wirehaired Pointer": [
+    "gwp"
+  ],
+  "Pointer": [
+    "pointer"
+  ],
+  "English Springer Spaniel": [
+    "springer"
+  ],
+  "Cocker Spaniel": [
+    "cocker"
+  ],
+  "English Cocker Spaniel": [
+    "english cocker"
+  ],
+  "Field Spaniel": [
+    "field spaniel"
+  ],
+  "Clumber Spaniel": [
+    "clumber"
+  ],
+  "Spinone Italiano": [
+    "spinone"
+  ],
+  "Lagotto Romagnolo": [
+    "lagotto"
+  ],
+  "Vizsla": [
+    "vizsla"
+  ],
+  "Weimaraner": [
+    "weim"
+  ],
+  "Brittany Spaniel": [
+    "brittany"
+  ],
+  "Irish Setter": [
+    "irish setter"
+  ],
+  "English Setter": [
+    "english setter",
+    "llewellin"
+  ],
+  "Gordon Setter": [
+    "gordon setter"
+  ],
+  "Chihuahua": [
+    "chi"
+  ],
+  "Shih Tzu": [
+    "shih tzu",
+    "shihtzu"
+  ],
+  "Yorkshire Terrier": [
+    "yorkie"
+  ],
+  "Pomeranian": [
+    "pom",
+    "pomerenian"
+  ],
+  "Miniature Pinscher": [
+    "min pin"
+  ],
+  "Papillon": [
+    "pap"
+  ],
+  "Lhasa Apso": [
+    "lhasa"
+  ],
+  "Maltese": [
+    "malt"
+  ],
+  "Havanese": [
+    "havanese"
+  ],
+  "American Eskimo Dog": [
+    "eskie"
+  ],
+  "Cavalier King Charles Spaniel": [
+    "cavalier"
+  ],
+  "Chow Chow": [
+    "chow"
+  ],
+  "Chinese Shar-Pei": [
+    "shar pei"
+  ],
+  "Basenji": [
+    "basenji"
+  ],
+  "Pharaoh Hound": [
+    "pharaoh"
+  ],
+  "Xoloitzcuintli": [
+    "mexican hairless",
+    "xolo"
+  ],
+  "Keeshond": [
+    "keesh"
+  ],
+  "Rat Terrier": [
+    "rat terrier"
+  ],
+  "Cairn Terrier": [
+    "cairn"
+  ],
+  "Border Terrier": [
+    "border terrier"
+  ],
+  "Bull Terrier": [
+    "bull terrier"
+  ],
+  "Saluki": [
+    "saluki"
+  ],
+  "Boxer": [
+    "boxer"
+  ],
+  "Siberian Husky": [
+    "husky",
+    "sibe"
+  ],
+  "Shetland Sheepdog": [
+    "sheltie"
+  ],
+  "Bernese Mountain Dog": [
+    "berner"
+  ],
+  "Miniature Schnauzer": [
+    "mini schnauzer"
+  ],
+  "Standard Schnauzer": [
+    "standard schnauzer"
+  ],
+  "Giant Schnauzer": [
+    "giant schnauzer"
+  ],
+  "Bulldog": [
+    "english bulldog"
+  ],
+  "French Bulldog": [
+    "frenchie"
+  ],
+  "Boston Terrier": [
+    "boston"
+  ],
+  "Pug": [
+    "pug"
+  ]
+}
