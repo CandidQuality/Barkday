@@ -1,11 +1,11 @@
 // very top of app.js
-console.log('[Barkday] app.js loaded v2+logs');
-// ====================== Barkday app.js (complete, upgraded) ======================
+console.log('[Barkday] app.js loaded v3+diag');
+// ====================== Barkday app.js (complete, with diagnostics) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
 const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
 
-// Data sources (cache-busted to v2)
+// Data sources (cache-busted)
 const GIFT_FEED_URL     = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
 const RECO_BANDED_URL   = "data/reco-banded.json?v=2";
 const RECO_BREED_URL    = "data/reco-breed.json?v=2";
@@ -14,13 +14,13 @@ const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 // ---------- Splash + Logos ----------
 (function(){
   const hideSplash = () => document.getElementById("splash")?.classList.add("hide");
-  window.addEventListener("load", () => setTimeout(hideSplash, 1800));   // doubled
+  window.addEventListener("load", () => setTimeout(hideSplash, 1800));
   document.addEventListener("DOMContentLoaded", () => {
     const h = document.getElementById("logoHeader");
     const s = document.getElementById("logoSplash");
     if (h) h.src = LOGO_HEADER_SRC;
     if (s) s.src = LOGO_SPLASH_SRC;
-    setTimeout(hideSplash, 3000); // doubled fail-safe
+    setTimeout(hideSplash, 3000); // fail-safe
   });
 })();
 
@@ -56,7 +56,7 @@ const poss = n => !n ? "your precious friend's" : (/\s*$/.test(n)&&/s$/i.test(n.
 function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${poss(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
 els.dogName.addEventListener('input', renderHero); renderHero();
 
-// ---------- Static group notes (UI hints under Results) ----------
+// ---------- Static group notes (UI hints) ----------
 const GROUP_META = {
   'Working / Herding': { desc:'High-drive problem solvers; thrive on jobs.', examples:['Border Collie','Australian Shepherd','German Shepherd','Belgian Malinois','Corgi'] },
   'Sporting': { desc:'Endurance & retrieving; water-confident.', examples:['Labrador','Golden Retriever','Vizsla','GSP','Setter'] },
@@ -160,14 +160,32 @@ function getBreedEntry(input){
   return null;
 }
 
-// ---------- Breed notes + examples under selectors ----------
+// ---------- Map UI group → JSON keys ----------
+const GROUP_SYNONYMS = {
+  'Working / Herding': ['Working','Herding'],
+  'Hound': ['Hound','Hounds'],
+  'Non-Sporting': ['Non-Sporting','Non Sporting'],
+  'Mixed / Other': ['Miscellaneous','Foundation Stock','Mixed','Other'],
+  'Guardian': ['Working','Non-Sporting'], // reasonable fallbacks
+  'Companion': ['Toy','Non-Sporting'],
+  'Sporting': ['Sporting'],
+  'Terrier': ['Terrier'],
+  'Toy': ['Toy']
+};
+function mapGroupKey(uiKey) {
+  const keys = Object.keys(RECO_BANDED || {});
+  const candidates = GROUP_SYNONYMS[uiKey] || [uiKey];
+  for (const k of candidates) if (keys.includes(k)) return k;
+  return null;
+}
+
+// ---------- Breed notes + examples ----------
 function updateBreedNotes(){
   const name = els.dogName.value || 'your dog';
   const breedTxt = (els.breed.value||'').trim();
   const group = els.breedGroup.value;
   const lb = parseInt(els.adultWeight.value,10) || 55;
 
-  // Show examples from external map if we recognize the breed; else fallback meta
   const mapped = findGroupByBreedName(breedTxt);
   if (mapped) {
     els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
@@ -199,7 +217,7 @@ const daysBetween=(a,b)=>Math.floor((b-a)/(24*60*60*1000));
 const pad2=n=>String(n).padStart(2,'0');
 const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+'Z';
 
-// Weight → slope (5→~7.2)
+// Weight → slope
 function slopeFromWeight(lb){
   const w=clamp(lb,5,200);
   if(w<=20) return 5;
@@ -224,7 +242,7 @@ function nextDogYearDate(dob, H, lb, smooth){
   const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
 }
 
-// ---------- Confetti (multicolor; duration doubled) ----------
+// ---------- Confetti (multicolor; longer) ----------
 function confetti(ms = 3400){
   const c = document.createElement('canvas');
   c.style.position = 'fixed'; c.style.inset = '0'; c.style.pointerEvents = 'none';
@@ -257,7 +275,7 @@ function confetti(ms = 3400){
   })(0);
 }
 
-// ---------- Age bands (fallback by group) ----------
+// ---------- Age bands ----------
 const AGE_BANDS = [
   { key:'puppy_1_6',min:1,max:6,label:'Puppy I (1–6 dog-years)' },
   { key:'puppy_7_10',min:7,max:10,label:'Puppy II (7–10 dog-years)' },
@@ -283,30 +301,43 @@ function nearestAgeEntry(agesObj, dogYears){
   return agesObj[String(best)];
 }
 
-// ---------- Plan selection (breed-first (fuzzy+nearest) → banded → none) ----------
+// ---------- Plan selection (breed-first → banded (mapped) → none) ----------
 function planFor(group, dogYears){
   const band = bandForDY(Math.round(dogYears));
 
-  // DEBUG: input snapshot
-  console.log('[Barkday planFor] breed=%o group=%o dogYears=%o',
-    (els.breed.value || '').trim(), group, Math.round(dogYears));
+  console.log('[Barkday planFor] breed=%o group=%o dogYears=%o bandKey=%o',
+    (els.breed.value || '').trim(), group, Math.round(dogYears), band.key);
 
   // 1) Breed-specific (fuzzy) → nearest age
   const breedInput = (els.breed.value || '').trim();
   const breedEntry = getBreedEntry(breedInput);
   if (breedEntry && breedEntry.ages){
+    // Log canonical if we found a mapping
+    const canonical = BREED_NAME_MAP[(breedInput||'').toLowerCase()];
+    if (canonical) console.log('  • matched breed canonical =', canonical);
     const entry = nearestAgeEntry(breedEntry.ages, dogYears);
     if (entry && entry.lanes) {
-      console.log('→ using', 'breed-specific');
+      const matchedAge = Object.keys(breedEntry.ages).find(k => breedEntry.ages[k] === entry) || 'nearest';
+      console.log('→ using', 'breed-specific', 'matchedAge=', matchedAge);
       return { plan: entry, band };
     }
+  } else {
+    if (breedInput) console.log('  • no breed-specific entry for:', breedInput);
   }
 
-  // 2) Group-banded fallback
-  const byGroup = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
-  if (byGroup) {
-    console.log('→ using', 'banded', `(key=${band.key})`);
-    return { plan: byGroup, band };
+  // 2) Group-banded fallback (map UI group → JSON key)
+  const mappedKey = mapGroupKey(group);
+  if (mappedKey) {
+    console.log('  • mapped group →', mappedKey);
+    const byGroup = RECO_BANDED[mappedKey] ? RECO_BANDED[mappedKey][band.key] : null;
+    if (byGroup) {
+      console.log('→ using', 'banded', `(key=${band.key})`);
+      return { plan: byGroup, band };
+    } else {
+      console.log('  • band not found for', mappedKey, 'bandKey=', band.key);
+    }
+  } else {
+    console.log('  • could not map UI group to reco-banded keys');
   }
 
   // 3) Nothing found
@@ -329,6 +360,7 @@ function renderPlan(group, upcomingDY){
 
 // ---------- Gifts ----------
 async function loadGifts(){
+  const t0 = performance.now();
   els.gifts.innerHTML=''; els.giftMeta.textContent='Loading…';
   try{
     const res = await fetch(GIFT_FEED_URL,{cache:'no-store'}); const items = await res.json();
@@ -384,11 +416,14 @@ async function loadGifts(){
     els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length? ' • ignored: '+ignored.join(', '):''}`;
     els.gifts.innerHTML = top.map(it=>`<div class="gift"><h4>${it.title||'Gift'}</h4><div class="muted">${(it.tag||it.ageTag||'').toString()}</div><div style="margin-top:8px"><a class="link" href="${it.url}" target="_blank" rel="noopener">View</a></div></div>`).join('');
   }catch(e){ els.giftMeta.textContent='Could not load gift ideas.'; }
+  console.log('[Barkday gifts] render in', Math.round(performance.now()-t0), 'ms');
 }
 $('loadGifts').addEventListener('click', loadGifts);
 
 // ---------- Compute ----------
 function compute(){
+  const clickStart = performance.now();
+
   const dobStr=els.dob.value; if(!dobStr){ alert('Please select a birthdate.'); return; }
   const dob=new Date(dobStr), now=new Date(); if(isNaN(dob)||dob>now){ alert('Birthdate is invalid.'); return; }
   const lb=parseInt(els.adultWeight.value,10);
@@ -424,6 +459,8 @@ function compute(){
 
   // If gifts open, refilter
   if(els.gifts.children.length) loadGifts();
+
+  console.log('[Barkday] click compute took', Math.round(performance.now()-clickStart), 'ms');
 }
 
 // ---------- Buttons ----------
