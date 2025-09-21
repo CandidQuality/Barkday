@@ -1,3 +1,5 @@
+// very top of app.js
+console.log('[Barkday] app.js loaded v2');
 // ====================== Barkday app.js (complete, upgraded) ======================
 // ---------- Config ----------
 const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
