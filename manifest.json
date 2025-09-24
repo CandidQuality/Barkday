@@ -1,5 +1,5 @@
 {
-  "name": "Barkday\u2122",
+  "name": "Barkday™",
   "short_name": "Barkday",
   "description": "Dog birthday age calculator & celebration reminders with gift ideas.",
   "start_url": "/Barkday/",
@@ -11,6 +11,16 @@
     {
       "src": "icon-192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-384.png",
+      "sizes": "384x384",
       "type": "image/png"
     },
     {
