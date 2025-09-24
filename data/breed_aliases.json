@@ -2,9 +2,7 @@
   "_copyright": "© 2025 CandidQuality (Barkday™). All rights reserved.",
   "_license": "No license granted for redistribution, republication, or derivative use.",
   "_dataset_id": "barkday-2025-09-23-v1",
-  
-  // … existing JSON data follows …
-}
+  "data": [
 {
   "Labrador Retriever": [
     "lab",
