@@ -656,27 +656,50 @@ $('resetBtn').addEventListener('click', ()=>{
   renderHero(); updateBreedNotes();
 });
 $('shareBtn').addEventListener('click', ()=>{
-  const p=new URLSearchParams({ n:els.dogName.value||'', d:els.dob.value||'', w:els.adultWeight.value, c:els.chewer.value, g:els.breedGroup.value, r:els.breed.value||'', s:els.smooth.checked?1:0, e:els.showEpi.checked?1:0 });
+  const p = new URLSearchParams({
+    n: els.dogName.value || '',
+    d: els.dob.value || '',
+    w: els.adultWeight.value,
+    c: els.chewer.value,
+    g: els.breedGroup.value,
+    r: els.breed.value || '',
+    s: els.smooth.checked ? 1 : 0,
+    e: els.showEpi.checked ? 1 : 0
+  });
+  const url = location.origin + location.pathname + '?' + p.toString();
+  navigator.clipboard.writeText(url)
+    .then(()=>alert('Shareable link copied.'))
+    .catch(()=>alert(url));
+});
 
-/* Calendar: single source of truth */
+/* Calendar: single source of truth — ICS with notes + 7d & 1d reminders */
 $('addCalBtn').addEventListener('click', ()=>{
-  if(!els.nextBday.textContent || els.nextBday.textContent==='—'){
-    alert('Calculate first.'); return;
+  if (!els.nextBday.textContent || els.nextBday.textContent === '—') {
+    alert('Calculate first.');
+    return;
   }
+
   const start = new Date(els.nextBday.textContent);
-  const end   = new Date(start.getTime()+60*60*1000);
+  const end   = new Date(start.getTime() + 60*60*1000);
 
   const rawName = els.dogName.value || 'your dog';
   const name = rawName.trim() || 'your dog';
 
-  // Recompute upcoming DY
-  const dob=new Date(els.dob.value), now=new Date();
-  const years=daysBetween(dob, now)/365.2425;
-  const H=humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
-  const upcoming=Math.floor(H)+1;
+  // Recompute upcoming DY from current state
+  const dob = new Date(els.dob.value), now = new Date();
+  const years = daysBetween(dob, now) / 365.2425;
+  const H = humanEqYears(years, parseInt(els.adultWeight.value, 10), els.smooth.checked);
+  const upcoming = Math.floor(H) + 1;
 
+  // Build plan text for notes
   const notes = planNotesText(els.breedGroup.value, upcoming);
-  const fmtUTC = d => { const p=n=>String(n).padStart(2,'0'); return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z'; };
+
+  const fmtUTC = d => {
+    const p = n => String(n).padStart(2,'0');
+    return d.getUTCFullYear() + p(d.getUTCMonth()+1) + p(d.getUTCDate()) +
+           'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + p(d.getUTCSeconds()) + 'Z';
+  };
+
   const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
 
   const icsLines = [
@@ -705,15 +728,117 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VEVENT',
     'END:VCALENDAR'
   ];
-  const ics = icsLines.join(String.fromCharCode(13,10)); // CRLF
-  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`${name}-barkday-${upcoming}DY.ics`;
+
+  // CRLF join — avoids quote/newline issues
+  const ics = icsLines.join(String.fromCharCode(13,10));
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name}-barkday-${upcoming}DY.ics`;
   document.body.appendChild(a);
   a.click();
   a.remove();
 });
+
+/* Inject “Add to Google” next to the lower ICS button (no HTML edits) */
+(function injectGoogleButton(){
+  const calBtn = $('addCalBtn');
+  if (!calBtn) return;
+  if ($('addGoogleLower')) return; // already there
+
+  const g = document.createElement('a');
+  g.id = 'addGoogleLower';
+  g.className = 'btn secondary';
+  g.textContent = 'Add to Google';
+  g.href = '#';
+  g.style.marginLeft = '12px';
+  calBtn.insertAdjacentElement('afterend', g);
+
+  const gcalFmtUTC = d => {
+    const p=n=>String(n).padStart(2,'0');
+    return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+
+           'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
+  };
+  const makeGoogleCalUrl = ({startUTC, endUTC, title, notes}) => {
+    const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+    const dates = `${gcalFmtUTC(startUTC)}/${gcalFmtUTC(endUTC)}`;
+    const qs = new URLSearchParams({ text:title, dates, details:notes });
+    return `${base}&${qs.toString()}`;
+  };
+
+  g.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if (!els.nextBday.textContent || els.nextBday.textContent === '—') {
+      alert('Calculate first.');
+      return;
+    }
+    const start = new Date(els.nextBday.textContent);
+    const end   = new Date(start.getTime()+60*60*1000);
+
+    const rawName = els.dogName.value || 'your dog';
+    const name = rawName.trim() || 'your dog';
+
+    const dob = new Date(els.dob.value), now = new Date();
+    const years = daysBetween(dob, now) / 365.2425;
+    const H = humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
+    const upcoming = Math.floor(H)+1;
+
+    const notes = planNotesText(els.breedGroup.value, upcoming);
+    const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
+
+    const url = makeGoogleCalUrl({ startUTC:start, endUTC:end, title, notes });
+    window.open(url, '_blank', 'noopener');
+  });
+})();
+
+/* Optional: hide any leftover temporary calendar-test block in HTML */
+(function hideTestBlock(){
+  const t = document.getElementById('calendar-test');
+  if (t) t.style.display = 'none';
+})();
+
+$('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
+
+$('addYearSeries').addEventListener('click', ()=>{
+  if (!els.dob.value) {
+    alert('Calculate first.');
+    return;
+  }
+  const name = els.dogName.value || 'Your dog';
+  const dob = new Date(els.dob.value);
+  const lb = parseInt(els.adultWeight.value, 10);
+
+  const now = new Date();
+  const years = daysBetween(dob, now) / 365.2425;
+  const H = humanEqYears(years, lb, els.smooth.checked);
+
+  let cur = nextDogYearDate(dob, H, lb, els.smooth.checked);
+  let dogYears = Math.floor(H) + 1;
+
+  const fmtUTC = d => {
+    const p=n=>String(n).padStart(2,'0');
+    return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+
+           'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
+  };
+
+  let ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
+  for (let i=0; i<3; i++) {
+    const start = cur, end = new Date(start.getTime()+60*60*1000);
+    ics += `BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
+    dogYears++;
+    cur = nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
+  }
+  ics += 'END:VCALENDAR';
+  const blob = new Blob([ics], {type:'text/calendar'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'barkday_series.ics';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
 
 // Inject Google button next to lower row button (no HTML edit required)
 (function injectGoogleButton(){
