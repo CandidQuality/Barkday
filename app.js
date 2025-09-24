@@ -657,20 +657,32 @@ $('shareBtn').addEventListener('click', ()=>{
   navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
 });
 $('addCalBtn').addEventListener('click', ()=>{
-  if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; }
-  const start=new Date(els.nextBday.textContent), end=new Date(start.getTime()+60*60*1000);
-  const rawName=els.dogName.value || 'your dog';
-  const name = rawName.trim() || 'your dog';
-  // Recompute upcoming dog-years similar to compute()
-  const dob=new Date(els.dob.value), now=new Date();
-  const years=daysBetween(dob, now)/365.2425;
-  const H=humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
-  const upcoming=Math.floor(H)+1;
+  if(!els.nextBday.textContent || els.nextBday.textContent==='—'){
+    alert('Calculate first.');
+    return;
+  }
 
-  // Build plan text from current selection
+  const start = new Date(els.nextBday.textContent);
+  const end   = new Date(start.getTime() + 60*60*1000);
+
+  const rawName = els.dogName.value || 'your dog';
+  const name = rawName.trim() || 'your dog';
+
+  // Recompute upcoming DY from current state
+  const dob = new Date(els.dob.value), now = new Date();
+  const years = daysBetween(dob, now)/365.2425;
+  const H = humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
+  const upcoming = Math.floor(H)+1;
+
+  // Build plan text for notes
   const notes = planNotesText(els.breedGroup.value, upcoming);
 
-  function fmtUTC(d){const p=n=>String(n).padStart(2,'0');return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';}
+  const fmtUTC = d => {
+    const p = n => String(n).padStart(2,'0');
+    return d.getUTCFullYear() + p(d.getUTCMonth()+1) + p(d.getUTCDate()) +
+           'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + p(d.getUTCSeconds()) + 'Z';
+  };
+
   const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
 
   const icsLines = [
@@ -699,13 +711,18 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VEVENT',
     'END:VCALENDAR'
   ];
-  const ics = icsLines.join('
-');
 
-  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();
+  const ics = icsLines.join('\n');
+
+  const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name}-barkday-${upcoming}DY.ics`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 });
+
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();
 });
