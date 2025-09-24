@@ -144,6 +144,12 @@
           <div class="headline" id="nextHeadline">—</div>
           <div class="big" id="nextBday">—</div>
           <div class="muted" id="nextBdayDelta"></div>
+      <!-- Calendar test buttons (temporary) -->
+      <div id="calendar-test" style="margin-top:16px">
+        <button id="addCalBtn" class="btn">🎉 Add Barkday (.ics)</button>
+        <a id="addGoogleBtn" class="btn secondary" target="_blank" rel="noopener">Add to Google Calendar</a>
+      </div>
+
         </div>
         <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
         <div class="pill"><h3>Human-years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
@@ -181,7 +187,7 @@
     <a href="privacy.html">Privacy</a> · 
     <a href="terms.html">Terms</a>
   </p>
-  <p><em>Sebby (our mascot) and I hope this makes you day just a little brighter. </em></p>
+  <p><em>Sebby (our mascot) and I hope this makes you day just a litle brighter. </em></p>
 </footer>
 
 <!-- Register PWA service worker -->
@@ -193,5 +199,111 @@
 </script>
 
   
+  <!-- Calendar test script (temporary) -->
+  <script>
+  (function(){
+    // TEST placeholders – replace with real state after validation
+    const dogName = 'Sebby';
+    const nextDogYearAge = 4;
+    const startUTC = new Date('2025-10-03T05:00:00Z');
+    const endUTC   = new Date('2025-10-03T06:00:00Z');
+    const planNotes = [
+      'Next Birthday Plan — Puppy I (1–6 dog-years)',
+      '',
+      'Training & Enrichment',
+      'Marker/engagement; 2–3 min sessions',
+      'Name game + check-ins',
+      'Crate calm with positive entries',
+      '',
+      'Health & Wellness',
+      'Vaccine/dental starter routine',
+      'Growth plate care; avoid high jumps',
+      '',
+      'Diet & Nutrition',
+      'Puppy diet; measured meals',
+      'Slow feeder to pace eating',
+      '',
+      'Exercise Needs',
+      'Very short sniff-walks',
+      'Gentle tug with easy "out"',
+      '',
+      'Play & Bonding Ideas',
+      'Cooperative care (ears/paws)',
+      'Calm handling + massage',
+      '',
+      'Helpful Gear (optional)',
+      'Back-clip Y-harness',
+      'Snuffle mat'
+    ].join('\n');
+
+    const pad = n => String(n).padStart(2,'0');
+    const toICalUTC = d => (
+      d.getUTCFullYear() +
+      pad(d.getUTCMonth()+1) +
+      pad(d.getUTCDate()) + 'T' +
+      pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z'
+    );
+
+    function makeICS({uid, startUTC, endUTC, title, notes}){
+      return [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Barkday//EN',
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${toICalUTC(new Date())}`,
+        `DTSTART:${toICalUTC(startUTC)}`,
+        `DTEND:${toICalUTC(endUTC)}`,
+        `SUMMARY:${title}`,
+        `DESCRIPTION:${notes}`,
+        'STATUS:CONFIRMED',
+        'TRANSP:OPAQUE',
+        'BEGIN:VALARM',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:🎁 One week until Barkday!',
+        'TRIGGER:-P7D',
+        'END:VALARM',
+        'BEGIN:VALARM',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:🎉 Barkday tomorrow!',
+        'TRIGGER:-P1D',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+    }
+
+    function makeGoogleCalUrl({startUTC, endUTC, title, notes}){
+      const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+      const dates = `${toICalUTC(startUTC)}/${toICalUTC(endUTC)}`;
+      const params = new URLSearchParams({ text: title, dates, details: notes });
+      return `${base}&${params.toString()}`;
+    }
+
+    const calBtn = document.getElementById('addCalBtn');
+    const gBtn   = document.getElementById('addGoogleBtn');
+    if (!calBtn || !gBtn) return;
+
+    const title = `🎉 ${dogName} turns ${nextDogYearAge} dog-years! Happy Barkday!`;
+
+    calBtn.addEventListener('click', () => {
+      const ics = makeICS({
+        uid: `${Date.now()}@barkday`,
+        startUTC, endUTC, title, notes: planNotes
+      });
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${dogName}-barkday-${nextDogYearAge}DY.ics`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    });
+
+    gBtn.href = makeGoogleCalUrl({startUTC, endUTC, title, notes: planNotes});
+  })();
+  </script>
 </body>
 </html>
