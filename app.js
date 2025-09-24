@@ -660,12 +660,30 @@ $('shareBtn').addEventListener('click', ()=>{
   const url=location.origin+location.pathname+'?'+p.toString();
   navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
 });
+ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday.ics'; document.body.appendChild(a); a.click(); a.remove();
+});
+$('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
+$('addYearSeries').addEventListener('click', ()=>{
+  if(!els.dob.value){ alert('Calculate first.'); return; }
+  const name=els.dogName.value||'Your dog', dob=new Date(els.dob.value), lb=parseInt(els.adultWeight.value,10);
+  const now=new Date(), years=daysBetween(dob, now)/365.2425, H=humanEqYears(years, lb, els.smooth.checked);
+  let cur=nextDogYearDate(dob, H, lb, els.smooth.checked), dogYears=Math.floor(H)+1;
+  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
+  for(let i=0;i<3;i++){
+    const start=cur, end=new Date(start.getTime()+60*60*1000);
+    ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
+    dogYears++; cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
+  }
+  ics+='END:VCALENDAR'; const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday_series.ics'; document.body.appendChild(a); a.click(); a.remove();
+});
+
+// Gifts auto-refilter if visible
+
 $('addCalBtn').addEventListener('click', ()=>{
   if(!els.nextBday.textContent || els.nextBday.textContent==='—'){
     alert('Calculate first.');
     return;
   }
-
   const start = new Date(els.nextBday.textContent);
   const end   = new Date(start.getTime() + 60*60*1000);
 
@@ -716,7 +734,6 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VCALENDAR'
   ];
 
-  // Use CRLF per iCalendar spec without quotes in join arg to avoid copy/paste issues
   const ics = icsLines.join(String.fromCharCode(13,10));
 
   const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
@@ -726,24 +743,7 @@ $('addCalBtn').addEventListener('click', ()=>{
   document.body.appendChild(a);
   a.click();
   a.remove();
-}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday.ics'; document.body.appendChild(a); a.click(); a.remove();
 });
-$('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
-$('addYearSeries').addEventListener('click', ()=>{
-  if(!els.dob.value){ alert('Calculate first.'); return; }
-  const name=els.dogName.value||'Your dog', dob=new Date(els.dob.value), lb=parseInt(els.adultWeight.value,10);
-  const now=new Date(), years=daysBetween(dob, now)/365.2425, H=humanEqYears(years, lb, els.smooth.checked);
-  let cur=nextDogYearDate(dob, H, lb, els.smooth.checked), dogYears=Math.floor(H)+1;
-  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
-  for(let i=0;i<3;i++){
-    const start=cur, end=new Date(start.getTime()+60*60*1000);
-    ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
-    dogYears++; cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
-  }
-  ics+='END:VCALENDAR'; const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday_series.ics'; document.body.appendChild(a); a.click(); a.remove();
-});
-
-// Gifts auto-refilter if visible
 function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
 ['change'].forEach(ev=>{
   els.adultWeight.addEventListener(ev, reloadGiftsIfShown);
