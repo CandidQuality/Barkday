@@ -2,8 +2,8 @@ console.log('[Barkday] app.js loaded v3 (aliases externalized)');
 // ====================== Barkday app.js (complete, upgraded) ======================
 
 // ---------- Config ----------
-const LOGO_SPLASH_SRC = "barkday-logo.png?v=2";   // full-size on splash
-const LOGO_HEADER_SRC = "barkday-logo2.png?v=1";  // smaller header mark
+const LOGO_SPLASH_SRC = "barkday-logo.png?v=3";   // full-size on splash
+const LOGO_HEADER_SRC = "barkday-logo2.png?v=2";  // smaller header mark
 
 // Data sources
 const GIFT_FEED_URL     = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
