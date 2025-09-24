@@ -675,20 +675,12 @@ $('shareBtn').addEventListener('click', ()=>{
 });
 
 /* --------------------
-   Calendar helpers
+   Calendar helpers (uses global fmtUTC already defined above)
 -------------------- */
 function requireCalculated(e){
   const ok = !!els.nextBday.textContent && els.nextBday.textContent !== '—';
-  if (!ok) {
-    if (e) e.preventDefault();
-    alert('Please calculate first.');
-  }
+  if (!ok) { if (e) e.preventDefault(); alert('Please calculate first.'); }
   return ok;
-}
-function fmtUTC(d){
-  const p=n=>String(n).padStart(2,'0');
-  return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+
-         'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
 }
 function getContext(){
   const start = new Date(els.nextBday.textContent);
@@ -754,7 +746,6 @@ function gcalFmtUTC(d){
          'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
 }
 function makeGoogleCalUrl({start,end,title,notes}){
-  // Google template links ignore alarms; we show a popup before continuing.
   const base='https://calendar.google.com/calendar/render?action=TEMPLATE';
   const dates=`${gcalFmtUTC(start)}/${gcalFmtUTC(end)}`;
   const qs=new URLSearchParams({ text:title, dates, details:notes });
@@ -799,7 +790,6 @@ $('remindBtn').addEventListener('click', (e)=>{
     e.preventDefault();
     if (!requireCalculated(e)) return;
     alert('Heads up: Google Calendar template links do not include early reminders. You can add them manually after the event is created.');
-
     const {start,end,title,notes} = getContext();
     window.open(makeGoogleCalUrl({start,end,title,notes}), '_blank', 'noopener');
   });
@@ -807,22 +797,19 @@ $('remindBtn').addEventListener('click', (e)=>{
 
 /* --------------------
    Local in-app reminders (beta)
-   - stores dog + next barkday in localStorage
-   - shows a toast-style alert when the app is opened within 7d/1d of the date
 -------------------- */
 (function inAppReminders(){
   const KEY = 'barkday-local-reminders-v1';
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch { return []; } };
+  const save = (list) => localStorage.setItem(KEY, JSON.stringify(list));
 
-  function load(){ try { return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch { return []; } }
-  function save(list){ localStorage.setItem(KEY, JSON.stringify(list)); }
-
-  // expose a tiny API for future UI toggle if desired
+  // expose for a future toggle button if wanted
   window.BarkdayReminders = {
     enableCurrent(){
       if (!els.nextBday.textContent || els.nextBday.textContent==='—') { alert('Calculate first.'); return; }
       const {name, upcoming} = getContext();
       const when = new Date(els.nextBday.textContent).toISOString();
-      const list = load().filter(r => r.name !== name); // de-dupe by name
+      const list = load().filter(r => r.name !== name);
       list.push({ name, when, upcoming });
       save(list);
       alert(`In-app reminder saved for ${name} — ${new Date(when).toDateString()}.`);
@@ -830,7 +817,7 @@ $('remindBtn').addEventListener('click', (e)=>{
     list: load
   };
 
-  // simple check on load — shows alerts if within 7d or 1d
+  // show alerts on load if within 7d or 1d
   function checkNow(){
     const list = load(); if (!list.length) return;
     const now = new Date();
@@ -841,7 +828,6 @@ $('remindBtn').addEventListener('click', (e)=>{
       if (days === 1) alert(`🎉 ${r.name}'s Barkday is tomorrow!`);
     }
   }
-  // run at startup
   checkNow();
 })();
 
