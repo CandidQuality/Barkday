@@ -301,7 +301,11 @@ function nextDogYearDate(dob, H, lb, smooth){
 }
 
 // ---------- Confetti (multicolor; default ~3.4s) ----------
-function confetti(ms = 3400){
+function confetti(ms){
+  // Make mobile last longer; desktop stays ~3.4s
+  const isMobile = window.matchMedia('(pointer: coarse)').matches || innerWidth < 768;
+  ms = ms ?? (isMobile ? 8500 : 3400);  // ~2.5x on mobile
+
   const c = document.createElement('canvas');
   c.style.position = 'fixed'; c.style.inset = '0'; c.style.pointerEvents = 'none';
   c.width = innerWidth; c.height = innerHeight; document.body.appendChild(c);
@@ -318,7 +322,8 @@ function confetti(ms = 3400){
     c: colors[(Math.random() * colors.length) | 0],
     r: Math.random() * Math.PI
   }));
-  let st = null;
+
+  let st=0;
   (function tick(ts){
     if (!st) st = ts;
     const t = ts - st;
@@ -332,6 +337,7 @@ function confetti(ms = 3400){
     if (t < ms) requestAnimationFrame(tick); else c.remove();
   })(0);
 }
+
 
 // ---------- Age bands (fallback by group) ----------
 const AGE_BANDS = [
