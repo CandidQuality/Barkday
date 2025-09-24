@@ -1,6 +1,11 @@
-[
-  {
-    "id": "herding_working",
+{
+  "_copyright": "© 2025 CandidQuality (Barkday™). All rights reserved.",
+  "_license": "No license granted for redistribution, republication, or derivative use.",
+  "_dataset_id": "barkday-2025-09-23-v1",
+  "data": [
+    {
+      "id": "herding_working",
+      "name": "Herding / Working"
     "name": "Herding / Working Drive",
     "examples": [
       "Border Collie",
