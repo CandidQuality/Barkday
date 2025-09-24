@@ -724,8 +724,8 @@ $('addCalBtn').addEventListener('click', ()=>{
 });
 
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();
-});   // <-- one and only one closing
+  a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();});   // <-- one and only one closing
+
 $('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
 $('addYearSeries').addEventListener('click', ()=>{
   if(!els.dob.value){ alert('Calculate first.'); return; }
