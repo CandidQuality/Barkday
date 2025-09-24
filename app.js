@@ -645,20 +645,49 @@ function compute(){
 
 // ---------- Buttons ----------
 $('calcBtn').addEventListener('click', compute);
+
 $('resetBtn').addEventListener('click', ()=>{
-  els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; els.adultWeightVal.textContent='55'; els.chewer.value='Normal';
-  els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding';
+  els.dogName.value='';
+  els.dob.value='';
+  els.adultWeight.value=55;
+  els.adultWeightVal.textContent='55';
+  els.chewer.value='Normal';
+  els.showEpi.checked=false;
+  els.smooth.checked=true;
+  els.breed.value='';
+  els.breedGroup.value='Working / Herding';
   els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false;
-  els.nextHeadline.textContent='—'; els.nextBday.textContent='—'; els.nextBdayDelta.textContent='';
-  els.dogAge.textContent='—'; els.humanYears.textContent='—'; els.slopeNote.textContent='';
-  document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
-  els.sizeWarn.style.display='none'; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.epi.textContent='';
-  renderHero(); updateBreedNotes();
+  els.nextHeadline.textContent='—';
+  els.nextBday.textContent='—';
+  els.nextBdayDelta.textContent='';
+  els.dogAge.textContent='—';
+  els.humanYears.textContent='—';
+  els.slopeNote.textContent='';
+  document.getElementById('nextPlan').innerHTML='';
+  document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
+  els.sizeWarn.style.display='none';
+  els.gifts.innerHTML='';
+  els.giftMeta.textContent='';
+  els.epi.textContent='';
+  renderHero();
+  updateBreedNotes();
 });
+
 $('shareBtn').addEventListener('click', ()=>{
-  const p=new URLSearchParams({ n:els.dogName.value||'', d:els.dob.value||'', w:els.adultWeight.value, c:els.chewer.value, g:els.breedGroup.value, r:els.breed.value||'', s:els.smooth.checked?1:0, e:els.showEpi.checked?1:0 });
+  const p=new URLSearchParams({
+    n:els.dogName.value||'',
+    d:els.dob.value||'',
+    w:els.adultWeight.value,
+    c:els.chewer.value,
+    g:els.breedGroup.value,
+    r:els.breed.value||'',
+    s:els.smooth.checked?1:0,
+    e:els.showEpi.checked?1:0
+  });
   const url=location.origin+location.pathname+'?'+p.toString();
-  navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
+  navigator.clipboard.writeText(url)
+    .then(()=>alert('Shareable link copied.'))
+    .catch(()=>alert(url));
 });
 
 $('addCalBtn').addEventListener('click', ()=>{
@@ -666,6 +695,7 @@ $('addCalBtn').addEventListener('click', ()=>{
     alert('Calculate first.');
     return;
   }
+
   const start = new Date(els.nextBday.textContent);
   const end   = new Date(start.getTime() + 60*60*1000);
 
@@ -716,7 +746,7 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VCALENDAR'
   ];
 
-  const ics = icsLines.join(String.fromCharCode(13,10));
+  const ics = icsLines.join(String.fromCharCode(13,10)); // CRLF per spec
 
   const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   const a = document.createElement('a');
@@ -726,22 +756,47 @@ $('addCalBtn').addEventListener('click', ()=>{
   a.click();
   a.remove();
 });
- const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday.ics'; document.body.appendChild(a); a.click(); a.remove();
-});
+
 $('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
+
 $('addYearSeries').addEventListener('click', ()=>{
-  if(!els.dob.value){ alert('Calculate first.'); return; }
-  const name=els.dogName.value||'Your dog', dob=new Date(els.dob.value), lb=parseInt(els.adultWeight.value,10);
-  const now=new Date(), years=daysBetween(dob, now)/365.2425, H=humanEqYears(years, lb, els.smooth.checked);
-  let cur=nextDogYearDate(dob, H, lb, els.smooth.checked), dogYears=Math.floor(H)+1;
+  if(!els.dob.value){
+    alert('Calculate first.');
+    return;
+  }
+  const name=els.dogName.value||'Your dog';
+  const dob=new Date(els.dob.value);
+  const lb=parseInt(els.adultWeight.value,10);
+  const now=new Date();
+  const years=daysBetween(dob, now)/365.2425;
+  const H=humanEqYears(years, lb, els.smooth.checked);
+
+  let cur=nextDogYearDate(dob, H, lb, els.smooth.checked);
+  let dogYears=Math.floor(H)+1;
+
+  const fmtUTC = d => {
+    const p=n=>String(n).padStart(2,'0');
+    return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+
+           'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
+  };
+
   let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
   for(let i=0;i<3;i++){
     const start=cur, end=new Date(start.getTime()+60*60*1000);
     ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
-    dogYears++; cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
+    dogYears++;
+    cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
   }
-  ics+='END:VCALENDAR'; const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday_series.ics'; document.body.appendChild(a); a.click(); a.remove();
+  ics+='END:VCALENDAR';
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='barkday_series.ics';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 });
+
 
 // Gifts auto-refilter if visible
 function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
