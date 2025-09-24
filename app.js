@@ -716,8 +716,8 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VCALENDAR'
   ];
 
-  const ics = icsLines.join('
-');
+  // Use CRLF per iCalendar spec without quotes in join arg to avoid copy/paste issues
+  const ics = icsLines.join(String.fromCharCode(13,10));
 
   const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   const a = document.createElement('a');
