@@ -645,6 +645,7 @@ function compute(){
 
 // ---------- Buttons ----------
 $('calcBtn').addEventListener('click', compute);
+
 $('resetBtn').addEventListener('click', ()=>{
   els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; els.adultWeightVal.textContent='55'; els.chewer.value='Normal';
   els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding';
@@ -655,6 +656,7 @@ $('resetBtn').addEventListener('click', ()=>{
   els.sizeWarn.style.display='none'; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.epi.textContent='';
   renderHero(); updateBreedNotes();
 });
+
 $('shareBtn').addEventListener('click', ()=>{
   const p = new URLSearchParams({
     n: els.dogName.value || '',
@@ -672,7 +674,7 @@ $('shareBtn').addEventListener('click', ()=>{
     .catch(()=>alert(url));
 });
 
-/* Calendar: single source of truth — ICS with notes + 7d & 1d reminders */
+/* Calendar: ICS with notes + week-before & day-before reminders */
 $('addCalBtn').addEventListener('click', ()=>{
   if (!els.nextBday.textContent || els.nextBday.textContent === '—') {
     alert('Calculate first.');
@@ -688,7 +690,7 @@ $('addCalBtn').addEventListener('click', ()=>{
   // Recompute upcoming DY from current state
   const dob = new Date(els.dob.value), now = new Date();
   const years = daysBetween(dob, now) / 365.2425;
-  const H = humanEqYears(years, parseInt(els.adultWeight.value, 10), els.smooth.checked);
+  const H = humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
   const upcoming = Math.floor(H) + 1;
 
   // Build plan text for notes
@@ -729,10 +731,8 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VCALENDAR'
   ];
 
-  // CRLF join — avoids quote/newline issues
-  const ics = icsLines.join(String.fromCharCode(13,10));
-
-  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const ics = icsLines.join(String.fromCharCode(13,10)); // CRLF
+  const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `${name}-barkday-${upcoming}DY.ics`;
@@ -741,11 +741,11 @@ $('addCalBtn').addEventListener('click', ()=>{
   a.remove();
 });
 
-/* Inject “Add to Google” next to the lower ICS button (no HTML edits) */
+/* Inject “Add to Google” right next to the lower ICS button (no HTML edits) */
 (function injectGoogleButton(){
   const calBtn = $('addCalBtn');
   if (!calBtn) return;
-  if ($('addGoogleLower')) return; // already there
+  if ($('addGoogleLower')) return; // already injected
 
   const g = document.createElement('a');
   g.id = 'addGoogleLower';
@@ -761,15 +761,15 @@ $('addCalBtn').addEventListener('click', ()=>{
            'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
   };
   const makeGoogleCalUrl = ({startUTC, endUTC, title, notes}) => {
-    const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
-    const dates = `${gcalFmtUTC(startUTC)}/${gcalFmtUTC(endUTC)}`;
-    const qs = new URLSearchParams({ text:title, dates, details:notes });
+    const base='https://calendar.google.com/calendar/render?action=TEMPLATE';
+    const dates=`${gcalFmtUTC(startUTC)}/${gcalFmtUTC(endUTC)}`;
+    const qs=new URLSearchParams({ text:title, dates, details:notes });
     return `${base}&${qs.toString()}`;
   };
 
   g.addEventListener('click', (e)=>{
     e.preventDefault();
-    if (!els.nextBday.textContent || els.nextBday.textContent === '—') {
+    if (!els.nextBday.textContent || els.nextBday.textContent==='—') {
       alert('Calculate first.');
       return;
     }
@@ -807,7 +807,7 @@ $('addYearSeries').addEventListener('click', ()=>{
   }
   const name = els.dogName.value || 'Your dog';
   const dob = new Date(els.dob.value);
-  const lb = parseInt(els.adultWeight.value, 10);
+  const lb = parseInt(els.adultWeight.value,10);
 
   const now = new Date();
   const years = daysBetween(dob, now) / 365.2425;
@@ -823,8 +823,8 @@ $('addYearSeries').addEventListener('click', ()=>{
   };
 
   let ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
-  for (let i=0; i<3; i++) {
-    const start = cur, end = new Date(start.getTime()+60*60*1000);
+  for (let i=0;i<3;i++){
+    const start=cur, end=new Date(start.getTime()+60*60*1000);
     ics += `BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
     dogYears++;
     cur = nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
@@ -839,73 +839,6 @@ $('addYearSeries').addEventListener('click', ()=>{
   a.remove();
 });
 
-
-// Inject Google button next to lower row button (no HTML edit required)
-(function injectGoogleButton(){
-  const calBtn = $('addCalBtn');
-  if (!calBtn) return;
-  if ($('addGoogleLower')) return; // already injected
-  const g = document.createElement('a');
-  g.id = 'addGoogleLower';
-  g.className = 'btn secondary';
-  g.textContent = 'Add to Google';
-  g.href = '#';
-  g.style.marginLeft = '12px';
-  calBtn.insertAdjacentElement('afterend', g);
-
-  const gcalFmtUTC = d => { const p=n=>String(n).padStart(2,'0'); return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z'; };
-  const makeGoogleCalUrl = ({startUTC, endUTC, title, notes}) => {
-    const base='https://calendar.google.com/calendar/render?action=TEMPLATE';
-    const dates=`${gcalFmtUTC(startUTC)}/${gcalFmtUTC(endUTC)}`;
-    const qs=new URLSearchParams({ text:title, dates, details:notes });
-    return `${base}&${qs.toString()}`;
-  };
-
-  g.addEventListener('click', (e)=>{
-    e.preventDefault();
-    if(!els.nextBday.textContent || els.nextBday.textContent==='—'){
-      alert('Calculate first.'); return;
-    }
-    const start=new Date(els.nextBday.textContent);
-    const end=new Date(start.getTime()+60*60*1000);
-    const rawName=els.dogName.value||'your dog';
-    const name=rawName.trim()||'your dog';
-    const dob=new Date(els.dob.value), now=new Date();
-    const years=daysBetween(dob, now)/365.2425;
-    const H=humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
-    const upcoming=Math.floor(H)+1;
-    const notes=planNotesText(els.breedGroup.value, upcoming);
-    const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
-    const url = makeGoogleCalUrl({ startUTC:start, endUTC:end, title, notes });
-    window.open(url, '_blank', 'noopener');
-  });
-})();
-
-// Hide any leftover temporary test block if it exists
-(function hideTestBlock(){
-  const t = document.getElementById('calendar-test');
-  if (t) t.style.display = 'none';
-})();
-
-  const url=location.origin+location.pathname+'?'+p.toString();
-  navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied.')).catch(()=>alert(url));
-});
-const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday.ics'; document.body.appendChild(a); a.click(); a.remove();
-});
-$('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
-$('addYearSeries').addEventListener('click', ()=>{
-  if(!els.dob.value){ alert('Calculate first.'); return; }
-  const name=els.dogName.value||'Your dog', dob=new Date(els.dob.value), lb=parseInt(els.adultWeight.value,10);
-  const now=new Date(), years=daysBetween(dob, now)/365.2425, H=humanEqYears(years, lb, els.smooth.checked);
-  let cur=nextDogYearDate(dob, H, lb, els.smooth.checked), dogYears=Math.floor(H)+1;
-  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Barkday//EN\n';
-  for(let i=0;i<3;i++){
-    const start=cur, end=new Date(start.getTime()+60*60*1000);
-    ics+=`BEGIN:VEVENT\nUID:${Date.now()+Math.random()}@barkday\nDTSTAMP:${fmtUTC(new Date())}\nDTSTART:${fmtUTC(start)}\nDTEND:${fmtUTC(end)}\nSUMMARY:${name} — Dog-Year ${dogYears}\nEND:VEVENT\n`;
-    dogYears++; cur=nextDogYearDate(dob, dogYears-1, lb, els.smooth.checked);
-  }
-  ics+='END:VCALENDAR'; const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday_series.ics'; document.body.appendChild(a); a.click(); a.remove();
-});
 
 // Gifts auto-refilter if visible
 function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
