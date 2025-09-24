@@ -412,6 +412,30 @@ function renderPlan(group, upcomingDY){
   }
 }
 
+// ---------- Serialize plan to plain text for calendar DESCRIPTION ----------
+function planNotesText(group, upcomingDY){
+  const {plan, band} = planFor(group, upcomingDY);
+  const header = `Next Birthday Plan — ${band ? band.label : ('turning ' + upcomingDY)}`;
+  if (!plan || !plan.lanes) return header;
+  const order = [
+    ['training','Training & Enrichment'],
+    ['health','Health & Wellness'],
+    ['nutrition','Diet & Nutrition'],
+    ['exercise','Exercise Needs'],
+    ['bonding','Play & Bonding Ideas'],
+    ['gear','Helpful Gear (optional)']
+  ];
+  const parts = [header, ''];
+  for (const [k,label] of order){
+    const items = Array.isArray(plan.lanes[k]) ? plan.lanes[k] : [];
+    if (!items.length) continue;
+    parts.push(label);
+    for (const t of items){ parts.push(t); }
+    parts.push('');
+  }
+  return parts.join('\n');
+}
+
 /* =========================
    Affiliate link builders + disclosure
    ========================= */
@@ -635,19 +659,56 @@ $('shareBtn').addEventListener('click', ()=>{
 $('addCalBtn').addEventListener('click', ()=>{
   if(!els.nextBday.textContent || els.nextBday.textContent==='—'){ alert('Calculate first.'); return; }
   const start=new Date(els.nextBday.textContent), end=new Date(start.getTime()+60*60*1000);
-  const name=els.dogName.value||'Your dog';
-  const ics=`BEGIN:VCALENDAR
+  const rawName=els.dogName.value || 'your dog';
+  const name = rawName.trim() || 'your dog';
+  // Recompute upcoming dog-years similar to compute()
+  const dob=new Date(els.dob.value), now=new Date();
+  const years=daysBetween(dob, now)/365.2425;
+  const H=humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
+  const upcoming=Math.floor(H)+1;
+
+  // Build plan text from current selection
+  const notes = planNotesText(els.breedGroup.value, upcoming);
+
+  function fmtUTC(d){const p=n=>String(n).padStart(2,'0');return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';}
+  const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
+
+  let ics = 'BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Barkday//EN
 BEGIN:VEVENT
-UID:${Date.now()}@barkday
+';
+  ics += `UID:${Date.now()}@barkday
 DTSTAMP:${fmtUTC(new Date())}
 DTSTART:${fmtUTC(start)}
 DTEND:${fmtUTC(end)}
-SUMMARY:${name} — Next Dog-Year Birthday
-END:VEVENT
-END:VCALENDAR`;
-  const blob=new Blob([ics],{type:'text/calendar'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday.ics'; document.body.appendChild(a); a.click(); a.remove();
+`;
+  ics += `SUMMARY:${title}
+`;
+  ics += `DESCRIPTION:${notes}
+`;
+  ics += 'STATUS:CONFIRMED
+TRANSP:OPAQUE
+';
+  // Alerts: week-before and day-before
+  ics += 'BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:🎁 One week until Barkday!
+TRIGGER:-P7D
+END:VALARM
+';
+  ics += 'BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:🎉 Barkday tomorrow!
+TRIGGER:-P1D
+END:VALARM
+';
+  ics += 'END:VEVENT
+END:VCALENDAR';
+
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();
 });
 $('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
 $('addYearSeries').addEventListener('click', ()=>{
