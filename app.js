@@ -412,6 +412,7 @@ function renderPlan(group, upcomingDY){
   }
 }
 
+
 // ---------- Serialize plan to plain text for calendar DESCRIPTION ----------
 function planNotesText(group, upcomingDY){
   const {plan, band} = planFor(group, upcomingDY);
@@ -435,6 +436,9 @@ function planNotesText(group, upcomingDY){
   }
   return parts.join('\n');
 }
+
+
+
 
 /* =========================
    Affiliate link builders + disclosure
@@ -712,7 +716,8 @@ $('addCalBtn').addEventListener('click', ()=>{
     'END:VCALENDAR'
   ];
 
-  const ics = icsLines.join('\n');
+  const ics = icsLines.join('
+');
 
   const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
   const a = document.createElement('a');
@@ -721,11 +726,8 @@ $('addCalBtn').addEventListener('click', ()=>{
   document.body.appendChild(a);
   a.click();
   a.remove();
+}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='barkday.ics'; document.body.appendChild(a); a.click(); a.remove();
 });
-
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();});   // <-- one and only one closing
-
 $('remindBtn').addEventListener('click', ()=> alert('Reminder integration placeholder.'));
 $('addYearSeries').addEventListener('click', ()=>{
   if(!els.dob.value){ alert('Calculate first.'); return; }
