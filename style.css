@@ -68,3 +68,49 @@ input[type="range"]{width:100%}
   max-height: 60vh;  /* scale relative to viewport height */
   image-rendering: auto;
 }
+/* Support both class and id for the splash container */
+#splash,
+.splash {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  /* keep your existing gradient/background via the class rule */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  z-index: 9999;
+}
+
+#splash.hide,
+.splash.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Constrain the logo robustly on all devices */
+#splash .logoWrap img,
+.splash .logoWrap img {
+  width: auto;
+  height: auto;
+  max-width: clamp(160px, 60vw, 420px);
+  max-height: 60vh;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+/* Make the logo a bit smaller on very short screens (e.g., landscape phones) */
+@media (max-height: 540px) {
+  #splash .logoWrap img,
+  .splash .logoWrap img {
+    max-width: clamp(140px, 50vw, 360px);
+    max-height: 50vh;
+  }
+}
+
+/* Respect reduced-motion preferences (optional) */
+@media (prefers-reduced-motion: reduce) {
+  #splash,
+  .splash {
+    transition: none !important;
+  }
+}
