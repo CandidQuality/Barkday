@@ -61,4 +61,10 @@ input[type="range"]{width:100%}
 }
 .splash.hide{ opacity:0; pointer-events:none }
 .splash .logoWrap{ display:grid; place-items:center; border-radius:20px; filter:drop-shadow(0 6px 16px rgba(0,0,0,.45)); }
-.splash .logoWrap img{ width:auto; height:auto; max-width:none; max-height:none; image-rendering:auto; }
+.splash .logoWrap img {
+  width: auto;
+  height: auto;
+  max-width: 60vw;   /* scale relative to viewport width */
+  max-height: 60vh;  /* scale relative to viewport height */
+  image-rendering: auto;
+}
