@@ -673,40 +673,39 @@ $('addCalBtn').addEventListener('click', ()=>{
   function fmtUTC(d){const p=n=>String(n).padStart(2,'0');return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';}
   const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
 
-  let ics = 'BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Barkday//EN
-BEGIN:VEVENT
-';
-  ics += `UID:${Date.now()}@barkday
-DTSTAMP:${fmtUTC(new Date())}
-DTSTART:${fmtUTC(start)}
-DTEND:${fmtUTC(end)}
-`;
-  ics += `SUMMARY:${title}
-`;
-  ics += `DESCRIPTION:${notes}
-`;
-  ics += 'STATUS:CONFIRMED
-TRANSP:OPAQUE
-';
-  // Alerts: week-before and day-before
-  ics += 'BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:🎁 One week until Barkday!
-TRIGGER:-P7D
-END:VALARM
-';
-  ics += 'BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:🎉 Barkday tomorrow!
-TRIGGER:-P1D
-END:VALARM
-';
-  ics += 'END:VEVENT
-END:VCALENDAR';
+  const icsLines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Barkday//EN',
+    'BEGIN:VEVENT',
+    `UID:${Date.now()}@barkday`,
+    `DTSTAMP:${fmtUTC(new Date())}`,
+    `DTSTART:${fmtUTC(start)}`,
+    `DTEND:${fmtUTC(end)}`,
+    `SUMMARY:${title}`,
+    `DESCRIPTION:${notes}`,
+    'STATUS:CONFIRMED',
+    'TRANSP:OPAQUE',
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:🎁 One week until Barkday!',
+    'TRIGGER:-P7D',
+    'END:VALARM',
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:🎉 Barkday tomorrow!',
+    'TRIGGER:-P1D',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ];
+  const ics = icsLines.join('
+');
 
   const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();
+});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download=`${name}-barkday-${upcoming}DY.ics`; document.body.appendChild(a); a.click(); a.remove();
 });
