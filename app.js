@@ -124,6 +124,9 @@ function resolveGroupKey(name){
 // and minor label variants (e.g., "Sporting / Gun Dogs" vs "Sporting").
 // Find and set the closest option in <select id="breedGroup">, without event loops.
 // Dispatches 'change' ONLY if the value actually changed.
+// Find and set the closest option in <select id="breedGroup">, without event loops.
+// Translates verbose dataset names (e.g., "Sporting / Gun Dogs") to your UI options
+// (e.g., "Sporting") before trying exact/partial matches.
 function setGroupFromName(name){
   const sel = els.breedGroup;
   if (!sel) return 'Mixed / Other';
@@ -131,32 +134,44 @@ function setGroupFromName(name){
 
   const lettersOnly = s => String(s||'').toLowerCase().replace(/[^a-z]/g,'');
   const tokenBag    = s => (String(s||'').toLowerCase().match(/[a-z]+/g)||[]).sort().join('');
-  const canonize    = s => String(s||'')
-    .replace(/gun\s*dogs?/ig, 'gundogs')
-    .replace(/guardian(?:s)?/ig, 'guardian')
-    .replace(/working\s*\/\s*herding|herding\s*\/\s*working/ig, 'working / herding')
-    .trim();
 
-  const targetRaw  = canonize(name);
-  const targetNorm = lettersOnly(targetRaw);
-  const targetBag  = tokenBag(targetRaw);
+  // Map verbose dataset categories to the UI's short options
+  const CANON_TO_UI = {
+    'herdingworkingdrive': 'Working / Herding',
+    'workingherding':      'Working / Herding',
+    'guardianprotection':  'Guardian',
+    'sportinggundogs':     'Sporting',
+    'scenthounds':         'Hound',
+    'sighthounds':         'Hound',
+    'terriers':            'Terrier',
+    'toycompaniondogs':    'Toy',          // choose Toy as default bucket
+    'nordicspitztypes':    'Non-Sporting',
+    'bulldogmolossertypes':'Non-Sporting'
+  };
 
-  // helper: set value only if different (prevents change-loop)
+  // Normalize the incoming name and translate to a UI label if known
+  const rawNorm   = lettersOnly(name);
+  const uiLabel   = CANON_TO_UI[rawNorm] || name; // fall back to original if not in map
+  const targetBag = tokenBag(uiLabel);
+  const targetLex = lettersOnly(uiLabel);
+
+  // helper: set only if value actually changes (prevents change-loop)
   const setIfChanged = (val) => {
     if (sel.value !== val) {
       sel.value = val;
       sel.dispatchEvent(new Event('change')); // notify dependents once
+      console.debug('[Barkday] breedGroup set →', val, '(from', name, ')');
     }
     return sel.value;
   };
 
   // 1) exact match on option value
   for (const opt of sel.options){
-    if (lettersOnly(opt.value) === targetNorm) return setIfChanged(opt.value);
+    if (lettersOnly(opt.value) === targetLex) return setIfChanged(opt.value);
   }
   // 2) exact match on visible text
   for (const opt of sel.options){
-    if (lettersOnly(opt.textContent) === targetNorm) return setIfChanged(opt.value);
+    if (lettersOnly(opt.textContent) === targetLex) return setIfChanged(opt.value);
   }
   // 3) bag-of-words equality (order-insensitive)
   for (const opt of sel.options){
@@ -167,7 +182,7 @@ function setGroupFromName(name){
   // 4) partial inclusion either way
   for (const opt of sel.options){
     const ov = lettersOnly(opt.value), ot = lettersOnly(opt.textContent);
-    if (ov.includes(targetNorm) || ot.includes(targetNorm) || targetNorm.includes(ov) || targetNorm.includes(ot)) {
+    if (ov.includes(targetLex) || ot.includes(targetLex) || targetLex.includes(ov) || targetLex.includes(ot)) {
       return setIfChanged(opt.value);
     }
   }
@@ -175,6 +190,7 @@ function setGroupFromName(name){
   // No change
   return sel.value || 'Mixed / Other';
 }
+
 
 // --- Replace the original applyGroupSafe with this shim that uses the helpers above ---
 function applyGroupSafe(name){
