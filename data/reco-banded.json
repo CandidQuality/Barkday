@@ -2,351 +2,119 @@
   "_copyright": "© 2025 CandidQuality (Barkday™). All rights reserved.",
   "_license": "No license granted for redistribution, republication, or derivative use.",
   "_dataset_id": "barkday-2025-09-23-v1",
-  "Working": {
-    "puppy_1_6": {
-      "lanes": {
-        "training": [
-          "2–3 min focus games: name, sit, down, touch",
-          "Introduce leash and reward calm at your side",
-          "Early recall games in a quiet, fenced space"
-        ],
-        "health": [
-          "Puppy vet series; parasite prevention",
-          "Handle paws/ears daily to prep for grooming/vet",
-          "Track growth; avoid stair/jump strain"
-        ],
-        "nutrition": [
-          "Large-breed puppy formula; 3–4 meals/day",
-          "Use part of meals for training to avoid overfeeding"
-        ],
-        "exercise": [
-          "Short structured play bursts 5–10 min, multiple times/day",
-          "No fetch marathons or long runs"
-        ],
-        "bonding": [
-          "Calm tether time near you; reward relaxation",
-          "Puzzle feeders for problem-solving"
-        ],
-        "gear": [
-          "Flat collar or Y-harness",
-          "Chew-safe toys, treat pouch",
-          "Crate/pen for rest"
-        ]
-      }
-    },
-    "puppy_7_10": {
-      "lanes": {
-        "training": [
-          "Proof recall in fenced area; add mild distractions",
-          "Intro heel position with 3–5 steps",
-          "Short place duration (20–40 sec)"
-        ],
-        "health": [
-          "Teething care; begin toothbrushing routine",
-          "Growth/joint check with vet"
-        ],
-        "nutrition": [
-          "Maintain puppy formula; weigh meals",
-          "Slow feeder to reduce gulping"
-        ],
-        "exercise": [
-          "Leashed neighborhood walks; sniff breaks",
-          "Low-impact fetch on grass"
-        ],
-        "bonding": [
-          "Simple chained tricks (spin → sit → touch)",
-          "Scent scavenger hunts at home"
-        ],
-        "gear": [
-          "Adjustable harness for leash training",
-          "Long line (10–15 m) for recall practice"
-        ]
-      }
-    },
-    "puppy_11_15": {
-      "lanes": {
-        "training": [
-          "Heel with turns and halts",
-          "Down-stay to 60–90 sec in low distraction",
-          "Intro polite greetings (four-on-floor)"
-        ],
-        "health": [
-          "Discuss growth plates; jumping limits",
-          "Baseline body handling comfort check"
-        ],
-        "nutrition": [
-          "Transition toward adult formula when advised by vet",
-          "Introduce joint-support chews if >50 lb (vet guided)"
-        ],
-        "exercise": [
-          "Fetch with structured rests",
-          "Intro controlled agility foundations (cavaletti poles)"
-        ],
-        "bonding": [
-          "Begin easy working games: carry a soft dummy",
-          "Weekly puzzle rotation"
-        ],
-        "gear": [
-          "Interactive feeder/puzzle bowls",
-          "Light reflective vest or collar light"
-        ]
-      }
-    },
-    "young_16_24": {
-      "lanes": {
-        "training": [
-          "Duration sits/downs to 2–3 min",
-          "Recall from moderate distractions",
-          "Begin sport foundations (agility/rally/herding drills)"
-        ],
-        "health": [
-          "Spay/neuter discussion if not done",
-          "Body condition scoring; adjust calories"
-        ],
-        "nutrition": [
-          "Switch to adult formula; monitor weight monthly",
-          "Add omega-3s if coat/skin needs support (vet guided)"
-        ],
-        "exercise": [
-          "Daily purposeful walks 30–45 min",
-          "Intervals of jogs if cleared by vet"
-        ],
-        "bonding": [
-          "Scent puzzles; ‘find it’ games outdoors",
-          "Light backpack carry ≤10% body weight on hikes"
-        ],
-        "gear": [
-          "Long line (20–30 m) for advanced recalls",
-          "Cooling vest for warm weather sessions"
-        ]
-      }
-    },
-    "adult_25_60": {
-      "lanes": {
-        "training": [
-          "Advanced tasks: herding patterns, scent indications",
-          "Generalize obedience to new locations"
-        ],
-        "health": [
-          "Annual vet exam + dental cleaning as needed",
-          "Joint support plan if high workload"
-        ],
-        "nutrition": [
-          "Calorie checks; measured portions",
-          "Joint/skin supplements as advised"
-        ],
-        "exercise": [
-          "Daily work: structured fetch, herding, running or hiking",
-          "Cross-train (swim/bikejor if appropriate)"
-        ],
-        "bonding": [
-          "Work-to-earn jobs; carry pack; scent patrol routes",
-          "Weekly new brain challenge"
-        ],
-        "gear": [
-          "Working harness, hands-free leash",
-          "High-visibility gear for dawn/dusk"
-        ]
-      }
-    },
-    "senior_61p": {
-      "lanes": {
-        "training": [
-          "Short mental games; nosework boxes",
-          "Cooperative care (consent handling)"
-        ],
-        "health": [
-          "Senior bloodwork; arthritis screen",
-          "Weight control; pain management if needed"
-        ],
-        "nutrition": [
-          "Senior diet; add omega-3s",
-          "Hydration checks; wet toppers if needed"
-        ],
-        "exercise": [
-          "Low-impact walks; gentle hills",
-          "Swim sessions if joints allow"
-        ],
-        "bonding": [
-          "Massage/grooming time",
-          "Low-impact enrichment (snuffle mat, lick mat)"
-        ],
-        "gear": [
-          "Orthopedic bed; non-slip mats",
-          "Ramps/steps for car and furniture"
-        ]
-      }
-    }
-  },
-  "Herding": {
-    "puppy_1_6": {
-      "lanes": {
-        "training": [
-          "Marker/bridge games; short luring to positions",
-          "Intro to calm crate and mat work"
-        ],
-        "health": [
-          "Puppy vaccines; early eye/ear checks",
-          "Avoid repetitive chasing games"
-        ],
-        "nutrition": [
-          "Puppy formula; frequent small meals",
-          "Use meal kibble for training"
-        ],
-        "exercise": [
-          "Short shaping sessions; no herding livestock",
-          "Gentle fetch on grass (few reps)"
-        ],
-        "bonding": [
-          "Chew-and-settle beside you",
-          "Scented kibble scatter hunts"
-        ],
-        "gear": [
-          "Harness; light long line",
-          "Soft tug toy with clear ‘out’ cue"
-        ]
-      }
-    },
-    "puppy_7_10": {
-      "lanes": {
-        "training": [
-          "Recall tag team (two handlers alternating)",
-          "Loose-lead walking around mild distractions"
-        ],
-        "health": [
-          "Teeth brushing routine",
-          "Body handling (tail, toes, teeth) with treats"
-        ],
-        "nutrition": [
-          "Puppy diet; growth monitoring",
-          "Limit rich treats; use training ration"
-        ],
-        "exercise": [
-          "Shaped tricks (spin, bow) for brain work",
-          "Obstacle exploration (low platforms, tunnels)"
-        ],
-        "bonding": [
-          "Hide-and-seek with family members",
-          "Snuffle mat wind-downs"
-        ],
-        "gear": [
-          "Treat pouch, target stick",
-          "Puzzle feeder"
-        ]
-      }
-    },
-    "puppy_11_15": {
-      "lanes": {
-        "training": [
-          "Impulse control around motion (rollers, bikes)",
-          "Heel beginnings with figure-8 patterns"
-        ],
-        "health": [
-          "Growth plate caution; moderate jumping only",
-          "Vet check for adult transition timing"
-        ],
-        "nutrition": [
-          "Begin transition to adult as vet advises",
-          "Add omega-3s for active coats"
-        ],
-        "exercise": [
-          "Short controlled herding-style games (no stock)",
-          "Intro to platform/stay at distance"
-        ],
-        "bonding": [
-          "Directional cues (left/right) with cones",
-          "Puzzles that require multiple steps"
-        ],
-        "gear": [
-          "Long line (15 m) for motion-control practice",
-          "Portable place board"
-        ]
-      }
-    },
-    "young_16_24": {
-      "lanes": {
-        "training": [
-          "Distance cues and duration stays",
-          "Intro to stock/herding with a trainer if desired"
-        ],
-        "health": [
-          "Fitness baseline: range of motion notes",
-          "Paw pad care for active footing"
-        ],
-        "nutrition": [
-          "Adult sport diet if workload high",
-          "Monitor hydration during work"
-        ],
-        "exercise": [
-          "Intervals: brisk walk + drills",
-          "Cavaletti grids for coordination"
-        ],
-        "bonding": [
-          "Herding balls; advanced trick chains",
-          "Search games in new locations"
-        ],
-        "gear": [
-          "Whistle for recalls, high-value tug",
-          "Cooling vest for warm days"
-        ]
-      }
-    },
-    "adult_25_60": {
-      "lanes": {
-        "training": [
-          "Regular skill maintenance: outruns, downs at distance",
-          "Cross-train (rally, agility) for variety"
-        ],
-        "health": [
-          "Annual dental; joint checks",
-          "Warm-up/cool-down before/after work"
-        ],
-        "nutrition": [
-          "Measured meals; adjust for season/workload",
-          "Joint support supplements if indicated"
-        ],
-        "exercise": [
-          "Daily purposeful work (herding, drills, runs)",
-          "Scent/track sessions to balance arousal"
-        ],
-        "bonding": [
-          "Structured fetch with impulse control",
-          "Teach new complex behaviors quarterly"
-        ],
-        "gear": [
-          "High-durability tug and reward pouch",
-          "Reflective gear for evening sessions"
-        ]
-      }
-    },
-    "senior_61p": {
-      "lanes": {
-        "training": [
-          "Low-impact shaping; nosework games",
-          "Refine cooperative care routines"
-        ],
-        "health": [
-          "Senior panel annually; pain assessment",
-          "Weight management to reduce joint load"
-        ],
-        "nutrition": [
-          "Senior diet; softer chews if dentition worn",
-          "Omega-3s; hydration support"
-        ],
-        "exercise": [
-          "Short, frequent walks; grassy footing",
-          "Wobble cushion/core stability (gentle)"
-        ],
-        "bonding": [
-          "Calm grooming; massage",
-          "Gentle foraging (snuffle/lick mats)"
-        ],
-        "gear": [
-          "Orthopedic bed; anti-slip rugs",
-          "Ramps; light rain/warmth coat"
-        ]
-      }
-    }
+
+  "Working / Herding": {
+    "puppy_1_6": { "lanes": { "training": [
+      "5–10 min focus games (name-response, sit, down, hand target)",
+      "Introduce gentle impulse control (wait at door, food bowl manners)"
+    ], "health": [
+      "Short, frequent potty breaks to protect joints",
+      "Soft chew only; no high-impact fetch"
+    ], "nutrition": [
+      "Puppy formula split into 3–4 meals",
+      "Slow feeder to moderate gulping"
+    ], "exercise": [
+      "Multiple short sniff-walks (5–10 min)",
+      "Zero forced running or stairs"
+    ], "bonding": [
+      "Calm handling daily (paws, ears, mouth)",
+      "Low-arousal play; settle on mat"
+    ], "gear": [
+      "Front-clip harness (no pressure on neck)",
+      "Snuffle mat or scatter feeding"
+    ] } },
+    "puppy_7_10": { "lanes": { "training": [
+      "Shaping basics (place, heel foundations)",
+      "Novelty surfaces, low-stress socialization"
+    ], "health": [
+      "Teething management; rotate safe chews",
+      "Brief body checks after play"
+    ], "nutrition": [
+      "Puppy formula; monitor growth curve weekly"
+    ], "exercise": [
+      "Short flirt-pole with strict rules (2–3 mins)",
+      "Begin leash skills—loose lead, turns"
+    ], "bonding": [
+      "Problem toys (easy food puzzles)",
+      "Short hide-and-seek recalls"
+    ], "gear": [
+      "Light long-line (15–20 ft)",
+      "Simple food puzzle (level 1)"
+    ] } },
+    "puppy_11_15": { "lanes": { "training": [
+      "Pattern games (u-turns, engage/disengage)",
+      "Start scent-tin games (pairing cue with food)"
+    ], "health": [
+      "Introduce nail Dremel with counter-conditioning",
+      "Watch adolescent over-arousal; enforce rest"
+    ], "nutrition": [
+      "Puppy formula; consider joint-friendly DHA"
+    ], "exercise": [
+      "Sniff walks 15–25 min; gentle hillwork",
+      "No repetitive jumping"
+    ], "bonding": [
+      "Settle with chew after training",
+      "Short ‘find it!’ games indoors"
+    ], "gear": [
+      "Mat/bed for stationing",
+      "Beginner snuffle/puzzle upgrade (level 2)"
+    ] } },
+    "young_16_24": { "lanes": { "training": [
+      "Intro to scentwork or herding-style games",
+      "Proof recall with long-line"
+    ], "health": [
+      "Baseline vet exam; discuss hip/ELB screening windows",
+      "Toe & pad care after longer outings"
+    ], "nutrition": [
+      "Transition to adult formula; adjust for lean body condition"
+    ], "exercise": [
+      "Structured fetch with rules (3–5 tosses/set)",
+      "Intervals: 20–30 min sniff-walk + decompression"
+    ], "bonding": [
+      "Problem-solving toys (drawer/slider puzzles)",
+      "Short shaping sessions (2–4 min)"
+    ], "gear": [
+      "Treat pouch + high-value rewards",
+      "Long-line (20–30 ft) upgrade"
+    ] } },
+    "adult_25_60": { "lanes": { "training": [
+      "Weekly brain job (scentwork, tricks, or herding-style patterning)",
+      "Neutrality training around livestock/dogs"
+    ], "health": [
+      "Joint care habits (warm-up/cool-down)",
+      "Annual dental check; brush 3–4×/wk"
+    ], "nutrition": [
+      "Measured meals; maintain waist tuck",
+      "Omega-3s for working coats/joints (if vet-approved)"
+    ], "exercise": [
+      "Daily job: fetch with rules, tug with out, or track line",
+      "2 × 30–45 min walks with sniff time"
+    ], "bonding": [
+      "Enrichment rotation (puzzles, sniff boxes, DIY search)",
+      "Calm cuddle decompression after work"
+    ], "gear": [
+      "High-durability tug (supervised)",
+      "Scentwork tins or perforated containers"
+    ] } },
+    "senior_61p": { "lanes": { "training": [
+      "Low-impact brain games (shaping with platforms)",
+      "Refine hand signals; shorter sessions"
+    ], "health": [
+      "Joint support per vet (omega-3s, supplements as approved)",
+      "Ramps/traction mats; semiannual bloodwork discussion"
+    ], "nutrition": [
+      "Senior-friendly macros; monitor weight & hydration",
+      "Food-stuffed slow chews for mental work"
+    ], "exercise": [
+      "Short, frequent sniff-strolls (10–20 min)",
+      "Gentle hill or cavaletti once cleared"
+    ], "bonding": [
+      "Nose games in small spaces",
+      "Massage and calm touch routines"
+    ], "gear": [
+      "Orthopedic bed with support",
+      "Non-slip booties if floors are slick"
+    ] } }
   },
   "Sporting": {
     "puppy_1_6": {
