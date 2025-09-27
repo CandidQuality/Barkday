@@ -113,29 +113,26 @@ function resolveGroupKey(name){
 }
 
 // Find the closest existing <option> in the breedGroup <select>
-// and set it. Returns the selected value.
 function setGroupFromName(name){
   const sel = els.breedGroup;
   if (!sel) return 'Mixed / Other';
-  const target = normalizeKey(name || sel.value || '');
+  if (!name) return sel.value || 'Mixed / Other';
 
-  // 1) exact value match
+  const target = normalizeKey(name);
+
+  // Exact match by option value (case-insensitive)
   for (const opt of sel.options){
-    if (opt.value === name){ sel.value = opt.value; return sel.value; }
+    if (normalizeKey(opt.value) === target) { sel.value = opt.value; return sel.value; }
   }
-  // 2) fuzzy (match by value or label)
+  // Exact match by visible text (case-insensitive)
   for (const opt of sel.options){
-    const nv = normalizeKey(opt.value);
-    const nt = normalizeKey(opt.textContent);
-    if (nv === target || nt === target || nv.includes(target) || target.includes(nv) || nt.includes(target) || target.includes(nt)){
-      sel.value = opt.value;
-      return sel.value;
-    }
+    if (normalizeKey(opt.textContent) === target) { sel.value = opt.value; return sel.value; }
   }
-  // 3) guaranteed non-empty fallback
-  sel.value = 'Mixed / Other';
-  return sel.value;
+
+  // No exact match → do not change current selection
+  return sel.value || 'Mixed / Other';
 }
+
 
 // --- Replace the original applyGroupSafe with this shim that uses the helpers above ---
 function applyGroupSafe(name){
@@ -288,10 +285,9 @@ function updateBreedNotes(){
     setGroupFromName(mapped.name);
   } else {
     // No mapped group: keep current (or default), show meta examples if available
-    const gSel = setGroupFromName(els.breedGroup?.value);
-    const meta = GROUP_META[resolveGroupKey(gSel)];
-    els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
-  }
+    const gSel = els.breedGroup?.value || 'Mixed / Other'; // keep current selection as-is
+const meta = GROUP_META[resolveGroupKey(gSel)];
+els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
 
   // Use the resolved, non-empty group name everywhere below
   const gname = setGroupFromName(els.breedGroup?.value);
