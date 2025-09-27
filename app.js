@@ -11,6 +11,7 @@ const RECO_BANDED_URL   = "data/reco-banded.json?v=2";
 const RECO_BREED_URL    = "data/reco-breed.json?v=2";
 const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 const BREED_ALIASES_URL = "data/breed_aliases.json?v=1"; // NEW: external aliases
+const TAXONOMY_URL      = "data/breed_taxonomy.json?v=1"; // NEW: AKC + behavioral mapping
 
 // --- Affiliate Config (Amazon live; Chewy placeholder) ---
 const AMAZON_TAG = "candidquality-20";               // your live Amazon Associates tag
@@ -23,7 +24,8 @@ console.debug("[Barkday] data sources", {
   banded: RECO_BANDED_URL,
   breed: RECO_BREED_URL,
   aliases: BREED_ALIASES_URL,
-  gifts: GIFT_FEED_URL
+  gifts: GIFT_FEED_URL,
+  taxonomy: TAXONOMY_URL // NEW
 });
 
 // ---------- Splash + Logos ----------
@@ -205,6 +207,8 @@ let RECO_BANDED = null;      // banded recommendations by group
 let RECO_BREED  = null;      // per-breed, per-dog-year overrides
 let BREED_NAME_MAP = {};     // lowercased alias → canonical breed name (from reco-breed keys)
 let BREED_ALIASES = {};      // canonical → [aliases] (from external JSON)
+let BREED_TAXONOMY = null;  // canonical breed → { akc_group: string, clusters: string[] }
+
 
 // Loaders
 async function loadBreedGroups(){
@@ -261,6 +265,21 @@ async function loadAliases(){
     BREED_ALIASES = {};
   }
 }
+
+async function loadTaxonomy(){
+  try{
+    const res = await fetch(TAXONOMY_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    BREED_TAXONOMY = await res.json();
+    const n = BREED_TAXONOMY ? Object.keys(BREED_TAXONOMY).length - (BREED_TAXONOMY._meta ? 1 : 0) : 0;
+    console.debug('[Barkday] taxonomy loaded:', n, 'breeds mapped');
+  }catch(e){
+    BREED_TAXONOMY = null;
+    console.warn('[Barkday] taxonomy load failed; continuing without overlays', e);
+  }
+}
+
+
 /**
  * Normalize user-typed breed to a canonical display name if possible.
  * Order of attempts:
@@ -294,6 +313,7 @@ function normalizeBreed(input){
 loadBreedGroups();
 loadReco();
 loadAliases();
+loadTaxonomy();
 
 // Map typed breed → BREED_GROUPS entry.
 // Accepts exact canonical AND alias-normalized example names (e.g., "Yorkie" → "Yorkshire Terrier").
@@ -519,10 +539,98 @@ function planFor(group, dogYears){
   return { plan: null, band };
 }
 
+// ---------- Taxonomy merge helpers (ADD BELOW planFor) ----------
+
+// Ensure a plan object has all 6 lanes, each as an array
+function ensureLanes(plan){
+  plan.lanes = plan.lanes || {};
+  for (const k of ['training','health','nutrition','exercise','bonding','gear']){
+    if (!Array.isArray(plan.lanes[k])) plan.lanes[k] = [];
+  }
+  return plan;
+}
+
+// Fill only missing/empty lanes in target from overlay (no overrides)
+function mergeFillLanes(targetPlan, overlayPlan){
+  if (!overlayPlan) return targetPlan;
+  ensureLanes(targetPlan); ensureLanes(overlayPlan);
+  for (const k of Object.keys(overlayPlan.lanes)){
+    if (!targetPlan.lanes[k] || targetPlan.lanes[k].length === 0){
+      targetPlan.lanes[k] = overlayPlan.lanes[k].slice(0);
+    }
+  }
+  return targetPlan;
+}
+
+// Push text into a lane only if it isn't already present (case/trim-insensitive)
+function pushUnique(laneArr, text){
+  if (!text) return;
+  const key = String(text).trim().toLowerCase();
+  if (!key) return;
+  if (!laneArr.some(x => String(x).trim().toLowerCase() === key)){
+    laneArr.push(text);
+  }
+}
+
+// Add up to N short insights from behavioral clusters (BREED_GROUPS[] by id)
+function applyClusterOverlays(targetPlan, clusterIds, maxAdds = 3){
+  if (!Array.isArray(clusterIds) || !clusterIds.length || !Array.isArray(BREED_GROUPS)) return targetPlan;
+  ensureLanes(targetPlan);
+
+  let added = 0;
+  for (const cid of clusterIds){
+    if (added >= maxAdds) break;
+    const cluster = BREED_GROUPS.find(g => g.id === cid);
+    if (!cluster) continue;
+
+    // Map cluster fields to succinct lane notes (pick 0/1 item each to keep it tight)
+    // You can tune these choices later.
+    const enrich = Array.isArray(cluster.enrichment) ? cluster.enrichment[0] : null;
+    const caution = Array.isArray(cluster.cautions) ? cluster.cautions[0] : null;
+    const tip = Array.isArray(cluster.owner_tips) ? cluster.owner_tips[0] : null;
+
+    const before = added;
+    if (enrich)  { pushUnique(targetPlan.lanes.training,  enrich);  added++; }
+    if (caution) { pushUnique(targetPlan.lanes.health,    caution); added++; }
+    if (tip)     { pushUnique(targetPlan.lanes.bonding,   tip);     added++; }
+
+    // don't let one cluster dump too much; cap overall adds
+    if (added - before > 0 && added >= maxAdds) break;
+  }
+  return targetPlan;
+}
+
+// Build an enriched plan:
+// 1) Start from planFor(...) outcome (breed-first or group fallback)
+// 2) If we had a breed plan, also fill thin lanes from the correct group for the computed band
+// 3) Add 1–3 cluster insights from taxonomy
+function getEnrichedPlan(group, upcomingDY){
+  const { plan, band } = planFor(group, upcomingDY);
+  if (!plan) return { plan:null, band };
+
+  // Clone shallowly so we don't mutate original structures when overlaying
+  const merged = { ...plan, lanes: { ...(plan.lanes || {}) } };
+  ensureLanes(merged);
+
+  // If we already had a breed plan, fill thin lanes from group for the same band
+  const gkey = resolveGroupKey(group);
+  const groupPlan = (RECO_BANDED && RECO_BANDED[gkey]) ? RECO_BANDED[gkey][band.key] : null;
+  mergeFillLanes(merged, groupPlan);
+
+  // Cluster overlays via taxonomy (based on normalized canonical breed)
+  const breedCanon = normalizeBreed((els.breed.value || '').trim());
+  const tax = breedCanon && BREED_TAXONOMY ? BREED_TAXONOMY[breedCanon] : null;
+  const clusters = Array.isArray(tax?.clusters) ? tax.clusters : [];
+  applyClusterOverlays(merged, clusters, /*maxAdds*/ 3);
+
+  return { plan: merged, band };
+}
+
+
 function renderPlan(group, upcomingDY){
   const box = $('nextPlan'); box.innerHTML = '';
   const gkey = resolveGroupKey(group);
-  const { plan, band } = planFor(gkey, upcomingDY);
+  const { plan, band } = getEnrichedPlan(gkey, upcomingDY);
   const head = $('nextPlanHeading');
   head.textContent = `Next Birthday Plan — ${band ? band.label : ('turning ' + upcomingDY)}`;
   if(!plan){ box.innerHTML='<div class="muted">Recommendations coming soon.</div>'; return; }
@@ -544,9 +652,10 @@ function renderPlan(group, upcomingDY){
 
 // ---------- Serialize plan to plain text for calendar DESCRIPTION ----------
 function planNotesText(group, upcomingDY){
-  const {plan, band} = planFor(group, upcomingDY);
+  const {plan, band} = getEnrichedPlan(group, upcomingDY);
   const header = `Next Birthday Plan — ${band ? band.label : ('turning ' + upcomingDY)}`;
   if (!plan || !plan.lanes) return header;
+
   const order = [
     ['training','Training & Enrichment'],
     ['health','Health & Wellness'],
@@ -555,6 +664,7 @@ function planNotesText(group, upcomingDY){
     ['bonding','Play & Bonding Ideas'],
     ['gear','Helpful Gear (optional)']
   ];
+
   const parts = [header, ''];
   for (const [k,label] of order){
     const items = Array.isArray(plan.lanes[k]) ? plan.lanes[k] : [];
@@ -563,10 +673,16 @@ function planNotesText(group, upcomingDY){
     for (const t of items){ parts.push(t); }
     parts.push('');
   }
+
+  // Optional plain-text provenance footer (no DOM writes here)
+  const breedCanon = normalizeBreed((els.breed.value || '').trim());
+  const tax = breedCanon && BREED_TAXONOMY ? BREED_TAXONOMY[breedCanon] : null;
+  if (tax && Array.isArray(tax.clusters) && tax.clusters.length){
+    parts.push('— Includes behavioral insights and group-standard fills.');
+  }
+
   return parts.join('\n');
 }
-
-
 
 
 /* =========================
