@@ -17,6 +17,15 @@ const AMAZON_TAG = "candidquality-20";               // your live Amazon Associa
 const CHEWY_IMPACT_BASE = "";                        // leave empty until Chewy approves (e.g., "https://chewy.pxf.io/c/XXXX/XXXX/XXXX")
 const CHEWY_ENABLED = !!CHEWY_IMPACT_BASE;           // auto-toggle when you paste your Chewy Impact base
 
+// Debug: show data file versions in console
+console.debug("[Barkday] data sources", {
+  groups: BREED_GROUPS_URL,
+  banded: RECO_BANDED_URL,
+  breed: RECO_BREED_URL,
+  aliases: BREED_ALIASES_URL,
+  gifts: GIFT_FEED_URL
+});
+
 // ---------- Splash + Logos ----------
 (function(){
   const hideSplash = () => document.getElementById("splash")?.classList.add("hide");
@@ -34,13 +43,16 @@ const CHEWY_ENABLED = !!CHEWY_IMPACT_BASE;           // auto-toggle when you pas
 const root=document.documentElement, themeBtn=document.getElementById('themeToggle');
 const savedTheme = localStorage.getItem('barkday-theme') || 'dark';
 root.setAttribute('data-theme', savedTheme==='light'?'light':'dark');
-themeBtn.textContent = savedTheme==='light' ? '🌙 Dark' : '☀️ Light';
-themeBtn.addEventListener('click', () => {
-  const now = root.getAttribute('data-theme')==='light'?'dark':'light';
-  root.setAttribute('data-theme', now);
-  localStorage.setItem('barkday-theme', now);
-  themeBtn.textContent = now==='light' ? '🌙 Dark' : '☀️ Light';
-});
+if (themeBtn) {
+  themeBtn.textContent = savedTheme==='light' ? '🌙 Dark' : '☀️ Light';
+  themeBtn.addEventListener('click', () => {
+    const now = root.getAttribute('data-theme')==='light'?'dark':'light';
+    root.setAttribute('data-theme', now);
+    localStorage.setItem('barkday-theme', now);
+    themeBtn.textContent = now==='light' ? '🌙 Dark' : '☀️ Light';
+  });
+}
+
 
 // ---------- DOM Shortcuts ----------
 const $ = id => document.getElementById(id);
@@ -49,10 +61,9 @@ const els = {
   chewer: $('chewer'), showEpi: $('showEpigenetic'), smooth: $('smoothMilestones'),
   breed: $('breed'), breedGroup: $('breedGroup'), breedExamples: $('breedExamples'),
   ignoreAge: $('ignoreAge'), ignoreSize: $('ignoreSize'), ignoreChewer: $('ignoreChewer'),
-  calcBtn: $('calcBtn'), resetBtn: $('resetBtn'), shareBtn: $('shareBtn'), sizeWarn: $('sizeWarn'),
+  resetBtn: $('resetBtn'), shareBtn: $('shareBtn'), sizeWarn: $('sizeWarn'),
   nextHeadline: $('nextHeadline'), nextBday: $('nextBday'), nextBdayDelta: $('nextBdayDelta'),
   dogAge: $('dogAge'), humanYears: $('humanYears'), slopeNote: $('slopeNote'),
-  addCal: $('addCalBtn'), remind: $('remindBtn'), addYearSeries: $('addYearSeries'),
   loadGifts: $('loadGifts'), giftMeta: $('giftMeta'), gifts: $('gifts'),
   heroLine: $('heroLine'), profileLine: $('profileLine'), breedNotes: $('breedNotes'), epi: $('epi')
 };
@@ -272,8 +283,6 @@ els.adultWeight.addEventListener('input', ()=>{
 // ---------- Math utils ----------
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
 const daysBetween=(a,b)=>Math.floor((b-a)/(24*60*60*1000));
-const pad2=n=>String(n).padStart(2,'0');
-const fmtUTC=d=>d.getUTCFullYear()+pad2(d.getUTCMonth()+1)+pad2(d.getUTCDate())+'T'+pad2(d.getUTCHours())+pad2(d.getUTCMinutes())+pad2(d.getUTCSeconds())+'Z';
 
 // Weight → slope (5→~7.2)
 function slopeFromWeight(lb){
@@ -509,9 +518,18 @@ async function loadGifts(){
   try{
     const res = await fetch(GIFT_FEED_URL,{cache:'no-store'}); const items = await res.json();
     const lb = parseInt(els.adultWeight.value,10);
-    const bucket = lb<20?'toy':lb<30?'small':lb<50?'medium':lb<90?'large':'giant';
-    const dogYears = parseFloat(els.humanYears.textContent);
-    const chewer = (els.chewer.value||'').toLowerCase();
+    const bucket = lb<20 ? 'toy'
+             : lb<30 ? 'small'
+             : lb<50 ? 'medium'
+             : lb<90 ? 'large'
+             : 'giant';
+
+// Explicit NaN guard: if not computed yet, set to null
+let dogYears = parseFloat(els.humanYears.textContent);
+if (isNaN(dogYears)) dogYears = null;
+
+const chewer = (els.chewer.value||'').toLowerCase();
+
 
     const results = [];
     for(const it of items){
@@ -643,8 +661,28 @@ function compute(){
   if(els.gifts.children.length) loadGifts();
 }
 
+// Adapter the Button Bar will call
+window.runCalculation = function(){
+  // Run your existing calculation (validates inputs, updates UI, etc.)
+  compute();
+
+  // If compute() failed validation, keep buttons disabled
+  const ok = !!els.nextBday.textContent && els.nextBday.textContent !== '—';
+  if (!ok) return null;
+
+  // Build the event payload from current state
+  const { start, end, title, notes } = getContext();
+  return {
+    title,
+    description: notes,
+    start,
+    end,
+    reminders: [{ minutes: 10 }, { minutes: 1440 }] // 10m and 24h
+  };
+};
+
+
 // ---------- Buttons ----------
-$('calcBtn').addEventListener('click', compute);
 
 $('resetBtn').addEventListener('click', ()=>{
   els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; els.adultWeightVal.textContent='55'; els.chewer.value='Normal';
@@ -675,13 +713,8 @@ $('shareBtn').addEventListener('click', ()=>{
 });
 
 /* --------------------
-   Calendar helpers (uses global fmtUTC already defined above)
+   Calendar context helper (used by Button Bar adapter)
 -------------------- */
-function requireCalculated(e){
-  const ok = !!els.nextBday.textContent && els.nextBday.textContent !== '—';
-  if (!ok) { if (e) e.preventDefault(); alert('Please calculate first.'); }
-  return ok;
-}
 function getContext(){
   const start = new Date(els.nextBday.textContent);
   const end   = new Date(start.getTime() + 60*60*1000);
@@ -698,102 +731,7 @@ function getContext(){
 
   return { start, end, name, upcoming, notes, title };
 }
-function icsDownload(filename, lines){
-  const ics = lines.join(String.fromCharCode(13,10)); // CRLF
-  const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
-}
-function buildBarkdayICS({start,end,title,notes}){
-  return [
-    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN',
-    'BEGIN:VEVENT',
-    `UID:${Date.now()}@barkday`,
-    `DTSTAMP:${fmtUTC(new Date())}`,
-    `DTSTART:${fmtUTC(start)}`,
-    `DTEND:${fmtUTC(end)}`,
-    `SUMMARY:${title}`,
-    `DESCRIPTION:${notes}`,
-    'STATUS:CONFIRMED','TRANSP:OPAQUE',
-    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:🎁 One week until Barkday!','TRIGGER:-P7D','END:VALARM',
-    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:🎉 Barkday tomorrow!','TRIGGER:-P1D','END:VALARM',
-    'END:VEVENT','END:VCALENDAR'
-  ];
-}
-function buildOneWeekReminderICS({startBday, name, upcoming}){
-  const start = new Date(startBday.getTime() - 7*24*60*60*1000);
-  const end   = new Date(start.getTime() + 30*60*1000);
-  const title = `🎁 Gift time soon for ${name}! (Barkday in 1 week — turning ${upcoming} DY)`;
-  const details = 'Friendly reminder to order a gift and prep the birthday plan.';
-  return [
-    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barkday//EN',
-    'BEGIN:VEVENT',
-    `UID:${Date.now()}-rem1w@barkday`,
-    `DTSTAMP:${fmtUTC(new Date())}`,
-    `DTSTART:${fmtUTC(start)}`,
-    `DTEND:${fmtUTC(end)}`,
-    `SUMMARY:${title}`,
-    `DESCRIPTION:${details}`,
-    'STATUS:CONFIRMED','TRANSP:OPAQUE',
-    'END:VEVENT','END:VCALENDAR'
-  ];
-}
-function gcalFmtUTC(d){
-  const p=n=>String(n).padStart(2,'0');
-  return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+
-         'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
-}
-function makeGoogleCalUrl({start,end,title,notes}){
-  const base='https://calendar.google.com/calendar/render?action=TEMPLATE';
-  const dates=`${gcalFmtUTC(start)}/${gcalFmtUTC(end)}`;
-  const qs=new URLSearchParams({ text:title, dates, details:notes });
-  return `${base}&${qs.toString()}`;
-}
 
-/* --------------------
-   Buttons (fresh)
--------------------- */
-
-// 1) Barkday event (.ics) — with week-before & day-before alerts
-$('addCalBtn').addEventListener('click', (e)=>{
-  if (!requireCalculated(e)) return;
-  const {start,end,name,upcoming,notes,title} = getContext();
-  const lines = buildBarkdayICS({start,end,title,notes});
-  icsDownload(`${name.replace(/\s+/g,'_')}-barkday_${upcoming}.ics`, lines);
-});
-
-// 2) 1-week reminder (.ics) — separate reminder event
-$('remindBtn').addEventListener('click', (e)=>{
-  if (!requireCalculated(e)) return;
-  const {start: startBday, name, upcoming} = getContext();
-  const lines = buildOneWeekReminderICS({startBday, name, upcoming});
-  icsDownload(`${name.replace(/\s+/g,'_')}-barkday_reminder_1w.ics`, lines);
-});
-
-// 3) Add to Google — warn about reminder stripping, then open
-(function injectGoogleClean(){
-  let g = $('addGoogleLower');
-  if (!g) {
-    const calBtn = $('addCalBtn');
-    if (!calBtn) return;
-    g = document.createElement('a');
-    g.id = 'addGoogleLower';
-    g.className = 'btn secondary';
-    g.textContent = 'Add to Google';
-    g.href = '#';
-    g.style.marginLeft = '12px';
-    calBtn.insertAdjacentElement('afterend', g);
-  }
-  g.addEventListener('click', (e)=>{
-    e.preventDefault();
-    if (!requireCalculated(e)) return;
-    alert('Heads up: Google Calendar template links do not include early reminders. You can add them manually after the event is created.');
-    const {start,end,title,notes} = getContext();
-    window.open(makeGoogleCalUrl({start,end,title,notes}), '_blank', 'noopener');
-  });
-})();
 
 /* --------------------
    Local in-app reminders (beta)
@@ -849,4 +787,197 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
   els.chewer.value=q.get('c')||'Normal'; els.breedGroup.value=q.get('g')||'Working / Herding'; els.breed.value=q.get('r')||'';
   els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1';
   renderHero(); updateBreedNotes();
+})();
+
+/* ==== Barkday Button Bar v1 (namespaced) ==== */
+(function(){
+  // Create namespace if missing
+  window.BarkdayUI = window.BarkdayUI || {};
+  const NS = window.BarkdayUI;
+
+  if (NS.__btnbar_initialized) return; // idempotent
+
+  // Prefer any existing global helpers your app already has
+  const has = (k)=> typeof window[k] === 'function';
+
+  // ---------- Non-colliding helpers (defined only if missing) ----------
+  if (!NS.fmtICSDate){
+    NS.fmtICSDate = function fmtICSDate(dt){
+      const z = new Date(dt);
+      return z.toISOString()
+              .replace(/[-:]/g,'')
+              .replace(/\.\d{3}Z$/,'Z');
+    };
+  }
+
+  if (!NS.downloadFile){
+    NS.downloadFile = function downloadFile(name, mime, content){
+      const blob = new Blob([content], {type: mime});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    };
+  }
+
+  if (!NS.buildICSEvent){
+    NS.buildICSEvent = function buildICSEvent(evt){
+      // evt: { title, description, location, start, end, reminders:[{minutes:int}], uid? }
+      const uid = evt.uid || ('barkday-' + Math.random().toString(36).slice(2));
+      const dtstart = NS.fmtICSDate(evt.start);
+      const dtend   = NS.fmtICSDate(evt.end   || (new Date(new Date(evt.start).getTime()+60*60*1000))); // +1h
+      const now = NS.fmtICSDate(new Date());
+      const esc = (s)=> String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+      const alarms = (evt.reminders||[]).map(r=>[
+        'BEGIN:VALARM',
+        `TRIGGER:-PT${Math.max(0, r.minutes)}M`,
+        'ACTION:DISPLAY',
+        `DESCRIPTION:${esc(evt.title||'Reminder')}`,
+        'END:VALARM'
+      ].join('\n')).join('\n');
+
+      return [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Barkday//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${now}`,
+        `DTSTART:${dtstart}`,
+        `DTEND:${dtend}`,
+        `SUMMARY:${esc(evt.title||'Barkday Reminder')}`,
+        evt.location? `LOCATION:${esc(evt.location)}` : '',
+        evt.description? `DESCRIPTION:${esc(evt.description)}` : '',
+        alarms,
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].filter(Boolean).join('\n');
+    };
+  }
+
+  if (!NS.openGoogleCalUrl){
+    NS.openGoogleCalUrl = function openGoogleCalUrl(evt){
+      if (has('openGoogleCalUrl')) return window.openGoogleCalUrl(evt);
+      const dt = (d)=> new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+      const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text: evt.title || 'Barkday Reminder',
+        details: evt.description || '',
+        location: evt.location || '',
+        dates: `${dt(evt.start)}/${dt(evt.end || (new Date(new Date(evt.start).getTime()+60*60*1000)))}`
+      });
+      window.open('https://www.google.com/calendar/render?' + params.toString(), '_blank');
+    };
+  }
+
+  // ---------- Button Bar rendering & wiring ----------
+  function render(container){
+    container.innerHTML = `
+      <div class="btn-bar" data-state="disabled">
+        <button type="button" class="primary" id="btnCalc">Calculate</button>
+        <button type="button" class="secondary" id="btnICS" disabled>Download .ics</button>
+        <button type="button" class="secondary" id="btnGCal" disabled>Add to Google Calendar</button>
+      </div>
+      <div id="selftestHost" style="display:none"></div>
+    `;
+  }
+
+  function setEnabled(on){
+    document.querySelectorAll('#btnBarMount .btn-bar button.secondary').forEach(b=> b.disabled = !on);
+    const bar = document.querySelector('#btnBarMount .btn-bar');
+    if (bar) bar.dataset.state = on ? 'enabled' : 'disabled';
+  }
+
+  // App calls this when it has an event ready
+  // evtData: { title, description, location, start, end, reminders:[{minutes:int}] }
+  NS.updateEventFromCalc = function(evtData){ NS.__lastEvent = evtData || null; setEnabled(!!evtData); };
+  NS.setButtonsEnabled = setEnabled;
+
+  function wire(){
+    const root = document.getElementById('btnBarMount');
+    if (!root) return;
+
+    const btnCalc = root.querySelector('#btnCalc');
+    const btnICS  = root.querySelector('#btnICS');
+    const btnGCal = root.querySelector('#btnGCal');
+
+    btnCalc.addEventListener('click', ()=>{
+      // Prefer your existing calc entry points if present
+      if (has('runCalculation')){
+        const evt = window.runCalculation();   // should return event object or falsy
+        NS.updateEventFromCalc(evt);
+      } else if (has('calculate')){
+        const evt = window.calculate();        // ditto
+        NS.updateEventFromCalc(evt);
+      } else {
+        // Fallback: let the app listen for this and respond
+        root.dispatchEvent(new CustomEvent('barkday:calc:request'));
+      }
+    });
+
+    btnICS.addEventListener('click', ()=>{
+      if (btnICS.disabled) return;
+      const evt = NS.__lastEvent; if (!evt) return;
+      const ics = NS.buildICSEvent(evt);
+      NS.downloadFile('barkday.ics', 'text/calendar;charset=utf-8', ics);
+    });
+
+    btnGCal.addEventListener('click', ()=>{
+      if (btnGCal.disabled) return;
+      const evt = NS.__lastEvent; if (!evt) return;
+      alert('Heads-up: Google Calendar may strip very-early reminders. We’ll include only supported ones.');
+      NS.openGoogleCalUrl(evt);
+    });
+  }
+
+  // Self-test (optional) — toggle with ?selftest=1 or Alt+Shift+T
+  NS.selfTest = NS.selfTest || {};
+  NS.selfTest.run = function(){
+    const host = document.getElementById('selftestHost');
+    if (!host) return;
+    host.style.display = 'block';
+    const checks = [];
+
+    const beforeEnabled = Array.from(document.querySelectorAll('#btnBarMount .btn-bar button.secondary')).every(b=> b.disabled);
+    checks.push(['Buttons disabled before calc', beforeEnabled]);
+
+    const now = new Date();
+    const evt = { title:'Test Barkday', description:'Self-test', start: now, end: new Date(now.getTime()+60*60*1000), reminders:[{minutes:10}] };
+    NS.updateEventFromCalc(evt);
+    const afterEnabled = Array.from(document.querySelectorAll('#btnBarMount .btn-bar button.secondary')).every(b=> !b.disabled);
+    checks.push(['Buttons enabled after calc', afterEnabled]);
+
+    const ics = NS.buildICSEvent(evt);
+    checks.push(['ICS contains DTSTART/DTEND', /DTSTART:/.test(ics) && /DTEND:/.test(ics)]);
+
+    host.innerHTML = `
+      <div class="selftest">
+        <h4>Self-Test</h4>
+        ${checks.map(([label, ok])=>`<div class="row"><span>${label}</span><span class="${ok?'ok':'fail'}">${ok?'✅ PASS':'❌ FAIL'}</span></div>`).join('')}
+      </div>
+    `;
+  };
+
+  function maybeRunSelfTest(){
+    const params = new URLSearchParams(location.search);
+    if (params.get('selftest')==='1') NS.selfTest.run();
+    window.addEventListener('keydown', (e)=>{
+      if (e.altKey && e.shiftKey && e.key.toLowerCase()==='t'){
+        const host = document.getElementById('selftestHost');
+        if (host && host.style.display==='none'){ NS.selfTest.run(); }
+        else if (host){ host.style.display='none'; }
+      }
+    });
+  }
+
+  // Init on DOM ready
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const mount = document.getElementById('btnBarMount');
+    if (!mount) return;
+    render(mount); wire(); setEnabled(false); maybeRunSelfTest();
+    NS.__btnbar_initialized = true;
+  });
 })();
