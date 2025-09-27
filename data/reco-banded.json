@@ -1308,154 +1308,476 @@
   },
   "Guardian": {
   "puppy_1_6": { "lanes": {
-    "training": ["Name response in quiet areas", "Gentle leash intro indoors"],
-    "health": ["Early vet visits; desensitize to handling", "Soft flooring to protect joints"],
-    "nutrition": ["Small, frequent meals", "Reward calm behavior with kibble"],
-    "exercise": ["Short play sessions; no forced guard work", "Exploration in safe yard"],
-    "bonding": ["Calm cuddles; brushing routines", "Gentle crate/mat comfort"],
-    "gear": ["Flat collar; ID tag", "Padded harness"]
+    "training": [
+      "Name-response, hand target, short place (10–20 sec)",
+      "Calm crate/mat introductions; reward neutrality"
+    ],
+    "health": [
+      "Puppy series; cooperative handling (paws/ears/teeth)",
+      "Avoid guard-style play; protect joints"
+    ],
+    "nutrition": [
+      "Balanced puppy formula; 3–4 small meals",
+      "Use meal kibble for training to limit extras"
+    ],
+    "exercise": [
+      "Short sniff-walks (5–10 min), no stairs/jumping",
+      "Controlled toy play (few reps) with cool-down"
+    ],
+    "bonding": [
+      "Calm cuddle decompression after activity",
+      "Handler proximity games (follow, check-ins)"
+    ],
+    "gear": [
+      "Padded Y-harness; flat collar + ID",
+      "Snuffle mat; low-arousal chew"
+    ]
   }},
   "puppy_7_10": { "lanes": {
-    "training": ["Impulse control at doors", "Short settle on mat"],
-    "health": ["Introduce nail care", "Gentle grooming"],
-    "nutrition": ["Monitor growth; avoid overfeeding", "Hydration check-ins"],
-    "exercise": ["Short leash walks", "Structured toy fetch (few reps)"],
-    "bonding": ["Family hide-and-seek", "Short calm touch routines"],
-    "gear": ["Treat pouch", "Puzzle feeder (easy)"]
+    "training": [
+      "Impulse control at doors/food; loose-lead basics",
+      "Neutral visitor exposures with distance"
+    ],
+    "health": [
+      "Teeth brushing routine; nail Dremel intro",
+      "Body condition checks during growth spurts"
+    ],
+    "nutrition": [
+      "Weigh meals; monitor growth curve weekly",
+      "Hydration habit after play"
+    ],
+    "exercise": [
+      "Neighborhood walks with sniff breaks",
+      "Structured fetch (few reps) on soft ground"
+    ],
+    "bonding": [
+      "Settle on mat while family moves about",
+      "Two-handler recalls (short, happy)"
+    ],
+    "gear": [
+      "Treat pouch; 10–15 m long line",
+      "Simple puzzle feeder (level 1)"
+    ]
   }},
   "puppy_11_15": { "lanes": {
-    "training": ["Polite greetings", "Recall foundation with long line"],
-    "health": ["Growth monitoring", "Ear/skin checks"],
-    "nutrition": ["Balanced meals", "Transition planning toward adult diet"],
-    "exercise": ["Leash walks with sniffing breaks", "Structured play"],
-    "bonding": ["Simple problem-solving toys", "Calm cuddle decompression"],
-    "gear": ["Sturdy leash", "Comfortable crate"]
+    "training": [
+      "Place with mild distractions; polite greetings",
+      "Recall foundations on long line; ‘leave it’"
+    ],
+    "health": [
+      "Growth plate caution; avoid repetitive impact",
+      "Cooperative muzzle conditioning (just in case)"
+    ],
+    "nutrition": [
+      "Puppy formula; consider omega-3s if vet-approved",
+      "Track treats; maintain waist tuck"
+    ],
+    "exercise": [
+      "Sniff walks 15–25 min; gentle hills",
+      "Pattern games to reduce reactivity"
+    ],
+    "bonding": [
+      "Scent games around the yard/home ‘patrol’ route",
+      "Calm grooming/handling with choice cues"
+    ],
+    "gear": [
+      "Station mat; 15–20 m long line",
+      "Perforated scent tins for searches"
+    ]
   }},
   "young_16_24": { "lanes": {
-    "training": ["Place training", "Neutral exposure to visitors"],
-    "health": ["Conditioning baseline", "Joint-friendly play"],
-    "nutrition": ["Adult diet transition", "Measured meals"],
-    "exercise": ["Longer walks with rest", "Gentle fetch"],
-    "bonding": ["Calm training games", "Trick training short sessions"],
-    "gear": ["Long line", "Enrichment puzzle"]
+    "training": [
+      "Structured neutrality sessions (observe, reward calm)",
+      "Reliable recall and place; proof around visitors"
+    ],
+    "health": [
+      "Baseline vet screening; joint warm-up/cool-down",
+      "Toe/pad care after longer outings"
+    ],
+    "nutrition": [
+      "Transition to adult formula; measured portions",
+      "Adjust kcals for lean condition"
+    ],
+    "exercise": [
+      "20–40 min walks with decompression time",
+      "Low-arousal tug with rules; brief fetch sets"
+    ],
+    "bonding": [
+      "Scent searches on property (keys/food tins)",
+      "Trick chains that end in settle"
+    ],
+    "gear": [
+      "Treat pouch + high-value rewards",
+      "Head halter or front-clip harness if needed"
+    ]
   }},
   "adult_25_60": { "lanes": {
-    "training": ["Structured neutrality sessions", "Basic obedience refreshers"],
-    "health": ["Annual exams", "Joint care warm-up/cool-down"],
-    "nutrition": ["Adult diet; measured", "Joint supplements if advised"],
-    "exercise": ["Daily structured walk", "Low-arousal fetch or tug"],
-    "bonding": ["Interactive puzzle rotation", "Calm family games"],
-    "gear": ["Durable harness", "Tug toy with rules"]
+    "training": [
+      "Maintain neutrality: structured greetings & ‘go to place’",
+      "Weekly brain work: scent patterns or utility tasks"
+    ],
+    "health": [
+      "Annual dental; joint support habits",
+      "Weight monitoring; rest days after big efforts"
+    ],
+    "nutrition": [
+      "Measured meals; treat accounting",
+      "Omega-3s per vet guidance"
+    ],
+    "exercise": [
+      "Daily purposeful walk (30–60 min) with sniff time",
+      "Task work: carry pack (≤10–15%), light retrieve"
+    ],
+    "bonding": [
+      "Calm family time post-work; massage",
+      "Rotate puzzles/searches to prevent over-arousal"
+    ],
+    "gear": [
+      "Durable harness; reflective lead",
+      "Scent tins; place mat/bed"
+    ]
   }},
   "senior_61p": { "lanes": {
-    "training": ["Gentle nose games", "Short hand-signal refreshers"],
-    "health": ["Senior check-ups twice yearly", "Comfort supports (ramps, mats)"],
-    "nutrition": ["Senior diet; softened food", "Hydration support"],
-    "exercise": ["Short, slow walks", "Gentle mobility exercises"],
-    "bonding": ["Massage and calm brush", "Quiet companionship"],
-    "gear": ["Orthopedic bed", "Non-slip rugs"]
+    "training": [
+      "Hand signals; short shaping; cooperative care",
+      "Nosework at floor level; brief place resets"
+    ],
+    "health": [
+      "Senior panels; comfort supports (ramps/traction mats)",
+      "Joint-friendly warmups; pain talk with vet if needed"
+    ],
+    "nutrition": [
+      "Senior diet/macros; hydration support",
+      "Softer chews; food-stuffed lick mats"
+    ],
+    "exercise": [
+      "Short, frequent sniff-strolls (10–20 min)",
+      "Gentle balance/cavaletti when cleared"
+    ],
+    "bonding": [
+      "Quiet companionship; brush/massage routines",
+      "Low-effort foraging games"
+    ],
+    "gear": [
+      "Orthopedic bed; non-slip rugs",
+      "Light coat for cold/wet days"
   }}
 },
 
 "Companion": {
   "puppy_1_6": { "lanes": {
-    "training": ["Gentle handling", "Name games"],
-    "health": ["Puppy shots", "Warm bedding"],
-    "nutrition": ["Small-breed puppy food", "Tiny treats for training"],
-    "exercise": ["Short play indoors", "Safe sniff walks"],
-    "bonding": ["Lap cuddles", "Soft brushing"],
-    "gear": ["Light harness", "Soft toy"]
+    "training": [
+      "Name games; target touch; tiny sits/downs",
+      "Crate/mat comfort with calm rewards"
+    ],
+    "health": [
+      "Puppy care; hypoglycemia watch (toy types)",
+      "Avoid high jumps; use ramps/steps"
+    ],
+    "nutrition": [
+      "Small-breed puppy formula; 3–4 small meals",
+      "Pea-sized treats; use meals for training"
+    ],
+    "exercise": [
+      "Short indoor play bursts; leash intro inside",
+      "5–10 min sniff walks, no rough wrestle"
+    ],
+    "bonding": [
+      "Calm cuddle; desensitize to grooming tools",
+      "Brief confidence games (platforms)"
+    ],
+    "gear": [
+      "Soft harness; light leash",
+      "Padded bed; ramps/steps"
+    ]
   }},
   "puppy_7_10": { "lanes": {
-    "training": ["Polite greetings", "Short leash walks"],
-    "health": ["Teeth brushing start", "Body checks"],
-    "nutrition": ["Portion control", "Hydration reminders"],
-    "exercise": ["Indoor play circuits", "Gentle fetch"],
-    "bonding": ["Puzzle feeder (small)", "Calm lap time"],
-    "gear": ["Light leash", "Small puzzle toy"]
+    "training": [
+      "Loose-lead in quiet areas; polite greetings",
+      "Place near family activity (short duration)"
+    ],
+    "health": [
+      "Teeth brushing start; nail care routine",
+      "Warmth protection outdoors"
+    ],
+    "nutrition": [
+      "Measured meals; avoid free feeding",
+      "Hydration reminders"
+    ],
+    "exercise": [
+      "Gentle fetch with soft toys",
+      "Indoor play circuits with rests"
+    ],
+    "bonding": [
+      "Mini puzzle toys rotated",
+      "Short trick sessions (1–2 min)"
+    ],
+    "gear": [
+      "Lightweight ID collar/harness",
+      "Soft sweater/raincoat"
+    ]
   }},
   "puppy_11_15": { "lanes": {
-    "training": ["Stay 20–30 sec", "Recall in yard"],
-    "health": ["Patella checks", "Nail care routine"],
-    "nutrition": ["Transition to adult plan", "Measured meals"],
-    "exercise": ["Short outdoor walks", "Safe indoor agility (low bars)"],
-    "bonding": ["Trick play", "Cuddle decompression"],
-    "gear": ["Soft bed", "Harness with back clip"]
+    "training": [
+      "Stay 20–40 sec; recall indoors then yard",
+      "Confidence walks on varied safe surfaces"
+    ],
+    "health": [
+      "Patella watch (toy breeds); regular nail trims",
+      "Keep sessions short to avoid fatigue"
+    ],
+    "nutrition": [
+      "Transition planning toward adult diet",
+      "Keep treats tiny; track intake"
+    ],
+    "exercise": [
+      "Ground-level obstacles/tunnels",
+      "Gentle tug with an ‘out’ cue"
+    ],
+    "bonding": [
+      "Trick chains for confidence",
+      "Relax on mat next to you"
+    ],
+    "gear": [
+      "Back-clip harness",
+      "Portable soft carrier for travel"
+    ]
   }},
   "young_16_24": { "lanes": {
-    "training": ["Basic tricks", "Polite leash skills"],
-    "health": ["Dental cleaning intro", "Weight monitoring"],
-    "nutrition": ["Small-breed adult food", "Hydration support"],
-    "exercise": ["Frequent mini-walks", "Indoor fetch"],
-    "bonding": ["Lap time daily", "Short puzzle sessions"],
-    "gear": ["Reflective gear", "Soft sweater/coat"]
+    "training": [
+      "Short heel basics; neutrality around bigger dogs",
+      "Reliable recall with sound cues"
+    ],
+    "health": [
+      "Dental cleaning plan; weight monitoring",
+      "Coat maintenance as needed"
+    ],
+    "nutrition": [
+      "Adult small-breed diet; measured",
+      "Count treats; consider wet toppers"
+    ],
+    "exercise": [
+      "Frequent mini-walks; indoor fetch corridors",
+      "Low-impact enrichment obstacle course"
+    ],
+    "bonding": [
+      "Trick showcases for family",
+      "Calm lap time after play"
+    ],
+    "gear": [
+      "Reflective leash/collar",
+      "Soft carrier bag"
+    ]
   }},
   "adult_25_60": { "lanes": {
-    "training": ["Platform tricks", "Neutrality in public"],
-    "health": ["Annual exams", "Dental hygiene"],
-    "nutrition": ["Adult diet; measured", "Treat accounting"],
-    "exercise": ["Daily short walks", "Indoor games"],
-    "bonding": ["Puzzle toy rotation", "Cuddle time"],
-    "gear": ["Comfortable harness", "Heated pad (supervised)"]
+    "training": [
+      "Platform games; polite public manners",
+      "Settle on mat in cafés/parks (short)"
+    ],
+    "health": [
+      "Annual dental; warmth/dryness in poor weather",
+      "Body condition checks quarterly"
+    ],
+    "nutrition": [
+      "Measured meals; prevent obesity",
+      "Hydration + occasional wet toppers"
+    ],
+    "exercise": [
+      "Multiple short walks daily",
+      "Puzzle + short fetch blend"
+    ],
+    "bonding": [
+      "Gentle puzzle rotation",
+      "Daily snuggles/quiet time"
+    ],
+    "gear": [
+      "Padded harness; reflective gear",
+      "Heated pad (supervised)"
+    ]
   }},
   "senior_61p": { "lanes": {
-    "training": ["Simple hand signals", "Short nose games"],
-    "health": ["Senior checks", "Comfortable bedding"],
-    "nutrition": ["Senior formula", "Hydration toppers"],
-    "exercise": ["Very short strolls", "Gentle indoor play"],
-    "bonding": ["Quiet companionship", "Massage routines"],
-    "gear": ["Orthopedic bed", "Non-slip rugs"]
+    "training": [
+      "Short nosework and shaping",
+      "Cooperative care with choice cues"
+    ],
+    "health": [
+      "Senior checkups; arthritis comfort plan",
+      "Keep warm; soft resting spots"
+    ],
+    "nutrition": [
+      "Senior small-breed formula",
+      "Softened kibble if chewing is hard"
+    ],
+    "exercise": [
+      "Very short strolls; stroller rest if needed",
+      "Indoor foraging games"
+    ],
+    "bonding": [
+      "Cuddle and gentle brush",
+      "Lick-mat calm time"
+    ],
+    "gear": [
+      "Orthopedic bed; ramps",
+      "Non-slip rugs"
   }}
 },
 
 "Mixed / Other": {
   "puppy_1_6": { "lanes": {
-    "training": ["Name games", "Crate comfort basics"],
-    "health": ["Vet puppy visits", "Gentle handling"],
-    "nutrition": ["Balanced puppy formula", "Small meal training rewards"],
-    "exercise": ["Short play bursts", "Exploration in safe yard"],
-    "bonding": ["Cuddle after play", "Gentle brushing"],
-    "gear": ["Harness/collar", "Soft chew toy"]
+    "training": [
+      "Marker games; sit/down/come basics",
+      "Crate/mat comfort with calm rewards"
+    ],
+    "health": [
+      "Puppy vet care; parasite prevention",
+      "Avoid long forced exercise"
+    ],
+    "nutrition": [
+      "Balanced puppy diet; 3–4 meals/day",
+      "Use meal kibble for training currency"
+    ],
+    "exercise": [
+      "Short play bursts with rest",
+      "Sniff time in yard/on leash"
+    ],
+    "bonding": [
+      "Calm handling; grooming intro",
+      "Beginner puzzle feeders"
+    ],
+    "gear": [
+      "Harness/collar; ID tag",
+      "Crate/pen; soft chew"
+    ]
   }},
   "puppy_7_10": { "lanes": {
-    "training": ["Loose-lead intro", "Recall foundation"],
-    "health": ["Growth monitoring", "Intro to teeth brushing"],
-    "nutrition": ["Measured meals", "Hydration support"],
-    "exercise": ["Short sniff walks", "Toy fetch with rest"],
-    "bonding": ["Puzzle feeder", "Calm play with family"],
-    "gear": ["Leash and ID", "Beginner puzzle"]
+    "training": [
+      "Loose-lead walking with turns",
+      "Recall on long line"
+    ],
+    "health": [
+      "Teeth brushing; nail care",
+      "Monitor growth for size type"
+    ],
+    "nutrition": [
+      "Measured meals; treat accounting",
+      "Hydration checks"
+    ],
+    "exercise": [
+      "Neighborhood walks with sniff breaks",
+      "Confidence course (low obstacles)"
+    ],
+    "bonding": [
+      "Hide-and-seek with family",
+      "Snuffle mat cool-downs"
+    ],
+    "gear": [
+      "Long line; treat pouch",
+      "Puzzle bowl"
+    ]
   }},
   "puppy_11_15": { "lanes": {
-    "training": ["Stay up to 1 min", "Impulse control at door"],
-    "health": ["Vet growth check", "Nail care routine"],
-    "nutrition": ["Transition toward adult", "Balanced treats"],
-    "exercise": ["Leash hikes", "Fetch with pauses"],
-    "bonding": ["Puzzle toys", "Calm settle beside family"],
-    "gear": ["Sturdy leash", "Cooling mat"]
+    "training": [
+      "Stay to 60–90 sec; leave-it",
+      "Polite greetings (four on floor)"
+    ],
+    "health": [
+      "Vet check; transition timing",
+      "Joint/back caution for jumpers"
+    ],
+    "nutrition": [
+      "Transition to adult as advised",
+      "Omega-3s if coat/joint benefit"
+    ],
+    "exercise": [
+      "Leash hikes; controlled fetch/tug",
+      "Intro nosework patterns"
+    ],
+    "bonding": [
+      "Trick chains; puzzle rotation",
+      "Calm settle beside you"
+    ],
+    "gear": [
+      "Reflective leash; collar light",
+      "Cooling mat for summer"
+    ]
   }},
   "young_16_24": { "lanes": {
-    "training": ["Generalize cues", "Recall with distractions"],
-    "health": ["Body condition checks", "Coat/ear care"],
-    "nutrition": ["Adult diet", "Hydration plan"],
-    "exercise": ["Daily walks 30 min", "Structured play"],
-    "bonding": ["Trick training short sessions", "New puzzle weekly"],
-    "gear": ["Reflective leash", "Travel water bowl"]
+    "training": [
+      "Generalize cues outdoors; longer recalls",
+      "Optional sport foundations"
+    ],
+    "health": [
+      "Warm-up/cool-down habit",
+      "Weight/coat maintenance"
+    ],
+    "nutrition": [
+      "Adult diet; portion control",
+      "Hydration plan in heat"
+    ],
+    "exercise": [
+      "Daily walks 30–45 min",
+      "Swim day or fetch with rests"
+    ],
+    "bonding": [
+      "New trail weekly; scent games",
+      "Car ride settle training"
+    ],
+    "gear": [
+      "Hands-free leash",
+      "Portable water bowl"
+    ]
   }},
   "adult_25_60": { "lanes": {
-    "training": ["Impulse control", "Refresh obedience"],
-    "health": ["Annual checkups", "Dental care"],
-    "nutrition": ["Measured meals", "Joint support if needed"],
-    "exercise": ["Daily walks", "Enrichment games"],
-    "bonding": ["Family games", "Decompression walks"],
-    "gear": ["Weather-appropriate coat", "Puzzle feeder"]
+    "training": [
+      "Impulse control in busy places",
+      "Teach a new practical behavior quarterly"
+    ],
+    "health": [
+      "Annual dental; joint/weight watch",
+      "Coat/skin care as needed"
+    ],
+    "nutrition": [
+      "Measured meals; reduce freebies",
+      "Joint support if indicated"
+    ],
+    "exercise": [
+      "Daily mixed cardio + puzzles",
+      "Weekend longer hike/swim"
+    ],
+    "bonding": [
+      "Family games; decompression walks",
+      "Quiet routines for calm"
+    ],
+    "gear": [
+      "Weather-appropriate coat",
+      "High-viz gear"
+    ]
   }},
   "senior_61p": { "lanes": {
-    "training": ["Short shaping games", "Hand signal refreshers"],
-    "health": ["Senior wellness checks", "Mobility support"],
-    "nutrition": ["Senior diet", "Softened food"],
-    "exercise": ["Short strolls", "Gentle balance work"],
-    "bonding": ["Quiet brush/massage", "Lap cuddle time"],
-    "gear": ["Orthopedic bed", "Non-slip mats"]
+    "training": [
+      "Short shaping/nosework at floor level",
+      "Cooperative care for meds/grooming"
+    ],
+    "health": [
+      "Senior screening; mobility plan",
+      "Weight/pain management"
+    ],
+    "nutrition": [
+      "Senior diet; hydration toppers",
+      "Softer treats for worn dentition"
+    ],
+    "exercise": [
+      "Short, shaded walks; flat terrain",
+      "Gentle balance exercises"
+    ],
+    "bonding": [
+      "Massage; low-effort foraging",
+      "Cuddle/brush time"
+    ],
+    "gear": [
+      "Orthopedic bed; ramps",
+      "Non-slip runners"
+    ]
   }}
 }
 
