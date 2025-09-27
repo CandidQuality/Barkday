@@ -330,16 +330,16 @@ els.adultWeight.addEventListener('input', ()=>{
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
 const daysBetween=(a,b)=>Math.floor((b-a)/(24*60*60*1000));
 
-// Inline status (used instead of alert() where possible)
+// Validation feedback (classic pop-up alerts)
 function showInline(msg, kind='warn'){
-  let slot = document.getElementById('inline-alert');
-  if (!slot) { console.warn('[Barkday]', msg); return; }
-  slot.textContent = msg;
-  slot.dataset.kind = kind; // style with [data-kind="warn|error|success|info"]
+  // Always use a blocking pop-up for visibility
+  alert(msg);
+  // Still log to console for debugging
+  console.warn('[Barkday]', msg);
 }
+
 function clearInline(){
-  const slot = document.getElementById('inline-alert');
-  if (slot){ slot.textContent=''; slot.removeAttribute('data-kind'); }
+  // No inline status to clear when using pop-ups only
 }
 
 // Weight → slope (5→~7.2)
