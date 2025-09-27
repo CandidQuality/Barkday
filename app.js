@@ -741,11 +741,20 @@ $('loadGifts').addEventListener('click', loadGifts);
 function compute(){
   clearInline();
 
-  const dobStr=els.dob.value;
-  if(!dobStr){ showInline('Please select a birthdate.', 'warn'); return; }
-  const dob=new Date(dobStr), now=new Date();
-  if(isNaN(dob)||dob>now){ showInline('Birthdate is invalid.', 'error'); return; }
-  const lb=parseInt(els.adultWeight.value,10);
+  const dobStr = els.dob.value;
+  if (!dobStr) {
+    alert('Please select a birthdate.');
+    return;   // 🚫 stop immediately
+  }
+
+  const dob = new Date(dobStr), now = new Date();
+  if (isNaN(dob) || dob > now) {
+    alert('Birthdate is invalid.');
+    return;   // 🚫 stop immediately
+  }
+
+  const lb = parseInt(els.adultWeight.value,10);
+  // … rest of your compute() continues here
 
   // Chronological age
   const days=daysBetween(dob, now), years=days/365.2425, yrs=Math.floor(years), months=Math.floor((years%1)*12);
@@ -799,26 +808,30 @@ function compute(){
 
 // Adapter the Button Bar will call
 window.runCalculation = function(){
-  // Run your existing calculation (validates inputs, updates UI, etc.)
+  // Run calculation; compute() shows pop-ups and returns early on invalid input
   compute();
 
-  // If compute() failed validation, keep buttons disabled
+  // Accept success only if we have either next date or HY populated
   const hasDate = !!els.nextBday.textContent && els.nextBday.textContent !== '—';
   const hasHY   = !!els.humanYears.textContent && els.humanYears.textContent !== '—';
-  const ok = hasDate || hasHY; // accept either being present
-  if (!ok) return null;
+  const ok = hasDate || hasHY;
 
-  // Build the event payload from current state
+  if (!ok) {
+    // Ensure calendar buttons remain disabled after a failed run
+    if (window.BarkdayUI?.setButtonsEnabled) window.BarkdayUI.setButtonsEnabled(false);
+    return null;
+  }
+
+  // Build and return event payload
   const { start, end, title, notes } = getContext();
   return {
     title,
     description: notes,
     start,
     end,
-    reminders: [{ minutes: 10 }, { minutes: 1440 }] // 10m and 24h
+    reminders: [{ minutes: 10 }, { minutes: 1440 }]
   };
 };
-
 
 // ---------- Buttons ----------
 
@@ -1145,19 +1158,23 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
 
 })();
 
-// EXTRA SAFETY: bind #btnCalc directly if btnbar init was interfered with
+// EXTRA SAFETY: bind #btnCalc only if the Button Bar didn't initialize
 document.addEventListener('DOMContentLoaded', () => {
+  // If the Button Bar wired itself, do nothing (prevents double alerts)
+  if (window.BarkdayUI?.__btnbar_initialized) return;
+
   const bc = document.querySelector('#btnBarMount #btnCalc');
-  if (bc && !bc.__barkday_bound) {
-    bc.__barkday_bound = true;
-    bc.addEventListener('click', () => {
-      const evt = (typeof window.runCalculation === 'function')
-        ? window.runCalculation()
-        : (typeof window.calculate === 'function' ? window.calculate() : null);
-      if (window.BarkdayUI?.updateEventFromCalc) {
-        window.BarkdayUI.updateEventFromCalc(evt || null);
-        if (evt && evt.start) window.BarkdayUI.setButtonsEnabled(true);
-      }
-    });
-  }
+  if (!bc || bc.__barkday_bound) return;
+
+  bc.__barkday_bound = true;
+  bc.addEventListener('click', () => {
+    const evt = (typeof window.runCalculation === 'function')
+      ? window.runCalculation()
+      : (typeof window.calculate === 'function' ? window.calculate() : null);
+
+    if (window.BarkdayUI?.updateEventFromCalc) {
+      window.BarkdayUI.updateEventFromCalc(evt || null);
+      if (evt && evt.start) window.BarkdayUI.setButtonsEnabled(true);
+    }
+  });
 });
