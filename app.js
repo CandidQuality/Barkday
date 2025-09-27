@@ -68,6 +68,12 @@ const els = {
   heroLine: $('heroLine'), profileLine: $('profileLine'), breedNotes: $('breedNotes'), epi: $('epi')
 };
 
+// Gate Reset/Share before first calculation
+document.addEventListener('DOMContentLoaded', () => {
+  if (els.resetBtn){ els.resetBtn.disabled = true; els.resetBtn.setAttribute('aria-disabled','true'); }
+  if (els.shareBtn){ els.shareBtn.disabled = true; els.shareBtn.setAttribute('aria-disabled','true'); }
+}, { once:true });
+
 // ---------- Hero line ----------
 const poss = n => !n ? "your precious friend's" : (/\s*$/.test(n)&&/s$/i.test(n.trim())? n.trim()+"’" : n.trim()+"’s");
 function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${poss(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
@@ -324,6 +330,18 @@ els.adultWeight.addEventListener('input', ()=>{
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
 const daysBetween=(a,b)=>Math.floor((b-a)/(24*60*60*1000));
 
+// Inline status (used instead of alert() where possible)
+function showInline(msg, kind='warn'){
+  let slot = document.getElementById('inline-alert');
+  if (!slot) { console.warn('[Barkday]', msg); return; }
+  slot.textContent = msg;
+  slot.dataset.kind = kind; // style with [data-kind="warn|error|success|info"]
+}
+function clearInline(){
+  const slot = document.getElementById('inline-alert');
+  if (slot){ slot.textContent=''; slot.removeAttribute('data-kind'); }
+}
+
 // Weight → slope (5→~7.2)
 function slopeFromWeight(lb){
   const w=clamp(lb,5,200);
@@ -342,6 +360,8 @@ function humanEqYears(tY, lb, smooth){
   return upto2+(tY-2)*post;
 }
 function nextDogYearDate(dob, H, lb, smooth){
+  if (!(dob instanceof Date) || isNaN(dob)) return new Date();
+  if (!isFinite(H)) return new Date(dob.getTime() + 365.2425*24*60*60*1000);
   const target=Math.floor(H)+1, now=new Date();
   const yearsNow=daysBetween(dob, now)/365.2425;
   let lo=yearsNow, hi=yearsNow+5;
@@ -662,8 +682,12 @@ $('loadGifts').addEventListener('click', loadGifts);
 
 // ---------- Compute ----------
 function compute(){
-  const dobStr=els.dob.value; if(!dobStr){ alert('Please select a birthdate.'); return; }
-  const dob=new Date(dobStr), now=new Date(); if(isNaN(dob)||dob>now){ alert('Birthdate is invalid.'); return; }
+  clearInline();
+
+  const dobStr=els.dob.value;
+  if(!dobStr){ showInline('Please select a birthdate.', 'warn'); return; }
+  const dob=new Date(dobStr), now=new Date();
+  if(isNaN(dob)||dob>now){ showInline('Birthdate is invalid.', 'error'); return; }
   const lb=parseInt(els.adultWeight.value,10);
 
   // Chronological age
@@ -679,24 +703,23 @@ function compute(){
   const upcoming=Math.floor(H)+1;
   els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`;
   const nbd=nextDogYearDate(dob,H,lb,els.smooth.checked); els.nextBday.textContent=nbd.toDateString(); const dTo=daysBetween(now, nbd); els.nextBdayDelta.textContent = dTo>0? `${dTo} days from now` : '';
+  if (dTo === 0) { els.nextHeadline.textContent = `🎉 It’s Barkday today!`; }
 
-  
   // Profile/notes (use normalized breed for display + mapping)
   const breedTxtRaw = (els.breed.value||'').trim();
   const breedCanon  = normalizeBreed(breedTxtRaw) || breedTxtRaw;
   const mapped      = findGroupByBreedName(breedCanon);
   if (mapped) applyGroupSafe(mapped.name);
 
-// Always resolve to a concrete, non-empty group name
-const gname = setGroupFromName(els.breedGroup?.value);
-const gkey  = resolveGroupKey(gname);  // align to our GROUP_META/GROUPS keys
+  // Always resolve to a concrete, non-empty group name
+  const gname = setGroupFromName(els.breedGroup?.value);
+  const gkey  = resolveGroupKey(gname);  // align to our GROUP_META/GROUPS keys
 
-els.profileLine.textContent =
-  `Profile: ${name}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
+  els.profileLine.textContent =
+    `Profile: ${name}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
 
-els.breedNotes.innerHTML =
-  (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
-
+  els.breedNotes.innerHTML =
+    (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
 
   // Weight/group hint
   let warn=''; if(els.breedGroup.value.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight-based.';
@@ -709,6 +732,10 @@ els.breedNotes.innerHTML =
   // Epigenetic note (optional)
   els.epi.textContent = els.showEpi.checked ? 'Science curve: UCSD DNA-methylation (≥ 1 yr). Note: visualization context; math remains weight-based.' : '';
 
+  // Enable gated buttons now that we have a valid result
+  if (els.resetBtn){ els.resetBtn.disabled = false; els.resetBtn.setAttribute('aria-disabled','false'); }
+  if (els.shareBtn){ els.shareBtn.disabled = false; els.shareBtn.setAttribute('aria-disabled','false'); }
+
   // If gifts open, refilter
   if(els.gifts.children.length) loadGifts();
 }
@@ -719,7 +746,9 @@ window.runCalculation = function(){
   compute();
 
   // If compute() failed validation, keep buttons disabled
-  const ok = !!els.nextBday.textContent && els.nextBday.textContent !== '—';
+  const hasDate = !!els.nextBday.textContent && els.nextBday.textContent !== '—';
+  const hasHY   = !!els.humanYears.textContent && els.humanYears.textContent !== '—';
+  const ok = hasDate || hasHY; // accept either being present
   if (!ok) return null;
 
   // Build the event payload from current state
@@ -745,6 +774,10 @@ if (els.resetBtn) els.resetBtn.addEventListener('click', ()=>{
   document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
   els.sizeWarn.style.display='none'; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.epi.textContent='';
   renderHero(); updateBreedNotes();
+
+  // re-gate buttons
+  if (els.resetBtn){ els.resetBtn.disabled = true; els.resetBtn.setAttribute('aria-disabled','true'); }
+  if (els.shareBtn){ els.shareBtn.disabled = true; els.shareBtn.setAttribute('aria-disabled','true'); }
 });
 
 
@@ -770,7 +803,10 @@ if (els.shareBtn) els.shareBtn.addEventListener('click', ()=>{
    Calendar context helper (used by Button Bar adapter)
 -------------------- */
 function getContext(){
-  const start = new Date(els.nextBday.textContent);
+  const rawText = els.nextBday.textContent || '';
+  const start = !rawText || rawText==='—'
+    ? new Date()
+    : new Date(rawText.replace(/\s+/g,' ').trim());
   const end   = new Date(start.getTime() + 60*60*1000);
   const rawName = els.dogName.value || 'your dog';
   const name = rawName.trim() || 'your dog';
@@ -837,7 +873,10 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
 // QS hydrate (no auto compute)
 (function initFromQS(){
   const q=new URLSearchParams(location.search); if(!q.size) return;
-  els.dogName.value=q.get('n')||''; els.dob.value=q.get('d')||''; els.adultWeight.value=q.get('w')||55; els.adultWeightVal.textContent=els.adultWeight.value;
+  els.dogName.value=q.get('n')||'';
+  const qsDob = q.get('d') || '';
+  if (qsDob) els.dob.value=qsDob;
+  els.adultWeight.value=q.get('w')||55; els.adultWeightVal.textContent=els.adultWeight.value;
   els.chewer.value=q.get('c')||'Normal'; els.breedGroup.value=q.get('g')||'Working / Herding'; els.breed.value=q.get('r')||'';
   els.smooth.checked=q.get('s')==='1'; els.showEpi.checked=q.get('e')==='1';
   renderHero(); updateBreedNotes();
@@ -934,6 +973,7 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
         <button type="button" class="primary" id="btnCalc">Calculate</button>
         <button type="button" class="secondary" id="btnICS" disabled>Download .ics</button>
         <button type="button" class="secondary" id="btnGCal" disabled>Add to Google Calendar</button>
+        <div id="inline-alert" role="status" aria-live="polite" class="muted" style="margin-left:auto"></div>
       </div>
       <div id="selftestHost" style="display:none"></div>
     `;
@@ -958,23 +998,21 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
     const btnICS  = root.querySelector('#btnICS');
     const btnGCal = root.querySelector('#btnGCal');
 
-btnCalc.addEventListener('click', ()=>{
-  // Prefer your existing calc entry points if present
-  if (has('runCalculation')){
-    const evt = window.runCalculation();   // should return event object or falsy
-    NS.updateEventFromCalc(evt);
-    // belt-and-suspenders: enable if we got a sensible event
-    if (evt && evt.start) NS.setButtonsEnabled(true);
-  } else if (has('calculate')){
-    const evt = window.calculate();        // ditto
-    NS.updateEventFromCalc(evt);
-    // belt-and-suspenders: enable if we got a sensible event
-    if (evt && evt.start) NS.setButtonsEnabled(true);
-  } else {
-    // Fallback: let the app listen for this and respond
-    root.dispatchEvent(new CustomEvent('barkday:calc:request'));
-  }
-});
+    btnCalc.addEventListener('click', ()=>{
+      // Prefer your existing calc entry points if present
+      if (typeof window.runCalculation === 'function'){
+        const evt = window.runCalculation();   // should return event object or falsy
+        NS.updateEventFromCalc(evt);
+        if (evt && evt.start) NS.setButtonsEnabled(true);
+      } else if (typeof window.calculate === 'function'){
+        const evt = window.calculate();        // ditto
+        NS.updateEventFromCalc(evt);
+        if (evt && evt.start) NS.setButtonsEnabled(true);
+      } else {
+        // Fallback: let the app listen for this and respond
+        root.dispatchEvent(new CustomEvent('barkday:calc:request'));
+      }
+    });
 
     btnICS.addEventListener('click', ()=>{
       if (btnICS.disabled) return;
@@ -1032,20 +1070,37 @@ btnCalc.addEventListener('click', ()=>{
   }
 
   function initBtnBar(){
-  const mount = document.getElementById('btnBarMount');
-  if (!mount) return;
-  render(mount);
-  wire();
-  setEnabled(false);
-  maybeRunSelfTest();
-  NS.__btnbar_initialized = true;
-}
+    const mount = document.getElementById('btnBarMount');
+    if (!mount) return;
+    render(mount);
+    wire();
+    setEnabled(false);
+    maybeRunSelfTest();
+    NS.__btnbar_initialized = true;
+  }
 
-// Run now if DOM is already parsed; else wait.
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initBtnBar, { once: true });
-} else {
-  initBtnBar();
-}
+  // Run now if DOM is already parsed; else wait.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBtnBar, { once: true });
+  } else {
+    initBtnBar();
+  }
 
 })();
+
+// EXTRA SAFETY: bind #btnCalc directly if btnbar init was interfered with
+document.addEventListener('DOMContentLoaded', () => {
+  const bc = document.querySelector('#btnBarMount #btnCalc');
+  if (bc && !bc.__barkday_bound) {
+    bc.__barkday_bound = true;
+    bc.addEventListener('click', () => {
+      const evt = (typeof window.runCalculation === 'function')
+        ? window.runCalculation()
+        : (typeof window.calculate === 'function' ? window.calculate() : null);
+      if (window.BarkdayUI?.updateEventFromCalc) {
+        window.BarkdayUI.updateEventFromCalc(evt || null);
+        if (evt && evt.start) window.BarkdayUI.setButtonsEnabled(true);
+      }
+    });
+  }
+});
