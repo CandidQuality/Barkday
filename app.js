@@ -644,9 +644,9 @@ async function loadGifts(){
              : lb<90 ? 'large'
              : 'giant';
 
-// Explicit NaN guard: if not computed yet, set to null
-let dogYears = parseFloat(els.humanYears.textContent);
-if (isNaN(dogYears)) dogYears = null;
+// Parse dogYears safely (NaN if not computed yet)
+const dyParsed = parseFloat(els.humanYears.textContent);
+const dogYears = Number.isFinite(dyParsed) ? dyParsed : NaN;
 
 const chewer = (els.chewer.value||'').toLowerCase();
 
@@ -668,7 +668,7 @@ const chewer = (els.chewer.value||'').toLowerCase();
       // age (dog-years)
       const minDY = it.minDogYears ?? null, maxDY = it.maxDogYears ?? null;
       let ageOK = true;
-      if(!isNaN(dogYears) && !els.ignoreAge.checked){
+      if (Number.isFinite(dogYears) && !els.ignoreAge.checked){
         if(minDY!=null) ageOK = ageOK && dogYears >= Number(minDY);
         if(maxDY!=null) ageOK = ageOK && dogYears <= Number(maxDY);
         if(minDY==null && maxDY==null && it.tag){
@@ -693,7 +693,7 @@ const chewer = (els.chewer.value||'').toLowerCase();
       if(top.length>=12) break;
     }
 
-    const parts=[]; parts.push(`size=${bucket}`); parts.push(`chewer=${chewer||'normal'}`); if(!isNaN(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
+    const parts=[]; parts.push(`size=${bucket}`); parts.push(`chewer=${chewer||'normal'}`); if (Number.isFinite(dogYears)) parts.push(`age≈${dogYears.toFixed(2)} DY`);
     const ignored=[]; if(els.ignoreSize.checked) ignored.push('size'); if(els.ignoreChewer.checked) ignored.push('chewer'); if(els.ignoreAge.checked) ignored.push('age');
     els.giftMeta.textContent = `Showing ${top.length} picks • ${parts.join(' • ')}${ignored.length? ' • ignored: '+ignored.join(', '):''}`;
 
