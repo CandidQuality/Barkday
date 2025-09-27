@@ -252,7 +252,7 @@ function findGroupByBreedName(name){
   const typedLC = typed.toLowerCase();
   const canonicalLC = canonical.toLowerCase();
 
-  // NEW: require at least 3 a–z letters before doing fuzzy matching
+  // require ≥3 letters before any fuzzy matching
   const lettersOnly = canonicalLC.replace(/[^a-z]/g, '');
   const canFuzzy = lettersOnly.length >= 3;
 
@@ -262,7 +262,7 @@ function findGroupByBreedName(name){
     // Exact match (case-insensitive) always allowed
     if (ex.some(e => String(e).trim().toLowerCase() === canonicalLC)) return g;
 
-    if (!canFuzzy) continue; // guard against 1–2 letter noise
+    if (!canFuzzy) continue; // block 1–2 letter jumps
 
     // Prefix fuzzy (either side) to handle "Labrador" vs "Labrador Retriever"
     if (ex.some(e => {
