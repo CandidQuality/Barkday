@@ -983,19 +983,23 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
     const btnICS  = root.querySelector('#btnICS');
     const btnGCal = root.querySelector('#btnGCal');
 
-    btnCalc.addEventListener('click', ()=>{
-      // Prefer your existing calc entry points if present
-      if (has('runCalculation')){
-        const evt = window.runCalculation();   // should return event object or falsy
-        NS.updateEventFromCalc(evt);
-      } else if (has('calculate')){
-        const evt = window.calculate();        // ditto
-        NS.updateEventFromCalc(evt);
-      } else {
-        // Fallback: let the app listen for this and respond
-        root.dispatchEvent(new CustomEvent('barkday:calc:request'));
-      }
-    });
+btnCalc.addEventListener('click', ()=>{
+  // Prefer your existing calc entry points if present
+  if (has('runCalculation')){
+    const evt = window.runCalculation();   // should return event object or falsy
+    NS.updateEventFromCalc(evt);
+    // belt-and-suspenders: enable if we got a sensible event
+    if (evt && evt.start) NS.setButtonsEnabled(true);
+  } else if (has('calculate')){
+    const evt = window.calculate();        // ditto
+    NS.updateEventFromCalc(evt);
+    // belt-and-suspenders: enable if we got a sensible event
+    if (evt && evt.start) NS.setButtonsEnabled(true);
+  } else {
+    // Fallback: let the app listen for this and respond
+    root.dispatchEvent(new CustomEvent('barkday:calc:request'));
+  }
+});
 
     btnICS.addEventListener('click', ()=>{
       if (btnICS.disabled) return;
