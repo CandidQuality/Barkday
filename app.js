@@ -684,7 +684,7 @@ window.runCalculation = function(){
 
 // ---------- Buttons ----------
 
-$('resetBtn').addEventListener('click', ()=>{
+if (els.resetBtn) els.resetBtn.addEventListener('click', ()=>{
   els.dogName.value=''; els.dob.value=''; els.adultWeight.value=55; els.adultWeightVal.textContent='55'; els.chewer.value='Normal';
   els.showEpi.checked=false; els.smooth.checked=true; els.breed.value=''; els.breedGroup.value='Working / Herding';
   els.ignoreAge.checked=els.ignoreSize.checked=els.ignoreChewer.checked=false;
@@ -695,7 +695,8 @@ $('resetBtn').addEventListener('click', ()=>{
   renderHero(); updateBreedNotes();
 });
 
-$('shareBtn').addEventListener('click', ()=>{
+
+if (els.shareBtn) els.shareBtn.addEventListener('click', ()=>{
   const p = new URLSearchParams({
     n: els.dogName.value || '',
     d: els.dob.value || '',
@@ -711,6 +712,7 @@ $('shareBtn').addEventListener('click', ()=>{
     .then(()=>alert('Shareable link copied.'))
     .catch(()=>alert(url));
 });
+
 
 /* --------------------
    Calendar context helper (used by Button Bar adapter)
