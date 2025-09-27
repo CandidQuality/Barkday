@@ -975,11 +975,20 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
     });
   }
 
-  // Init on DOM ready
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const mount = document.getElementById('btnBarMount');
-    if (!mount) return;
-    render(mount); wire(); setEnabled(false); maybeRunSelfTest();
-    NS.__btnbar_initialized = true;
-  });
-})();
+  function initBtnBar(){
+  const mount = document.getElementById('btnBarMount');
+  if (!mount) return;
+  render(mount);
+  wire();
+  setEnabled(false);
+  maybeRunSelfTest();
+  NS.__btnbar_initialized = true;
+}
+
+// Run now if DOM is already parsed; else wait.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBtnBar, { once: true });
+} else {
+  initBtnBar();
+}
+
