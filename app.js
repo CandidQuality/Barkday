@@ -220,22 +220,20 @@ function normalizeBreed(input){
 
   // 1) Canonical keys (from alias file)
   for (const canon of Object.keys(BREED_ALIASES)){
-    if (canon.toLowerCase() === q) return canon;
+    if (canon.toLowerCase() === q) return canon; // exact canonical match
   }
-  // 2) Alias arrays
+
+  // 2) Alias arrays (case-insensitive exact match)
   for (const [canon, aliases] of Object.entries(BREED_ALIASES)){
-    if (Array.isArray(aliases) && aliases.some(a => String(a).toLowerCase() === q)) {
-      return canon;
+    if (Array.isArray(aliases) && aliases.some(a => String(a).trim().toLowerCase() === q)) {
+      return canon; // exact alias match
     }
   }
-  // 3) Reco-breed keys (built from reco-breed.json)
-  if (BREED_NAME_MAP[q]) return BREED_NAME_MAP[q];
-  for (const key in BREED_NAME_MAP){
-    if (key.startsWith(q)) return BREED_NAME_MAP[key];
-  }
-  // 4) No normalization
-  return input.trim();
+
+  // 3) No match: return null (NO fuzzy / prefix fallback)
+  return null;
 }
+
 
 // Kick off data loads
 loadBreedGroups();
@@ -246,55 +244,32 @@ loadAliases();
 function findGroupByBreedName(name){
   if (!name || !BREED_GROUPS.length) return null;
 
-  const typed = String(name).trim();
-  const canonical = normalizeBreed(typed) || typed;
+  // Only map if we can canonicalize via alias file
+  const canonical = normalizeBreed(name);
+  if (!canonical) return null;
 
-  const typedLC = typed.toLowerCase();
   const canonicalLC = canonical.toLowerCase();
 
-  // require ≥3 letters before any fuzzy matching
-  const lettersOnly = canonicalLC.replace(/[^a-z]/g, '');
-  const canFuzzy = lettersOnly.length >= 3;
-
+  // Exact example match only (no fuzzy)
   for (const g of BREED_GROUPS){
     const ex = Array.isArray(g.examples) ? g.examples : [];
-
-    // Exact match (case-insensitive) always allowed
-    if (ex.some(e => String(e).trim().toLowerCase() === canonicalLC)) return g;
-
-    if (!canFuzzy) continue; // block 1–2 letter jumps
-
-    // Prefix fuzzy (either side) to handle "Labrador" vs "Labrador Retriever"
-    if (ex.some(e => {
-      const elc = String(e).trim().toLowerCase();
-      return elc.startsWith(canonicalLC) || canonicalLC.startsWith(elc) ||
-             elc.startsWith(typedLC)     || typedLC.startsWith(elc);
-    })) return g;
-
-    // Inclusion fallback (multi-word variants)
-    if (ex.some(e => {
-      const elc = String(e).trim().toLowerCase();
-      return elc.includes(canonicalLC) || canonicalLC.includes(elc) ||
-             elc.includes(typedLC)     || typedLC.includes(elc);
-    })) return g;
+    if (ex.some(e => String(e).trim().toLowerCase() === canonicalLC)) {
+      return g;
+    }
   }
   return null;
 }
 
-
 // Fuzzy breed lookup from RECO_BREED (unchanged)
 function getBreedEntry(input){
   if (!input || !RECO_BREED) return null;
-  const qNorm = normalizeBreed(input); // use canonicalized value
-  const q = (qNorm || input).trim().toLowerCase();
 
-  // exact alias/case-insensitive via BREED_NAME_MAP
-  if (BREED_NAME_MAP[q]) return RECO_BREED[BREED_NAME_MAP[q]];
-  // prefix match
-  for (const key in BREED_NAME_MAP){
-    if (key.startsWith(q)) return RECO_BREED[BREED_NAME_MAP[key]];
-  }
-  return null;
+  // Only accept breeds that resolve via alias table
+  const canon = normalizeBreed(input);
+  if (!canon) return null;
+
+  // Exact key in RECO_BREED
+  return RECO_BREED[canon] || null;
 }
 
 // ---------- Breed notes + examples under selectors ----------
