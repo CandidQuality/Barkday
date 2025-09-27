@@ -98,13 +98,50 @@ const GROUPS = {
 };
 
 // --- Ensure the UI never holds a blank group name ---
-function applyGroupSafe(name){
-  const current = (els.breedGroup && els.breedGroup.value) || '';
-  const next = (name && String(name).trim()) || current || 'Mixed / Other';
-  if (els.breedGroup && els.breedGroup.value !== next) {
-    els.breedGroup.value = next;
+// --- Group select helpers (handles name mismatches like "Sporting / Gun Dogs") ---
+function normalizeKey(s){ return String(s||'').toLowerCase().replace(/[^a-z]/g,''); }
+
+// Map an arbitrary group name to one of our GROUP_META/GROUPS keys,
+// so tips and examples always show up.
+function resolveGroupKey(name){
+  const n = normalizeKey(name);
+  for (const k of Object.keys(GROUP_META)){
+    const nk = normalizeKey(k);
+    if (n === nk || n.includes(nk) || nk.includes(n)) return k;
   }
-  return next;
+  return 'Mixed / Other';
+}
+
+// Find the closest existing <option> in the breedGroup <select>
+// and set it. Returns the selected value.
+function setGroupFromName(name){
+  const sel = els.breedGroup;
+  if (!sel) return 'Mixed / Other';
+  const target = normalizeKey(name || sel.value || '');
+
+  // 1) exact value match
+  for (const opt of sel.options){
+    if (opt.value === name){ sel.value = opt.value; return sel.value; }
+  }
+  // 2) fuzzy (match by value or label)
+  for (const opt of sel.options){
+    const nv = normalizeKey(opt.value);
+    const nt = normalizeKey(opt.textContent);
+    if (nv === target || nt === target || nv.includes(target) || target.includes(nv) || nt.includes(target) || target.includes(nt)){
+      sel.value = opt.value;
+      return sel.value;
+    }
+  }
+  // 3) guaranteed non-empty fallback
+  sel.value = 'Mixed / Other';
+  return sel.value;
+}
+
+// --- Replace the original applyGroupSafe with this shim that uses the helpers above ---
+function applyGroupSafe(name){
+  // Try to set the dropdown to the closest option and return what we set.
+  const chosen = setGroupFromName(name);
+  return chosen || 'Mixed / Other';
 }
 
 // ---------- External data (breed groups + recos + aliases) ----------
@@ -259,28 +296,29 @@ function updateBreedNotes(){
   const breedTxt = normalizeBreed(breedTxtRaw) || breedTxtRaw;
   const lb = parseInt(els.adultWeight.value,10) || 55;
 
-  // Try to map the (normalized) breed to a group entry
+  // Try to map the (normalized) breed to a group entry from BREED_GROUPS
   const mapped = findGroupByBreedName(breedTxt);
 
   if (mapped) {
-    // Show examples for the mapped group and force a concrete group selection
+    // Show examples for the mapped group and force dropdown to the closest existing option
     els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
-    applyGroupSafe(mapped.name);
+    setGroupFromName(mapped.name);
   } else {
     // No mapped group: keep current (or default), show meta examples if available
-    const g = applyGroupSafe(els.breedGroup?.value);
-    const meta = GROUP_META[g];
+    const gSel = setGroupFromName(els.breedGroup?.value);
+    const meta = GROUP_META[resolveGroupKey(gSel)];
     els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
   }
 
   // Use the resolved, non-empty group name everywhere below
-  const gname = applyGroupSafe(els.breedGroup?.value);
+  const gname = setGroupFromName(els.breedGroup?.value);
+  const gkey  = resolveGroupKey(gname); // aligns to our GROUP_META/GROUPS keys
 
-   els.profileLine.textContent =
+  els.profileLine.textContent =
     `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${gname} • Weight: ${lb} lb`;
 
   els.breedNotes.innerHTML =
-    (GROUPS[gname]||[]).map(n=>`• ${n}`).join(' ');
+    (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
 }   // <— this is the end of the updateBreedNotes() function
 
 // Attach listeners so notes update live
@@ -396,6 +434,7 @@ function nearestAgeEntry(agesObj, dogYears){
 // ---------- Plan selection (breed-first → banded → none) ----------
 function planFor(group, dogYears){
   const band = bandForDY(Math.round(dogYears));
+  const gkey = resolveGroupKey(group);   // <-- use canonical key
 
   // 1) Breed-specific (fuzzy) → nearest age
   const breedInput = (els.breed.value || '').trim();
@@ -409,9 +448,9 @@ function planFor(group, dogYears){
   }
 
   // 2) Group-banded fallback
-  const byGroup = (RECO_BANDED && RECO_BANDED[group]) ? RECO_BANDED[group][band.key] : null;
+  const byGroup = (RECO_BANDED && RECO_BANDED[gkey]) ? RECO_BANDED[gkey][band.key] : null;
   if (byGroup){
-    console.debug('[Barkday] plan source: GROUP banded fallback', {group, band: band.key});
+    console.debug('[Barkday] plan source: GROUP banded fallback', {group: gkey, band: band.key});
     return { plan: byGroup, band };
   }
 
@@ -421,9 +460,11 @@ function planFor(group, dogYears){
 }
 
 function renderPlan(group, upcomingDY){
-  const box=$('nextPlan'); box.innerHTML='';
-  const {plan,band}=planFor(group, upcomingDY);
-  const head=$('nextPlanHeading'); head.textContent = `Next Birthday Plan — ${band?band.label:('turning '+upcomingDY)}`;
+  const box = $('nextPlan'); box.innerHTML = '';
+  const gkey = resolveGroupKey(group);
+  const { plan, band } = planFor(gkey, upcomingDY);
+  const head = $('nextPlanHeading');
+  head.textContent = `Next Birthday Plan — ${band ? band.label : ('turning ' + upcomingDY)}`;
   if(!plan){ box.innerHTML='<div class="muted">Recommendations coming soon.</div>'; return; }
   const order=[['training','Training & Enrichment'],['health','Health & Wellness'],['nutrition','Diet & Nutrition'],['exercise','Exercise Needs'],['bonding','Play & Bonding Ideas'],['gear','Helpful Gear (optional)']];
 
@@ -663,14 +704,15 @@ function compute(){
   const mapped      = findGroupByBreedName(breedCanon);
   if (mapped) applyGroupSafe(mapped.name);
 
-  // Always resolve to a concrete, non-empty group name
-  const gname = applyGroupSafe(els.breedGroup?.value);
+// Always resolve to a concrete, non-empty group name
+const gname = setGroupFromName(els.breedGroup?.value);
+const gkey  = resolveGroupKey(gname);  // align to our GROUP_META/GROUPS keys
 
-  els.profileLine.textContent =
-    `Profile: ${name}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
+els.profileLine.textContent =
+  `Profile: ${name}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
 
-  els.breedNotes.innerHTML =
-    (GROUPS[gname]||[]).map(n=>`• ${n}`).join(' ');
+els.breedNotes.innerHTML =
+  (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
 
 
   // Weight/group hint
@@ -755,7 +797,7 @@ function getContext(){
   const H = humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
   const upcoming = Math.floor(H) + 1;
 
-  const notes = planNotesText(els.breedGroup.value, upcoming);
+  const notes = planNotesText(resolveGroupKey(els.breedGroup.value), upcoming);
   const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
 
   return { start, end, name, upcoming, notes, title };
