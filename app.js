@@ -272,22 +272,25 @@ function getBreedEntry(input){
 // ---------- Breed notes + examples under selectors ----------
 function updateBreedNotes(){
   const name = els.dogName.value || 'your dog';
-  const breedTxtRaw = (els.breed.value||'').trim();
+  const breedTxtRaw = (els.breed.value || '').trim();
   const breedTxt = normalizeBreed(breedTxtRaw) || breedTxtRaw;
-  const lb = parseInt(els.adultWeight.value,10) || 55;
+  const lb = parseInt(els.adultWeight.value, 10) || 55;
 
   // Try to map the (normalized) breed to a group entry from BREED_GROUPS
   const mapped = findGroupByBreedName(breedTxt);
 
   if (mapped) {
-    // Show examples for the mapped group and force dropdown to the closest existing option
-    els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
+    // Show examples for the mapped group and force dropdown to the exact option
+    els.breedExamples.textContent =
+      `${mapped.name}: examples — ${(mapped.examples || []).join(', ')}`;
     setGroupFromName(mapped.name);
   } else {
     // No mapped group: keep current (or default), show meta examples if available
-    const gSel = els.breedGroup?.value || 'Mixed / Other'; // keep current selection as-is
-const meta = GROUP_META[resolveGroupKey(gSel)];
-els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
+    const gSel = els.breedGroup?.value || 'Mixed / Other';
+    const meta = GROUP_META[resolveGroupKey(gSel)];
+    els.breedExamples.textContent =
+      meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
+  }
 
   // Use the resolved, non-empty group name everywhere below
   const gname = setGroupFromName(els.breedGroup?.value);
@@ -297,8 +300,9 @@ els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.j
     `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${gname} • Weight: ${lb} lb`;
 
   els.breedNotes.innerHTML =
-    (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
-}   // <— this is the end of the updateBreedNotes() function
+    (GROUPS[gkey] || []).map(n => `• ${n}`).join(' ');
+}
+   // <— this is the end of the updateBreedNotes() function
 
 // Attach listeners so notes update live
 ['input','change'].forEach(ev=>{
