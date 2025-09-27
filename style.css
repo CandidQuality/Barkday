@@ -1,7 +1,7 @@
 :root{
   /* Button Bar tokens */
   --gap: .75rem;
-  --btn-min-h: 44px;
+  --btn-min-h: 48px;
   --pad: 12px;
   --radius: 12px;
 
@@ -138,8 +138,14 @@ input[type="range"]{width:100%}
 }
 
 .btn-bar button{
-  min-height:var(--btn-min-h);
-  padding:var(--pad);
+  appearance:none;               /* normalize UA styles */
+  font-family:inherit;           /* avoid fallback jumps */
+  font-size:16px;
+  line-height:1.2;
+  white-space:nowrap;            /* prevent wrap → height change */
+  min-height:var(--btn-min-h);   /* now 48px from the token */
+  padding-block:12px;            /* lock vertical padding */
+  padding-inline:var(--pad);
   border-radius:var(--radius);
   border:1px solid var(--border);
   font-weight:600;
