@@ -244,18 +244,25 @@ loadAliases();
 
 // Map typed breed → BREED_GROUPS entry (using normalizer + fuzzy)
 function findGroupByBreedName(name){
-  if(!name || !BREED_GROUPS.length) return null;
+  if (!name || !BREED_GROUPS.length) return null;
 
   const typed = String(name).trim();
   const canonical = normalizeBreed(typed) || typed;
+
   const typedLC = typed.toLowerCase();
   const canonicalLC = canonical.toLowerCase();
 
-  for (const g of BREED_GROUPS){
-    const ex = Array.isArray(g.examples)? g.examples : [];
+  // NEW: require at least 3 a–z letters before doing fuzzy matching
+  const lettersOnly = canonicalLC.replace(/[^a-z]/g, '');
+  const canFuzzy = lettersOnly.length >= 3;
 
-    // Exact match (case-insensitive)
+  for (const g of BREED_GROUPS){
+    const ex = Array.isArray(g.examples) ? g.examples : [];
+
+    // Exact match (case-insensitive) always allowed
     if (ex.some(e => String(e).trim().toLowerCase() === canonicalLC)) return g;
+
+    if (!canFuzzy) continue; // guard against 1–2 letter noise
 
     // Prefix fuzzy (either side) to handle "Labrador" vs "Labrador Retriever"
     if (ex.some(e => {
@@ -273,6 +280,7 @@ function findGroupByBreedName(name){
   }
   return null;
 }
+
 
 // Fuzzy breed lookup from RECO_BREED (unchanged)
 function getBreedEntry(input){
