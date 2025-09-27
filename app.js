@@ -233,20 +233,55 @@ function rebuildBreedIndex(){
   add("frenchie", "French Bulldog");
 }
 async function loadReco(){
-  try{
+  try {
     const [bandedRes, breedRes] = await Promise.allSettled([
-      fetch(RECO_BANDED_URL, { cache:'no-store' }),
-      fetch(RECO_BREED_URL,   { cache:'no-store' })
+      fetch(RECO_BANDED_URL, { cache: 'no-store' }),
+      fetch(RECO_BREED_URL,   { cache: 'no-store' })
     ]);
-    if (bandedRes.status === 'fulfilled') RECO_BANDED = await bandedRes.value.json();
-    if (breedRes.status  === 'fulfilled') {
-      const raw = await breedRes.value.json();
-      RECO_BREED = normalizeBreedReco(raw);
-      rebuildBreedIndex();
+
+    // Helper to parse JSON safely and log useful context
+    const safeJson = async (label, resSettle) => {
+      if (resSettle.status !== 'fulfilled') {
+        throw new Error(`${label}: fetch failed: ${resSettle.reason}`);
+      }
+      const res = resSettle.value;
+      if (!res.ok) {
+        const body = await res.text().catch(()=>'(no body)');
+        throw new Error(`${label}: HTTP ${res.status} ${res.statusText} — ${body.slice(0,200)}`);
+      }
+      const text = await res.text(); // parse manually so we can show context on error
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        // Try to echo a small window around the parse error if the engine provided a position
+        let extra = '';
+        const m = String(e.message).match(/position (\d+)/i);
+        if (m) {
+          const pos = Number(m[1]);
+          const from = Math.max(0, pos - 160);
+          const to = Math.min(text.length, pos + 160);
+          extra = `\nContext[${from}..${to}]:\n${text.slice(from, to)}`;
+        }
+        throw new Error(`${label}: JSON parse error: ${e.message}${extra}`);
+      }
+    };
+
+    // Parse
+    if (bandedRes.status === 'fulfilled') {
+      RECO_BANDED = await safeJson('reco-banded', bandedRes);
     }
+    if (breedRes.status === 'fulfilled') {
+      const raw = await safeJson('reco-breed', breedRes);
+      RECO_BREED = normalizeBreedReco(raw);
+    }
+
+    // Ensure defined objects so the app doesn’t crash elsewhere
     if (!RECO_BANDED) RECO_BANDED = {};
+    if (!RECO_BREED)  RECO_BREED  = null;
+
+    rebuildBreedIndex();
     console.debug('[Barkday] reco files loaded:', { banded: !!RECO_BANDED, breed: !!RECO_BREED });
-  }catch(e){
+  } catch (e) {
     RECO_BANDED = RECO_BANDED || {};
     RECO_BREED  = RECO_BREED  || null;
     rebuildBreedIndex();
