@@ -295,25 +295,30 @@ loadBreedGroups();
 loadReco();
 loadAliases();
 
-// Map typed breed → BREED_GROUPS entry (using normalizer + fuzzy)
+// Map typed breed → BREED_GROUPS entry.
+// Accepts exact canonical AND alias-normalized example names (e.g., "Yorkie" → "Yorkshire Terrier").
 function findGroupByBreedName(name){
   if (!name || !BREED_GROUPS.length) return null;
 
-  // Only map if we can canonicalize via alias file
+  // Canonicalize the user input (via aliases file)
   const canonical = normalizeBreed(name);
   if (!canonical) return null;
 
-  const canonicalLC = canonical.toLowerCase();
+  const canonicalLC = canonical.trim().toLowerCase();
 
-  // Exact example match only (no fuzzy)
   for (const g of BREED_GROUPS){
     const ex = Array.isArray(g.examples) ? g.examples : [];
-    if (ex.some(e => String(e).trim().toLowerCase() === canonicalLC)) {
-      return g;
+    for (const e of ex){
+      // Normalize each example through the same alias resolver
+      const eCanon = normalizeBreed(e) || String(e);
+      if (String(eCanon).trim().toLowerCase() === canonicalLC) {
+        return g; // minimal object with { name, examples, ... }
+      }
     }
   }
   return null;
 }
+
 
 // Fuzzy breed lookup from RECO_BREED (unchanged)
 function getBreedEntry(input){
