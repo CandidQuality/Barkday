@@ -1,0 +1,618 @@
+{
+  "_meta": {
+    "version": "v1",
+    "generated_by": "chatgpt",
+    "notes": "akc_group from heuristics+overrides; clusters from examples+heuristics; safe to refine."
+  },
+  "Airedale Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Akita": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "Alaskan Malamute": {
+    "akc_group": "Working",
+    "clusters": [
+      "nordic_spitz"
+    ]
+  },
+  "American Eskimo Dog": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "nordic_spitz"
+    ]
+  },
+  "American Staffordshire Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Anatolian Shepherd Dog": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection",
+      "herding_working"
+    ]
+  },
+  "Australian Cattle Dog": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Australian Shepherd": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Basenji": {
+    "akc_group": "Hound",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Basset Hound": {
+    "akc_group": "Hound",
+    "clusters": [
+      "scent_hound"
+    ]
+  },
+  "Beagle": {
+    "akc_group": "Hound",
+    "clusters": [
+      "scent_hound"
+    ]
+  },
+  "Belgian Malinois": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Belgian Sheepdog": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Belgian Tervuren": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Bernese Mountain Dog": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Bloodhound": {
+    "akc_group": "Hound",
+    "clusters": [
+      "scent_hound"
+    ]
+  },
+  "Border Collie": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Border Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Borzoi": {
+    "akc_group": "Hound",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Boston Terrier": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Boxer": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser"
+    ]
+  },
+  "Brittany": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Bull Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Bulldog": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "bulldog_molosser"
+    ]
+  },
+  "Bullmastiff": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser"
+    ]
+  },
+  "Cairn Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Cane Corso": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "Cavalier King Charles Spaniel": {
+    "akc_group": "Toy",
+    "clusters": [
+      "sporting_gundog",
+      "toy_companion"
+    ]
+  },
+  "Chesapeake Bay Retriever": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Chihuahua": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Chinese Shar-Pei": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Chow Chow": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "guardian_protection",
+      "nordic_spitz"
+    ]
+  },
+  "Clumber Spaniel": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Cocker Spaniel": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Collie": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Dachshund": {
+    "akc_group": "Hound",
+    "clusters": [
+      "scent_hound"
+    ]
+  },
+  "Doberman Pinscher": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "English Cocker Spaniel": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "English Setter": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "English Setter (Llewellin)": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "English Springer Spaniel": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Field Spaniel": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Flat-Coated Retriever": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "French Bulldog": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "bulldog_molosser"
+    ]
+  },
+  "German Shepherd": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "German Shorthaired Pointer": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "German Wirehaired Pointer": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Giant Schnauzer": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "Golden Retriever": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Gordon Setter": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Great Dane": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser"
+    ]
+  },
+  "Great Pyrenees": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "Great Swiss Mountain Dog": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Greyhound": {
+    "akc_group": "Hound",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Havanese": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Irish Setter": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Irish Wolfhound": {
+    "akc_group": "Hound",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Italian Greyhound": {
+    "akc_group": "Hound",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Jack Russell Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Keeshond": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "nordic_spitz"
+    ]
+  },
+  "Kuvasz": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "Labrador Retriever": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Lagotto Romagnolo": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Lhasa Apso": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Maltese": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Mastiff": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Miniature Pinscher": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Miniature Schnauzer": {
+    "akc_group": "Working",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Newfoundland": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Nova Scotia Duck Tolling Retriever": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Papillon": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Pembroke Welsh Corgi": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Pointer": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Pomeranian": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Poodle": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Pug": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Pyrenean Shepherd": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Rat Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Rhodesian Ridgeback": {
+    "akc_group": "Hound",
+    "clusters": [
+      "guardian_protection",
+      "sight_hound"
+    ]
+  },
+  "Rottweiler": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Saint Bernard": {
+    "akc_group": "Working",
+    "clusters": [
+      "bulldog_molosser",
+      "guardian_protection"
+    ]
+  },
+  "Saluki": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Samoyed": {
+    "akc_group": "Working",
+    "clusters": [
+      "nordic_spitz"
+    ]
+  },
+  "Scottish Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Shetland Sheepdog": {
+    "akc_group": "Herding",
+    "clusters": [
+      "herding_working"
+    ]
+  },
+  "Shiba Inu": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "nordic_spitz"
+    ]
+  },
+  "Shih Tzu": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Siberian Husky": {
+    "akc_group": "Working",
+    "clusters": [
+      "nordic_spitz"
+    ]
+  },
+  "Smooth Fox Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Spinone Italiano": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Staffordshire Bull Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Standard Poodle": {
+    "akc_group": "Non-Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Standard Schnauzer": {
+    "akc_group": "Working",
+    "clusters": [
+      "guardian_protection"
+    ]
+  },
+  "Toy Poodle": {
+    "akc_group": "Toy",
+    "clusters": [
+      "toy_companion"
+    ]
+  },
+  "Vizsla": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "Weimaraner": {
+    "akc_group": "Sporting",
+    "clusters": [
+      "sporting_gundog"
+    ]
+  },
+  "West Highland White Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Whippet": {
+    "akc_group": "Hound",
+    "clusters": [
+      "sight_hound"
+    ]
+  },
+  "Wire Fox Terrier": {
+    "akc_group": "Terrier",
+    "clusters": [
+      "terrier"
+    ]
+  },
+  "Yorkshire Terrier": {
+    "akc_group": "Toy",
+    "clusters": [
+      "terrier"
+    ]
+  }
+}
