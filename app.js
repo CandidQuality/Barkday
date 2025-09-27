@@ -1019,3 +1019,4 @@ if (document.readyState === 'loading') {
   initBtnBar();
 }
 
+})();
