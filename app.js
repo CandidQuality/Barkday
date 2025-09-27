@@ -97,6 +97,16 @@ const GROUPS = {
   'Mixed / Other':['Profile by observed drive (retrieve, scent, herd).']
 };
 
+// --- Ensure the UI never holds a blank group name ---
+function applyGroupSafe(name){
+  const current = (els.breedGroup && els.breedGroup.value) || '';
+  const next = (name && String(name).trim()) || current || 'Mixed / Other';
+  if (els.breedGroup && els.breedGroup.value !== next) {
+    els.breedGroup.value = next;
+  }
+  return next;
+}
+
 // ---------- External data (breed groups + recos + aliases) ----------
 let BREED_GROUPS = [];       // array with id/name/examples/etc.
 let RECO_BANDED = null;      // banded recommendations by group
@@ -247,25 +257,33 @@ function updateBreedNotes(){
   const name = els.dogName.value || 'your dog';
   const breedTxtRaw = (els.breed.value||'').trim();
   const breedTxt = normalizeBreed(breedTxtRaw) || breedTxtRaw;
-  const group = els.breedGroup.value;
   const lb = parseInt(els.adultWeight.value,10) || 55;
 
-  // Show examples from external map if we recognize the (normalized) breed; else fallback meta
+  // Try to map the (normalized) breed to a group entry
   const mapped = findGroupByBreedName(breedTxt);
+
   if (mapped) {
+    // Show examples for the mapped group and force a concrete group selection
     els.breedExamples.textContent = `${mapped.name}: examples — ${(mapped.examples||[]).join(', ')}`;
-    // Auto-set dropdown to mapped if user hasn't manually overridden
-    if (group !== mapped.name) {
-      els.breedGroup.value = mapped.name;
-    }
+    applyGroupSafe(mapped.name);
   } else {
-    const meta = GROUP_META[group];
+    // No mapped group: keep current (or default), show meta examples if available
+    const g = applyGroupSafe(els.breedGroup?.value);
+    const meta = GROUP_META[g];
     els.breedExamples.textContent = meta ? `${meta.desc} Examples: ${meta.examples.join(', ')}` : '';
   }
 
-  els.profileLine.textContent = `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${els.breedGroup.value} • Weight: ${lb} lb`;
-  els.breedNotes.innerHTML = (GROUPS[els.breedGroup.value]||[]).map(n=>`• ${n}`).join(' ');
-}
+  // Use the resolved, non-empty group name everywhere below
+  const gname = applyGroupSafe(els.breedGroup?.value);
+
+   els.profileLine.textContent =
+    `Profile: ${name}${breedTxt ? ' — ' + breedTxt : ''} • Group: ${gname} • Weight: ${lb} lb`;
+
+  els.breedNotes.innerHTML =
+    (GROUPS[gname]||[]).map(n=>`• ${n}`).join(' ');
+}   // <— this is the end of the updateBreedNotes() function
+
+// Attach listeners so notes update live
 ['input','change'].forEach(ev=>{
   els.breed.addEventListener(ev, updateBreedNotes);
   els.breedGroup.addEventListener(ev, updateBreedNotes);
@@ -279,6 +297,7 @@ els.adultWeight.addEventListener('input', ()=>{
   const v=Math.round(parseInt(els.adultWeight.value,10)/5)*5;
   els.adultWeight.value=v; els.adultWeightVal.textContent=v;
 });
+
 
 // ---------- Math utils ----------
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
@@ -637,14 +656,22 @@ function compute(){
   els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`;
   const nbd=nextDogYearDate(dob,H,lb,els.smooth.checked); els.nextBday.textContent=nbd.toDateString(); const dTo=daysBetween(now, nbd); els.nextBdayDelta.textContent = dTo>0? `${dTo} days from now` : '';
 
+  
   // Profile/notes (use normalized breed for display + mapping)
-  const breedTxtRaw=(els.breed.value||'').trim();
-  const breedCanon = normalizeBreed(breedTxtRaw) || breedTxtRaw;
-  const mapped = findGroupByBreedName(breedCanon);
-  if (mapped) els.breedGroup.value = mapped.name;
+  const breedTxtRaw = (els.breed.value||'').trim();
+  const breedCanon  = normalizeBreed(breedTxtRaw) || breedTxtRaw;
+  const mapped      = findGroupByBreedName(breedCanon);
+  if (mapped) applyGroupSafe(mapped.name);
 
-  els.profileLine.textContent = `Profile: ${name}${breedCanon?' — '+breedCanon:''} • Group: ${els.breedGroup.value} • Weight: ${lb} lb`;
-  els.breedNotes.innerHTML = (GROUPS[els.breedGroup.value]||[]).map(n=>`• ${n}`).join(' ');
+  // Always resolve to a concrete, non-empty group name
+  const gname = applyGroupSafe(els.breedGroup?.value);
+
+  els.profileLine.textContent =
+    `Profile: ${name}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
+
+  els.breedNotes.innerHTML =
+    (GROUPS[gname]||[]).map(n=>`• ${n}`).join(' ');
+
 
   // Weight/group hint
   let warn=''; if(els.breedGroup.value.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight-based.';
