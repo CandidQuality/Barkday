@@ -122,53 +122,59 @@ function resolveGroupKey(name){
 // Find the closest existing <option> in the breedGroup <select> and set it.
 // Handles ordering differences (e.g., "Working / Herding" vs "Herding / Working")
 // and minor label variants (e.g., "Sporting / Gun Dogs" vs "Sporting").
+// Find and set the closest option in <select id="breedGroup">, without event loops.
+// Dispatches 'change' ONLY if the value actually changed.
 function setGroupFromName(name){
   const sel = els.breedGroup;
   if (!sel) return 'Mixed / Other';
   if (!name) return sel.value || 'Mixed / Other';
 
-  // normalizers
   const lettersOnly = s => String(s||'').toLowerCase().replace(/[^a-z]/g,'');
   const tokenBag    = s => (String(s||'').toLowerCase().match(/[a-z]+/g)||[]).sort().join('');
-
-  // soft synonyms to improve matches
-  const canonize = s => String(s||'')
+  const canonize    = s => String(s||'')
     .replace(/gun\s*dogs?/ig, 'gundogs')
     .replace(/guardian(?:s)?/ig, 'guardian')
     .replace(/working\s*\/\s*herding|herding\s*\/\s*working/ig, 'working / herding')
     .trim();
 
-  const targetRaw = canonize(name);
+  const targetRaw  = canonize(name);
   const targetNorm = lettersOnly(targetRaw);
   const targetBag  = tokenBag(targetRaw);
 
+  // helper: set value only if different (prevents change-loop)
+  const setIfChanged = (val) => {
+    if (sel.value !== val) {
+      sel.value = val;
+      sel.dispatchEvent(new Event('change')); // notify dependents once
+    }
+    return sel.value;
+  };
+
   // 1) exact match on option value
   for (const opt of sel.options){
-    if (lettersOnly(opt.value) === targetNorm) { sel.value = opt.value; sel.dispatchEvent(new Event('change')); return sel.value; }
+    if (lettersOnly(opt.value) === targetNorm) return setIfChanged(opt.value);
   }
   // 2) exact match on visible text
   for (const opt of sel.options){
-    if (lettersOnly(opt.textContent) === targetNorm) { sel.value = opt.value; sel.dispatchEvent(new Event('change')); return sel.value; }
+    if (lettersOnly(opt.textContent) === targetNorm) return setIfChanged(opt.value);
   }
   // 3) bag-of-words equality (order-insensitive)
   for (const opt of sel.options){
     if (tokenBag(opt.textContent) === targetBag || tokenBag(opt.value) === targetBag) {
-      sel.value = opt.value; sel.dispatchEvent(new Event('change')); return sel.value;
+      return setIfChanged(opt.value);
     }
   }
-  // 4) partial inclusion either way (e.g., "Sporting / Gun Dogs" ↔ "Sporting")
+  // 4) partial inclusion either way
   for (const opt of sel.options){
     const ov = lettersOnly(opt.value), ot = lettersOnly(opt.textContent);
     if (ov.includes(targetNorm) || ot.includes(targetNorm) || targetNorm.includes(ov) || targetNorm.includes(ot)) {
-      sel.value = opt.value; sel.dispatchEvent(new Event('change')); return sel.value;
+      return setIfChanged(opt.value);
     }
   }
 
   // No change
   return sel.value || 'Mixed / Other';
 }
-
-
 
 // --- Replace the original applyGroupSafe with this shim that uses the helpers above ---
 function applyGroupSafe(name){
