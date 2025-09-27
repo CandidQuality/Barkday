@@ -1,7 +1,7 @@
 [
   {
-    "id": "herding_working",
-    "name": "Herding / Working Drive",
+    "id": "working_herding",
+    "name": "Working / Herding",
     "examples": [
       "Border Collie",
       "Australian Shepherd",
@@ -11,13 +11,13 @@
     ],
     "core_traits": [
       "Needs purposeful work and mental challenges",
-      "Learns fast; can become frustrated if under‑stimulated",
+      "Learns fast; can become frustrated if under-stimulated",
       "High handler focus with strong herding/working drives"
     ],
     "enrichment": [
       "Daily puzzle or scent game (10–15 min)",
       "Trick chaining (e.g., spin → down → touch)",
-      "Targeting & directional cues (left/right) for fetch or herding‑style games",
+      "Targeting & directional cues (left/right) for fetch or herding-style games",
       "Agility/obedience drills 2–3×/week"
     ],
     "owner_tips": [
@@ -27,7 +27,7 @@
     ],
     "notification_short": "Plan a job: quick scent game or trick chain to scratch that working itch.",
     "cautions": [
-      "Watch for over‑arousal; add decompression walks",
+      "Watch for over-arousal; add decompression walks",
       "Give structured outlets or they’ll invent their own ‘work’ (herding kids, chasing bikes)"
     ],
     "gift_tags": [
@@ -54,14 +54,14 @@
       "Benefit from neutral exposures vs. forced friendliness"
     ],
     "enrichment": [
-      "Calm place training with real‑life distractions",
+      "Calm place training with real-life distractions",
       "Impulse control at doors/greetings",
       "Scent searches around home/yard for ‘patrol’ outlet"
     ],
     "owner_tips": [
-      "Prioritize neutrality: reward calm, not over‑excitement",
+      "Prioritize neutrality: reward calm, not over-excitement",
       "Introduce visitors with structure and space",
-      "Avoid repetitive high‑arousal tug without rules"
+      "Avoid repetitive high-arousal tug without rules"
     ],
     "notification_short": "Reinforce calm neutrality: place time + structured greetings today.",
     "cautions": [
@@ -86,8 +86,8 @@
       "Vizsla"
     ],
     "core_traits": [
-      "High stamina; people‑oriented and eager to please",
-      "Often water‑loving and fetch‑motivated"
+      "High stamina; people-oriented and eager to please",
+      "Often water-loving and fetch-motivated"
     ],
     "enrichment": [
       "Retrieve games (land/water)",
@@ -101,8 +101,8 @@
     ],
     "notification_short": "Prep a bumper hide or water fetch—work that retrieve brain.",
     "cautions": [
-      "Watch joints with repetitive high‑impact fetch",
-      "Prevent resource guarding around high‑value bumpers/ducks"
+      "Watch joints with repetitive high-impact fetch",
+      "Prevent resource guarding around high-value bumpers/ducks"
     ],
     "gift_tags": [
       "fetch",
@@ -122,11 +122,11 @@
       "Foxhound"
     ],
     "core_traits": [
-      "Nose‑driven; persistence in tracking",
+      "Nose-driven; persistence in tracking",
       "Can be independent with selective recall"
     ],
     "enrichment": [
-      "Sniffari walks (dog‑led pace)",
+      "Sniffari walks (dog-led pace)",
       "Food scatter hunts and scent trails",
       "Intro nosework boxes (1–2 sessions/week)"
     ],
@@ -135,7 +135,7 @@
       "Make recall a game with jackpots",
       "Let them ‘clock in’ with daily sniff time"
     ],
-    "notification_short": "Lay a 5‑minute scent trail—let the nose do the work!",
+    "notification_short": "Lay a 5-minute scent trail—let the nose do the work!",
     "cautions": [
       "Strong scent interests can override cues; manage environment",
       "Prevent frustration barking with foraging outlets"
@@ -170,9 +170,9 @@
       "Recall practice in fenced areas",
       "Monitor thin skin; provide padded bedding"
     ],
-    "notification_short": "Plan a warm‑up + short sprint set; end with a calm cool‑down.",
+    "notification_short": "Plan a warm-up + short sprint set; end with a calm cool-down.",
     "cautions": [
-      "High chase drive—avoid unfenced off‑leash",
+      "High chase drive—avoid unfenced off-leash",
       "Watch for injuries from sudden turns on slick surfaces"
     ],
     "gift_tags": [
@@ -193,7 +193,7 @@
       "Scottish Terrier"
     ],
     "core_traits": [
-      "Tenacious problem‑solvers; love to dig and tug",
+      "Tenacious problem-solvers; love to dig and tug",
       "High prey/varmint drive"
     ],
     "enrichment": [
@@ -206,10 +206,10 @@
       "Keep tug controlled; reinforce outs",
       "Short, exciting training sprints"
     ],
-    "notification_short": "Set up a dig box or tug‑with‑rules session to burn that terrier drive.",
+    "notification_short": "Set up a dig box or tug-with-rules session to burn that terrier drive.",
     "cautions": [
       "Small prey triggers—use management",
-      "Prevent fence‑fighting; provide visual barriers if needed"
+      "Prevent fence-fighting; provide visual barriers if needed"
     ],
     "gift_tags": [
       "tug",
@@ -228,7 +228,7 @@
       "Shih Tzu"
     ],
     "core_traits": [
-      "Bonded to people; can get over‑carried (literally)",
+      "Bonded to people; can get over-carried (literally)",
       "Confidence building helps reduce reactivity"
     ],
     "enrichment": [
@@ -241,7 +241,7 @@
       "Use tiny treats; keep sessions playful",
       "Dental care early and often"
     ],
-    "notification_short": "Practice two tiny tricks and a lick‑mat wind‑down today.",
+    "notification_short": "Practice two tiny tricks and a lick-mat wind-down today.",
     "cautions": [
       "Fragile joints—avoid high jumps",
       "Watch for resource guarding in laps/beds"
@@ -298,10 +298,10 @@
     ],
     "core_traits": [
       "Strong bodies; some brachycephalic breathing limits",
-      "Often affectionate and people‑loving"
+      "Often affectionate and people-loving"
     ],
     "enrichment": [
-      "Low‑impact training and snuffle work",
+      "Low-impact training and snuffle work",
       "Short, fun sessions with frequent breaks",
       "Cooperative care (nail/ear/teeth)"
     ],
@@ -310,7 +310,7 @@
       "Focus on calm leash skills & manners",
       "Keep sessions brief; watch for overheating"
     ],
-    "notification_short": "Keep it low‑impact today: snuffle work + a short, happy training burst.",
+    "notification_short": "Keep it low-impact today: snuffle work + a short, happy training burst.",
     "cautions": [
       "Overheating risk; monitor breathing",
       "Joint/skin care can need extra attention"
