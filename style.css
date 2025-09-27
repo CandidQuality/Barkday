@@ -1,4 +1,16 @@
 :root{
+  /* Button Bar tokens */
+  --gap: .75rem;
+  --btn-min-h: 44px;
+  --pad: 12px;
+  --radius: 12px;
+
+  --btn-primary-bg: #1f6feb;
+  --btn-primary-fg: #fff;
+  --btn-secondary-bg: #f3f4f6;
+  --btn-secondary-fg: #111827;
+  --btn-disabled-bg: #e5e7eb;
+  --btn-disabled-fg: #9ca3af;
   --bg:#0b0c10; --card:#13151a; --text:#e8ecf1; --muted:#9aa4af; --brand:#4aa3ff; --accent:#6ae3b2; --danger:#ff6b6b; --border:#232734;
   --shadow:0 6px 24px rgba(0,0,0,.35);
 }
@@ -33,7 +45,8 @@ input[type="range"]{width:100%}
 .pill h3{margin:0 0 6px;font-size:15px;color:var(--muted);font-weight:600}
 .big{font-size:24px;font-weight:800}
 .headline{font-size:26px;font-weight:900;line-height:1.15;margin:0 0 4px}
-.primary{outline:2px solid var(--brand);}
+/* Limit the primary outline to KPI pills only */
+.pill.primary{ outline:2px solid var(--brand); }
 .btn{appearance:none;border:1px solid var(--border);background:var(--brand);color:white;padding:10px 14px;border-radius:12px;cursor:pointer}
 .btn.secondary{background:transparent;color:var(--text)}
 
@@ -42,6 +55,12 @@ input[type="range"]{width:100%}
 .gift h4{margin:0 0 6px}
 .link{background:none;border:0;color:var(--brand);cursor:pointer;text-decoration:underline;padding:0}
 .hero{margin:4px 0 0 60px}
+
+/* Adjust hero spacing on small screens */
+@media (max-width:600px){
+  .hero{ margin:8px 0 0 0 }
+}
+
 .warn{background:rgba(255,107,107,.1);border:1px solid var(--danger);color:var(--danger);padding:8px 10px;border-radius:10px;margin:8px 0}
 
 /* Plan lanes */
@@ -61,13 +80,7 @@ input[type="range"]{width:100%}
 }
 .splash.hide{ opacity:0; pointer-events:none }
 .splash .logoWrap{ display:grid; place-items:center; border-radius:20px; filter:drop-shadow(0 6px 16px rgba(0,0,0,.45)); }
-.splash .logoWrap img {
-  width: auto;
-  height: auto;
-  max-width: 60vw;   /* scale relative to viewport width */
-  max-height: 60vh;  /* scale relative to viewport height */
-  image-rendering: auto;
-}
+
 /* Support both class and id for the splash container */
 #splash,
 .splash {
@@ -113,4 +126,70 @@ input[type="range"]{width:100%}
   .splash {
     transition: none !important;
   }
+}
+/* === Barkday Button Bar v1 === */
+.btnbar-mount{ margin-top:12px }
+
+.btn-bar{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+  gap:var(--gap);
+  align-items:stretch;
+}
+
+.btn-bar button{
+  min-height:var(--btn-min-h);
+  padding:var(--pad);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:transform .02s ease, opacity .15s ease;
+}
+
+.btn-bar button:active{ transform:translateY(1px) }
+
+.btn-bar button.primary{
+  background:var(--btn-primary-bg);
+  color:var(--btn-primary-fg);
+  border-color:#1c62d4;
+}
+
+.btn-bar button.secondary{
+  background:var(--btn-secondary-bg);
+  color:var(--btn-secondary-fg);
+}
+
+/* Disabled state for bar buttons only */
+.btn-bar button:disabled{
+  background:var(--btn-disabled-bg) !important;
+  color:var(--btn-disabled-fg) !important;
+  cursor:not-allowed;
+  opacity:.85;
+  box-shadow:none;
+}
+
+/* Stack vertically on phones */
+@media (max-width:480px){
+  .btn-bar{ grid-template-columns:1fr }
+}
+
+/* Optional: self-test panel styling */
+.selftest{
+  margin-top:1rem;
+  padding:1rem;
+  border:1px dashed #d1d5db;
+  border-radius:10px;
+  background:#fafafa;
+}
+.selftest h4{ margin:0 0 .5rem 0 }
+.selftest .row{ display:flex; align-items:center; gap:.5rem; margin:.25rem 0 }
+.selftest .ok{ color:#065f46; font-weight:700 }
+.selftest .fail{ color:#991b1b; font-weight:700 }
+
+/* Optional: Improve accessibility for any disabled button */
+button[disabled], .btn[disabled]{
+  cursor:not-allowed;
+  opacity:.7;
 }
