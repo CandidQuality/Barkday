@@ -287,5 +287,5 @@ html, body{ overflow-x:hidden }
   background:var(--btn-primary-bg);color:var(--btn-primary-fg);
   border:1px solid #1c62d4;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer
 }
+/* Lock page scroll when modal is open */
 .body-lock{overflow:hidden}
-
