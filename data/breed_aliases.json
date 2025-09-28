@@ -23,12 +23,17 @@
     "chesapeake",
     "chessie"
   ],
-  "Poodle": [
-    "mini poodle",
-    "poodle",
-    "standard poodle",
-    "toy poodle"
-  ],
+  "Standard Poodle": [
+  "standard poodle",
+  "poodle standard",
+  "standard-size poodle"
+],
+"Toy Poodle": [
+  "toy poodle",
+  "poodle toy",
+  "mini poodle",
+  "toy-size poodle"
+],
   "German Shepherd": [
     "german shepherd",
     "german shepherd dog",
