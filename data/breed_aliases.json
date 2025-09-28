@@ -332,5 +332,37 @@
   ],
   "Pug": [
     "pug"
+  ],
+  "English Setter (Llewellin)": [
+    "llewellin",
+    "llewellin setter",
+    "english setter llewellin"
+  ],
+  "Great Swiss Mountain Dog": [
+    "swissy",
+    "gsmd",
+    "greater swiss mountain dog",
+    "great swiss"
+  ],
+  "Irish Wolfhound": [
+    "wolfhound",
+    "irish wolf hound"
+  ],
+  "Kuvasz": [
+    "kuvaszok"
+  ],
+  "Shiba Inu": [
+    "shiba",
+    "shibe"
+  ],
+  "Standard Poodle": [
+    "poodle standard",
+    "standard poodle",
+    "standard-size poodle"
+  ],
+  "Toy Poodle": [
+    "poodle toy",
+    "toy poodle",
+    "toy-size poodle"
   ]
 }
