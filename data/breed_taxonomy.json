@@ -580,24 +580,24 @@
       "sporting_gundog"
     ]
   },
-  "West Highland White Terrier": {
-  "akc_group": "Terrier",
-  "clusters": ["terrier"]
-},
-"Whippet": {
-  "akc_group": "Hound",
-  "clusters": ["sight_hound"]
-},
-"Wire Fox Terrier": {
-  "akc_group": "Terrier",
-  "clusters": ["terrier"]
-},
-"Yorkshire Terrier": {
-  "akc_group": "Toy",
-  "clusters": ["terrier"]
-},
-"Xoloitzcuintli": {
-  "akc_group": "Non-Sporting",
-  "clusters": ["toy_companion"]
-}
+   "West Highland White Terrier": {
+    "akc_group": "Terrier",
+    "clusters": ["terrier"]
+  },
+  "Whippet": {
+    "akc_group": "Hound",
+    "clusters": ["sight_hound"]
+  },
+  "Wire Fox Terrier": {
+    "akc_group": "Terrier",
+    "clusters": ["terrier"]
+  },
+  "Yorkshire Terrier": {
+    "akc_group": "Toy",
+    "clusters": ["terrier"]
+  },
+  "Xoloitzcuintli": {
+    "akc_group": "Non-Sporting",
+    "clusters": ["toy_companion"]
+  }
 }
