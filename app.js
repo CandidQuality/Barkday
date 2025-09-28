@@ -7,7 +7,7 @@ const LOGO_HEADER_SRC = "barkday-logo2.png?v=2";  // smaller header mark
 
 // Data sources
 const GIFT_FEED_URL     = "https://raw.githubusercontent.com/CandidQuality/dog-birthday-feed/main/dog-gifts.json";
-const RECO_BANDED_URL   = "data/reco-banded.json?v=3";
+const RECO_BANDED_URL   = "data/reco-banded.json?v=4";
 const RECO_BREED_URL    = "data/reco-breed.json?v=3";
 const BREED_GROUPS_URL  = "data/breed_groups.json?v=2";
 const BREED_ALIASES_URL = "data/breed_aliases.json?v=1"; // NEW: external aliases
