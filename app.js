@@ -145,6 +145,178 @@ function scrollResultsIntoView(){
   setTimeout(()=> anchor.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
 }
 
+// ===== Round 3: Saved Results (localStorage) =====
+const BD_STORE_KEY = 'barkday.runs.v1'; // same key you added earlier
+
+function bdStoreList(){ try{ return JSON.parse(localStorage.getItem(BD_STORE_KEY)||'[]'); }catch{ return []; } }
+function bdStoreSave(list){ localStorage.setItem(BD_STORE_KEY, JSON.stringify(list)); }
+
+function currentRunPayload(){
+  const { start, end, title, notes } = getContext(); // existing helper
+  return {
+    ts: Date.now(),
+    dog: (els.dogName.value||'').trim(),
+    dob: els.dob.value || '',
+    weight: parseInt(els.adultWeight.value,10)||55,
+    chewer: els.chewer.value,
+    breed: (els.breed.value||'').trim(),
+    group: els.breedGroup.value,
+    smooth: !!els.smooth.checked,
+    epi: !!els.showEpi.checked,
+    kpi: {
+      nextHeadline: els.nextHeadline.textContent,
+      nextDate: els.nextBday.textContent,
+      hy: els.humanYears.textContent,
+      dogAge: els.dogAge.textContent
+    },
+    event: { start, end, title, notes }
+  };
+}
+
+function bdSaveRun(){
+  const list = bdStoreList();
+  list.unshift( currentRunPayload() );
+  // keep latest 50
+  if (list.length > 50) list.length = 50;
+  bdStoreSave(list);
+  bdToast('Saved to this device'); // Round 2 toast
+}
+
+function hydrateRun(run, doCompute=false){
+  if (!run) return;
+  els.dogName.value = run.dog || '';
+  els.dob.value = run.dob || '';
+  els.adultWeight.value = run.weight || 55;
+  els.adultWeightVal.textContent = String(els.adultWeight.value);
+  els.chewer.value = run.chewer || 'Normal';
+  els.breed.value = run.breed || '';
+  els.breedGroup.value = run.group || 'Working / Herding';
+  els.smooth.checked = !!run.smooth;
+  els.showEpi.checked = !!run.epi;
+  renderHero(); updateBreedNotes();
+  if (doCompute) compute();
+}
+
+// Drawer UI
+const BarkdaySaved = (() => {
+  const drawer = () => document.getElementById('bdSaved');
+  const panel  = () => drawer()?.querySelector('.bd-panel');
+  const bodyEl = () => document.getElementById('bdSavedBody');
+
+  function open(){
+    const d = drawer(); if (!d) return;
+    render();
+    d.classList.add('is-open'); document.body.classList.add('body-lock');
+    // backdrop + buttons
+    d.addEventListener('click', onBackdrop);
+    document.addEventListener('keydown', onEsc);
+    panel()?.focus();
+  }
+  function close(){
+    const d = drawer(); if (!d) return;
+    d.classList.remove('is-open'); document.body.classList.remove('body-lock');
+    d.removeEventListener('click', onBackdrop);
+    document.removeEventListener('keydown', onEsc);
+  }
+  function onBackdrop(e){ if (e.target?.dataset?.close === 'drawer') close(); }
+  function onEsc(e){ if (e.key === 'Escape') close(); }
+
+  function render(){
+    const host = bodyEl(); if (!host) return;
+    const items = bdStoreList();
+    if (!items.length){
+      host.innerHTML = `<div class="muted">No saved results yet. Run Calculate, then click “Save result”.</div>`;
+      return;
+    }
+    host.innerHTML = items.map((r, i) => {
+      const date = new Date(r.ts).toLocaleString();
+      const dog  = r.dog || 'Your dog';
+      const hy   = r.kpi?.hy || '—';
+      const next = r.kpi?.nextDate || '—';
+      const w    = r.weight ? `${r.weight} lb` : '';
+      const grp  = r.group || '';
+      return `
+        <div class="bd-card" data-i="${i}">
+          <h4>${dog}</h4>
+          <div class="muted">${grp}${grp&&w?' · ':''}${w} · Saved ${date}</div>
+          <div class="muted" style="margin-top:4px">Next: ${r.kpi?.nextHeadline || '—'} (${next}) · Human-years: ${hy}</div>
+          <div class="bd-row">
+            <button type="button" class="btn" data-act="load">Load</button>
+            <button type="button" class="ghost" data-act="compute">Load & Compute</button>
+            <button type="button" class="ghost" data-act="share">Copy Share Link</button>
+            <button type="button" class="ghost" data-act="delete">Delete</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function onListClick(e){
+    const btn = e.target.closest('[data-act]'); if (!btn) return;
+    const card = e.target.closest('.bd-card'); if (!card) return;
+    const idx = parseInt(card.dataset.i,10);
+    const items = bdStoreList();
+    const run = items[idx];
+
+    switch(btn.dataset.act){
+      case 'load':
+        hydrateRun(run, false);
+        bdToast('Loaded inputs (not computed)');
+        break;
+      case 'compute':
+        hydrateRun(run, true);
+        bdToast('Loaded and computed');
+        break;
+      case 'share': {
+        // Rebuild a share URL from inputs
+        const p = new URLSearchParams({
+          n: els.dogName.value || '',
+          d: els.dob.value || '',
+          w: els.adultWeight.value,
+          c: els.chewer.value,
+          g: els.breedGroup.value,
+          r: els.breed.value || '',
+          s: els.smooth.checked ? 1 : 0,
+          e: els.showEpi.checked ? 1 : 0
+        });
+        const url = location.origin + location.pathname + '?' + p.toString();
+        navigator.clipboard.writeText(url).then(()=>bdToast('Share link copied'));
+        break;
+      }
+      case 'delete': {
+        const next = items.filter((_,i)=>i!==idx);
+        bdStoreSave(next);
+        render();
+        bdToast('Deleted');
+        break;
+      }
+    }
+  }
+
+  // Footer controls
+  function onFooterClick(e){
+    const id = e.target.id;
+    if (id === 'bdExport'){
+      const data = JSON.stringify(bdStoreList(), null, 2);
+      const blob = new Blob([data], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'barkday-saved.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    } else if (id === 'bdClearAll'){
+      if (confirm('Delete all saved results on this device?')){
+        bdStoreSave([]); render(); bdToast('Cleared');
+      }
+    } else if (e.target.dataset?.close === 'drawer'){
+      close();
+    }
+  }
+
+  // Public API
+  return { open, close, render, onListClick, onFooterClick };
+})();
+
 
 // Find and set the closest option in <select id="breedGroup">, without event loops.
 function setGroupFromName(name){
@@ -314,15 +486,6 @@ async function loadTaxonomy(){
     console.warn('[Barkday] taxonomy load failed; continuing without overlays', e);
   }
 }
-
-// Future: saved results storage (Round 3 hook)
-const BD_STORE_KEY = 'barkday.runs.v1';
-function bdSaveRunSkeleton(payload){ try{
-  const arr = JSON.parse(localStorage.getItem(BD_STORE_KEY) || '[]');
-  arr.unshift({ ts: Date.now(), ...payload });
-  localStorage.setItem(BD_STORE_KEY, JSON.stringify(arr));
-} catch(_){} }
-
 
 /**
  * Normalize user-typed breed to a canonical display name if possible.
@@ -829,6 +992,15 @@ async function loadGifts(){
 }
 $('loadGifts').addEventListener('click', loadGifts);
 
+// Saved drawer event delegation
+document.addEventListener('click', (e)=>{
+  const inList = e.target.closest?.('#bdSavedBody [data-act]');
+  const inFoot = e.target.closest?.('#bdSaved footer');
+  if (inList) BarkdaySaved?.onListClick(e);
+  if (inFoot) BarkdaySaved?.onFooterClick(e);
+});
+
+
 // ---------- ✅ GLOBAL Results Modal helper (fixed) ----------
 window.BarkdayResultsModal = window.BarkdayResultsModal || (() => {
   let lastFocus = null;
@@ -1181,22 +1353,28 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
     };
   }
 
-  function render(container){
-    container.innerHTML = `
-      <div class="btn-bar" data-state="disabled">
-        <button type="button" class="primary" id="btnCalc">Calculate</button>
-        <button type="button" class="secondary" id="btnICS" disabled>Download .ics</button>
-        <button type="button" class="secondary" id="btnGCal" disabled>Add to Google Calendar</button>
-        <div id="inline-alert" role="status" aria-live="polite" class="muted" style="margin-left:auto"></div>
-      </div>
-      <div id="selftestHost" style="display:none"></div>
-    `;
-  }
-  function setEnabled(on){
-    document.querySelectorAll('#btnBarMount .btn-bar button.secondary').forEach(b=> b.disabled = !on);
-    const bar = document.querySelector('#btnBarMount .btn-bar');
-    if (bar) bar.dataset.state = on ? 'enabled' : 'disabled';
-  }
+function render(container){
+  container.innerHTML = `
+    <div class="btn-bar" data-state="disabled">
+      <button type="button" class="primary" id="btnCalc">Calculate</button>
+      <button type="button" class="secondary" id="btnSave" disabled>Save result</button>
+      <button type="button" class="secondary" id="btnICS" disabled>Download .ics</button>
+      <button type="button" class="secondary" id="btnGCal" disabled>Add to Google Calendar</button>
+      <button type="button" class="ghost" id="btnSaved" title="Open Saved Results">Saved ▾</button>
+      <div id="inline-alert" role="status" aria-live="polite" class="muted" style="margin-left:auto"></div>
+    </div>
+    <div id="selftestHost" style="display:none"></div>
+  `;
+}
+
+ function setEnabled(on){
+  // Toggle only the action buttons that require a computed result
+  ['#btnSave','#btnICS','#btnGCal'].forEach(sel=>{
+    document.querySelectorAll('#btnBarMount .btn-bar ' + sel).forEach(b=> b.disabled = !on);
+  });
+  const bar = document.querySelector('#btnBarMount .btn-bar');
+  if (bar) bar.dataset.state = on ? 'enabled' : 'disabled';
+}
   NS.updateEventFromCalc = function(evtData){ NS.__lastEvent = evtData || null; setEnabled(!!evtData); };
   NS.setButtonsEnabled = setEnabled;
 
@@ -1221,6 +1399,19 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
         root.dispatchEvent(new CustomEvent('barkday:calc:request'));
       }
     });
+
+    // NEW: Save + Saved
+const btnSave  = root.querySelector('#btnSave');
+const btnSaved = root.querySelector('#btnSaved');
+
+btnSave.addEventListener('click', ()=>{
+  // require a valid calc (buttons are enabled only when calc succeeded)
+  bdSaveRun();
+});
+
+btnSaved.addEventListener('click', ()=>{
+  BarkdaySaved.open();
+});
 
     btnICS.addEventListener('click', ()=>{
       if (btnICS.disabled) return;
