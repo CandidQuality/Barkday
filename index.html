@@ -204,6 +204,25 @@
   <span id="bdToastMsg">Results updated.</span>
   <button type="button" class="bd-x" aria-label="Dismiss">×</button>
 </div>
+<!-- Saved Results Drawer (Round 3) -->
+<div id="bdSaved" class="bd-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="bdSavedTitle">
+  <div class="bd-backdrop" data-close="drawer"></div>
+  <div class="bd-panel" role="document" tabindex="-1">
+    <header>
+      <h3 id="bdSavedTitle">Saved Results</h3>
+      <button class="bd-close-x" type="button" aria-label="Close" data-close="drawer">×</button>
+    </header>
+    <div id="bdSavedBody" class="bd-body">
+      <!-- cards render here -->
+    </div>
+    <footer class="bd-footer">
+      <button id="bdExport" class="ghost" type="button">Export JSON</button>
+      <button id="bdClearAll" class="ghost" type="button">Clear all</button>
+      <button id="bdClose" class="btn" type="button" data-close="drawer">Close</button>
+    </footer>
+  </div>
+</div>
+<!-- /Saved Results Drawer -->
 
 </body>
 </html>
