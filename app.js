@@ -120,6 +120,32 @@ function resolveGroupKey(name){
   return 'Mixed / Other';
 }
 
+// ===== Round 2 helpers: toast + auto-scroll =====
+function bdToast(msg, ms = 2200){
+  const el = document.getElementById('bdToast');
+  const msgEl = document.getElementById('bdToastMsg');
+  if (!el || !msgEl) return;
+  msgEl.textContent = msg || 'Results updated.';
+  el.classList.add('show');
+  // Close handlers
+  const closer = el.querySelector('.bd-x');
+  const off = () => el.classList.remove('show');
+  closer?.addEventListener('click', off, { once:true });
+  // Auto-dismiss
+  clearTimeout(bdToast._t); bdToast._t = setTimeout(off, ms);
+}
+
+function scrollResultsIntoView(){
+  // Prefer the “Next Birthday Plan” header; fall back to first KPI
+  const anchor = document.getElementById('nextPlanHeading')
+             || document.querySelector('.kpi')
+             || document.querySelector('h2');
+  if (!anchor) return;
+  // Small timeout so layout is final (after DOM writes)
+  setTimeout(()=> anchor.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+}
+
+
 // Find and set the closest option in <select id="breedGroup">, without event loops.
 function setGroupFromName(name){
   const sel = els.breedGroup;
