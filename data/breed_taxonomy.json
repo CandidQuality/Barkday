@@ -431,6 +431,10 @@
     "akc_group": "Herding",
     "clusters": ["herding_working"]
   },
+  "Pharaoh Hound": {
+  "akc_group": "Hound",
+  "clusters": ["sight_hound"]
+},
   "Pointer": {
     "akc_group": "Sporting",
     "clusters": [
@@ -577,27 +581,22 @@
     ]
   },
   "West Highland White Terrier": {
-    "akc_group": "Terrier",
-    "clusters": [
-      "terrier"
-    ]
-  },
-  "Whippet": {
-    "akc_group": "Hound",
-    "clusters": [
-      "sight_hound"
-    ]
-  },
-  "Wire Fox Terrier": {
-    "akc_group": "Terrier",
-    "clusters": [
-      "terrier"
-    ]
-  },
-  "Yorkshire Terrier": {
-    "akc_group": "Toy",
-    "clusters": [
-      "terrier"
-    ]
-  }
+  "akc_group": "Terrier",
+  "clusters": ["terrier"]
+},
+"Whippet": {
+  "akc_group": "Hound",
+  "clusters": ["sight_hound"]
+},
+"Wire Fox Terrier": {
+  "akc_group": "Terrier",
+  "clusters": ["terrier"]
+},
+"Yorkshire Terrier": {
+  "akc_group": "Toy",
+  "clusters": ["terrier"]
+},
+"Xoloitzcuintli": {
+  "akc_group": "Non-Sporting",
+  "clusters": ["toy_companion"]
 }
