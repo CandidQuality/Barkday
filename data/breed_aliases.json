@@ -23,6 +23,9 @@
     "chesapeake",
     "chessie"
   ],
+  "Poodle": [
+  "poodle"
+],
   "Standard Poodle": [
   "standard poodle",
   "poodle standard",
@@ -69,9 +72,6 @@
   ],
   "Belgian Sheepdog": [
     "groenendael"
-  ],
-  "Greater Swiss Mountain Dog": [
-    "swissy"
   ],
   "Pyrenean Shepherd": [
     "pyr shep",
@@ -230,7 +230,6 @@
   ],
   "English Setter": [
     "english setter",
-    "llewellin"
   ],
   "Gordon Setter": [
     "gordon setter"
