@@ -128,8 +128,8 @@
         <label class="muted"><input id="ignoreChewer" type="checkbox" /> Ignore chewer filter</label>
       </div>
 
-     <!-- Button Bar mount (Barkday v1) -->
-<div id="btnBarMount" class="btnbar-mount"></div>
+      <!-- Button Bar mount (Barkday v1) -->
+      <div id="btnBarMount" class="btnbar-mount"></div>
 
       <div id="sizeWarn" class="warn" style="display:none"></div>
 
@@ -141,8 +141,6 @@
           <div class="headline" id="nextHeadline">—</div>
           <div class="big" id="nextBday">—</div>
           <div class="muted" id="nextBdayDelta"></div>
-      
-
         </div>
         <div class="pill"><h3>Dog age today</h3><div class="big" id="dogAge">—</div></div>
         <div class="pill"><h3>Human-years estimate</h3><div class="big" id="humanYears">—</div><div class="muted" id="slopeNote"></div></div>
@@ -169,36 +167,37 @@
   <script src="app.js?5" defer></script>
   
   <footer style="margin-top:40px;padding:20px 0;text-align:center;font-size:0.9em;color:var(--text-secondary)">
-  <p>© 2025 <strong>Barkday™</strong>. All Rights Reserved.</p>
-  <p>
-    <a href="privacy.html">Privacy</a> · 
-    <a href="terms.html">Terms</a>
-  </p>
-  <p><em>Sebby (our mascot) and I hope this makes you day just a litle brighter. </em></p>
-</footer>
+    <p>© 2025 <strong>Barkday™</strong>. All Rights Reserved.</p>
+    <p>
+      <a href="privacy.html">Privacy</a> · 
+      <a href="terms.html">Terms</a>
+    </p>
+    <p><em>Sebby (our mascot) and I hope this makes you day just a litle brighter. </em></p>
+  </footer>
 
-<!-- Register PWA service worker -->
-<script>
-  if ('serviceWorker' in navigator) {
-    // IMPORTANT: capital B matches your repo URL (/Barkday/)
-    navigator.serviceWorker.register('/Barkday/service-worker.js');
-  }
-</script>
-<!-- Results Modal (Barkday) -->
-<div id="resultsModal" class="bd-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="resultsModalTitle">
-  <div class="bd-backdrop" data-close="true"></div>
-  <div class="bd-dialog" role="document" tabindex="-1">
-    <button class="bd-close" type="button" aria-label="Close" data-close="true">×</button>
-    <header class="bd-header">
-      <h2 id="resultsModalTitle">Your Barkday Results</h2>
-    </header>
-    <div class="bd-body" id="resultsModalBody"></div>
-    <footer class="bd-footer">
-      <button class="bd-action" type="button" data-close="true">OK</button>
-    </footer>
+  <!-- Register PWA service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      // IMPORTANT: capital B matches your repo URL (/Barkday/)
+      navigator.serviceWorker.register('/Barkday/service-worker.js');
+    }
+  </script>
+
+  <!-- Results Modal (Barkday) -->
+  <div id="resultsModal" class="bd-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="resultsModalTitle">
+    <div class="bd-backdrop" data-close="true"></div>
+    <div class="bd-dialog" role="document" tabindex="-1">
+      <button class="bd-close" type="button" aria-label="Close" data-close="true">×</button>
+      <header class="bd-header">
+        <h2 id="resultsModalTitle">Your Barkday Results</h2>
+      </header>
+      <div class="bd-body" id="resultsModalBody"></div>
+      <footer class="bd-footer">
+        <button class="bd-action" type="button" data-close="true">OK</button>
+      </footer>
+    </div>
   </div>
-</div>
-<!-- /Results Modal -->
+  <!-- /Results Modal -->
 
 </body>
 </html>
