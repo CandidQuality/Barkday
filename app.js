@@ -145,12 +145,93 @@ function scrollResultsIntoView(){
   setTimeout(()=> anchor.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
 }
 
-// ===== Round 3: Saved Results (localStorage) =====
-const BD_STORE_KEY = 'barkday.runs.v1'; // same key you added earlier
+// ===== Round 3: Saved Results (mobile-safe) =====
+const BD_STORE_KEY = 'barkday.runs.v1';
 
-function bdStoreList(){ try{ return JSON.parse(localStorage.getItem(BD_STORE_KEY)||'[]'); }catch{ return []; } }
-function bdStoreSave(list){ localStorage.setItem(BD_STORE_KEY, JSON.stringify(list)); }
+/* Mobile-safe storage shim
+   Chooses localStorage → sessionStorage → in-memory fallback.
+   Shows a small badge so you know which backend you're on. */
+const BarkdayStore = (function(){
+  let memory = {}; // last resort (per tab)
+  function testArea(area){
+    if (!area) return false;
+    const k = '__bd_test__' + Math.random();
+    try { area.setItem(k, '1'); area.removeItem(k); return true; }
+    catch { return false; }
+  }
+  const hasLocal   = testArea(window.localStorage);
+  const hasSession = !hasLocal && testArea(window.sessionStorage);
+  const area = hasLocal ? window.localStorage : (hasSession ? window.sessionStorage : null);
+  const kind = hasLocal ? 'localStorage' : (hasSession ? 'sessionStorage' : 'memory');
 
+  function get(key){
+    try { return area ? area.getItem(key) : (memory[key] ?? null); }
+    catch (e) { console.warn('[Barkday] storage.get failed', e); return null; }
+  }
+  function set(key, val){
+    try {
+      if (area) { area.setItem(key, val); }
+      else { memory[key] = val; }
+      return true;
+    } catch (e) {
+      console.warn('[Barkday] storage.set failed', e);
+      return false;
+    }
+  }
+  return { get, set, kind };
+})();
+
+// Storage helpers (use the shim above)
+function bdStoreList(){
+  try { const raw = BarkdayStore.get(BD_STORE_KEY); return raw ? JSON.parse(raw) : []; }
+  catch { return []; }
+}
+function bdStoreSave(list){
+  const ok = BarkdayStore.set(BD_STORE_KEY, JSON.stringify(list));
+  if (!ok) bdToast('Could not save on this device (storage blocked).', 3500);
+}
+
+// Optional: show which backend we’re using (local/session/memory)
+(function showStorageStatus(){
+  try{
+    const el = document.createElement('div');
+    el.id = 'bdStorageStatus';
+    el.textContent = `Storage: ${BarkdayStore.kind}`;
+    el.style.cssText = 'position:fixed;right:10px;bottom:10px;font:12px/1.2 system-ui;padding:6px 8px;border-radius:8px;background:#0009;color:#fff;z-index:9999';
+    document.addEventListener('DOMContentLoaded', ()=> document.body.appendChild(el), { once:true });
+  }catch{}
+})();
+
+// Optional: quick self-test button (injects a dummy saved run)
+(function storageSelfTest(){
+  try{
+    const host = document.getElementById('selftestHost');
+    if (!host) return;
+    const btn = document.createElement('button');
+    btn.className = 'ghost';
+    btn.textContent = 'Storage Self-Test';
+    btn.addEventListener('click', ()=>{
+      const list = bdStoreList();
+      list.unshift({
+        ts: Date.now(),
+        dog: 'Test Dog',
+        dob: '2020-01-01',
+        weight: 40,
+        chewer: 'Normal',
+        breed: 'Labrador Retriever',
+        group: 'Sporting',
+        smooth: true, epi: false,
+        kpi: { nextHeadline:'Test', nextDate:new Date().toDateString(), nextDateISO:new Date().toISOString(), hy:'42.00', dogAge:'4y 0m' },
+        event: { start:new Date().toISOString(), end:new Date(Date.now()+3600000).toISOString(), title:'Test', notes:'Test' }
+      });
+      bdStoreSave(list);
+      bdToast('Dummy run saved. Open Saved ▾ to verify.');
+    });
+    host.appendChild(btn);
+  }catch{}
+})();
+
+// Build the payload we store each time
 function currentRunPayload(){
   const { start, end, title, notes } = getContext(); // existing helper
   return {
@@ -174,17 +255,23 @@ function currentRunPayload(){
   };
 }
 
+// Save handler (session-only toast is always shown when not on localStorage)
 function bdSaveRun(){
   const list = bdStoreList();
-  list.unshift( currentRunPayload() );
-  // keep latest 50
+  list.unshift(currentRunPayload());
   if (list.length > 50) list.length = 50;
   bdStoreSave(list);
-  bdToast('Saved to this device'); // Round 2 toast
+  bdToast('Saved to this device');
+
+  if (BarkdayStore?.kind && BarkdayStore.kind !== 'localStorage') {
+    bdToast('Saved for this session only in this browser.', 3500);
+  }
+
   if (document.getElementById('bdSaved')?.classList.contains('is-open')) {
-  BarkdaySaved.render();
+    BarkdaySaved.render();
+  }
 }
-}
+
 
 function hydrateRun(run, doCompute=false){
   if (!run) return;
