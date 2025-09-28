@@ -191,9 +191,10 @@ function bdStoreSave(list){
   if (!ok) bdToast('Could not save on this device (storage blocked).', 3500);
 }
 
-// Optional: show which backend we’re using (local/session/memory)
+// Optional: show which backend we’re using (local/session/memory) — gated for dev
 (function showStorageStatus(){
   try{
+    if (!(location.hostname === 'localhost' || location.search.includes('debug=1'))) return;
     const el = document.createElement('div');
     el.id = 'bdStorageStatus';
     el.textContent = `Storage: ${BarkdayStore.kind}`;
@@ -201,6 +202,7 @@ function bdStoreSave(list){
     document.addEventListener('DOMContentLoaded', ()=> document.body.appendChild(el), { once:true });
   }catch{}
 })();
+
 
 // Optional: quick self-test button (injects a dummy saved run)
 (function storageSelfTest(){
@@ -1319,31 +1321,54 @@ function getContext(){
 }
 
 /* --------------------
-   Local in-app reminders (beta)
+   Local in-app reminders (beta) — shimmed
 -------------------- */
 (function inAppReminders(){
   const KEY = 'barkday-local-reminders-v1';
-  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch { return []; } };
-  const save = (list) => localStorage.setItem(KEY, JSON.stringify(list));
+
+  // Use the same storage shim as Saved Results
+  const load = () => {
+    try {
+      const raw = BarkdayStore.get(KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      console.warn('[Barkday] reminders.load failed', e);
+      return [];
+    }
+  };
+  const save = (list) => {
+    const ok = BarkdayStore.set(KEY, JSON.stringify(list || []));
+    if (!ok) bdToast('Reminders could not be saved on this device.', 3500);
+  };
 
   window.BarkdayReminders = {
     enableCurrent(){
-      if (!els.nextBday.textContent || els.nextBday.textContent==='—') { alert('Calculate first.'); return; }
+      if (!els.nextBday.textContent || els.nextBday.textContent==='—') {
+        alert('Calculate first.'); return;
+      }
       const {name, upcoming} = getContext();
       const when = els.nextBday.dataset.iso || new Date().toISOString();
+
+      // Keep the latest reminder per name
       const list = load().filter(r => r.name !== name);
       list.push({ name, when, upcoming });
       save(list);
-      alert(`In-app reminder saved for ${name} — ${new Date(when).toDateString()}.`);
+
+      // Let the user know if this is session/memory only
+      const note = (BarkdayStore?.kind && BarkdayStore.kind !== 'localStorage')
+        ? ' (saved for this session only)'
+        : '';
+      alert(`In-app reminder saved for ${name} — ${new Date(when).toDateString()}${note}.`);
     },
     list: load
   };
 
+  // Lightweight check (runs on page open)
   function checkNow(){
     const list = load(); if (!list.length) return;
     const now = new Date();
     for (const r of list){
-      const when = new Date(r.when); // r.when is ISO now
+      const when = new Date(r.when);
       const days = Math.floor((when - now)/(24*60*60*1000));
       if (days === 7) alert(`🎁 One week until ${r.name}'s Barkday (turning ${r.upcoming} DY)!`);
       if (days === 1) alert(`🎉 ${r.name}'s Barkday is tomorrow!`);
@@ -1351,6 +1376,7 @@ function getContext(){
   }
   checkNow();
 })();
+
 
 // Gifts auto-refilter if visible
 function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
