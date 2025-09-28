@@ -1249,6 +1249,49 @@ function reloadGiftsIfShown(){ if(els.gifts.children.length>0){ loadGifts(); } }
       NS.openGoogleCalUrl(evt);
     });
   }
+// ===== Barkday Results Modal helper =====
+const BarkdayResultsModal = (() => {
+  const modal = document.getElementById('resultsModal');
+  const dialog = modal?.querySelector('.bd-dialog');
+  const bodyEl = modal?.querySelector('#resultsModalBody');
+  let lastFocus = null;
+  const focusableSel = 'button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
+
+  function open(html) {
+    if (!modal || !dialog || !bodyEl) return;
+    lastFocus = document.activeElement;
+    bodyEl.innerHTML = html || '<p>No results.</p>';
+    modal.classList.add('is-open');
+    document.body.classList.add('body-lock');
+    (dialog.querySelector(focusableSel) || dialog).focus();
+    modal.addEventListener('click', onBackdrop);
+    document.addEventListener('keydown', onKey);
+    dialog.addEventListener('keydown', trap);
+  }
+  function close() {
+    if (!modal || !dialog) return;
+    modal.classList.remove('is-open');
+    document.body.classList.remove('body-lock');
+    modal.removeEventListener('click', onBackdrop);
+    document.removeEventListener('keydown', onKey);
+    dialog.removeEventListener('keydown', trap);
+    if (lastFocus?.focus) lastFocus.focus();
+  }
+  function onBackdrop(e){ if (e.target?.dataset?.close === 'true') close(); }
+  function onKey(e){ if (e.key === 'Escape') close(); }
+  function trap(e){
+    if (e.key !== 'Tab') return;
+    const f = dialog.querySelectorAll(focusableSel); if (!f.length) return;
+    const first=f[0], last=f[f.length-1];
+    if (e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  return {
+    show(html){ open(html); },
+    showFromElement(sel){ const el = document.querySelector(sel); open(el? el.innerHTML : ''); },
+    close
+  };
+})();
 
   // Self-test (optional) — toggle with ?selftest=1 or Alt+Shift+T
   NS.selfTest = NS.selfTest || {};
