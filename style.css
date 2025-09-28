@@ -264,4 +264,28 @@ html, body{ overflow-x:hidden }
   min-height: 44px;         /* accessible target */
   box-sizing: border-box;   /* avoid growth via borders */
 }
+/* ===== Barkday Results Modal ===== */
+.bd-modal{position:fixed;inset:0;display:none;z-index:1000}
+.bd-modal.is-open{display:block}
+.bd-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.bd-dialog{
+  position:relative;max-width:680px;margin:6vh auto;background:var(--card);
+  color:var(--text);border-radius:16px;box-shadow:var(--shadow);
+  padding:16px;outline:none
+}
+@media (max-width:720px){.bd-dialog{margin:4vh 16px}}
+.bd-header{padding:8px 12px 4px}
+.bd-header h2{margin:0;font-size:1.25rem;line-height:1.2}
+.bd-body{padding:12px}
+.bd-footer{display:flex;justify-content:flex-end;gap:8px;padding:8px 12px}
+.bd-close{
+  position:absolute;top:6px;right:8px;border:0;background:transparent;
+  color:var(--muted);font-size:28px;line-height:1;cursor:pointer
+}
+.bd-close:hover{color:var(--text)}
+.bd-action{
+  background:var(--btn-primary-bg);color:var(--btn-primary-fg);
+  border:1px solid #1c62d4;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer
+}
+.body-lock{overflow:hidden}
 
