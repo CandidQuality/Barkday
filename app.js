@@ -315,6 +315,14 @@ async function loadTaxonomy(){
   }
 }
 
+// Future: saved results storage (Round 3 hook)
+const BD_STORE_KEY = 'barkday.runs.v1';
+function bdSaveRunSkeleton(payload){ try{
+  const arr = JSON.parse(localStorage.getItem(BD_STORE_KEY) || '[]');
+  arr.unshift({ ts: Date.now(), ...payload });
+  localStorage.setItem(BD_STORE_KEY, JSON.stringify(arr));
+} catch(_){} }
+
 
 /**
  * Normalize user-typed breed to a canonical display name if possible.
@@ -944,6 +952,10 @@ function compute(){
   // 🔔 Show popup copy of Results (headline + KPIs + plan)
   BarkdayResultsModal.showFromElement('.kpi');   // or '#nextPlan' or a composed HTML
 
+// 🔔 Round 2: toast + auto-scroll (keeps popup too)
+bdToast('Results updated — opened popup with details');
+scrollResultsIntoView();
+  
   // If gifts open, refilter
   if(els.gifts.children.length) loadGifts();
 }
@@ -961,6 +973,16 @@ window.runCalculation = function(){
     return null;
   }
 
+bdSaveRunSkeleton({
+  name: (els.dogName.value||'').trim(),
+  breed: (els.breed.value||'').trim(),
+  group: els.breedGroup.value,
+  weight: parseInt(els.adultWeight.value,10),
+  dogAgeToday: els.dogAge.textContent,
+  humanYears: els.humanYears.textContent,
+  next: { headline: els.nextHeadline.textContent, date: els.nextBday.textContent }
+});
+  
   const { start, end, title, notes } = getContext();
   return {
     title,
