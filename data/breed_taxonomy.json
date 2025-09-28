@@ -163,10 +163,8 @@
     ]
   },
   "Cane Corso": {
-    "akc_group": "Non-Sporting",
-    "clusters": [
-      "guardian_protection"
-    ]
+    "akc_group": "Working",
+    "clusters": ["guardian_protection"]
   },
   "Cavalier King Charles Spaniel": {
     "akc_group": "Toy",
@@ -321,12 +319,9 @@
       "guardian_protection"
     ]
   },
-  "Great Swiss Mountain Dog": {
-    "akc_group": "Non-Sporting",
-    "clusters": [
-      "bulldog_molosser",
-      "guardian_protection"
-    ]
+  "Greater Swiss Mountain Dog": {
+    "akc_group": "Working",
+    "clusters": ["bulldog_molosser", "guardian_protection"]
   },
   "Greyhound": {
     "akc_group": "Hound",
@@ -353,10 +348,8 @@
     ]
   },
   "Italian Greyhound": {
-    "akc_group": "Hound",
-    "clusters": [
-      "sight_hound"
-    ]
+    "akc_group": "Toy",
+    "clusters": ["sight_hound", "toy_companion"]
   },
   "Jack Russell Terrier": {
     "akc_group": "Terrier",
@@ -408,16 +401,12 @@
     ]
   },
   "Miniature Pinscher": {
-    "akc_group": "Non-Sporting",
-    "clusters": [
-      "toy_companion"
-    ]
+    "akc_group": "Toy",
+    "clusters": ["toy_companion"]
   },
   "Miniature Schnauzer": {
-    "akc_group": "Working",
-    "clusters": [
-      "terrier"
-    ]
+    "akc_group": "Terrier",
+    "clusters": ["terrier"]
   },
   "Newfoundland": {
     "akc_group": "Working",
@@ -439,10 +428,8 @@
     ]
   },
   "Pembroke Welsh Corgi": {
-    "akc_group": "Non-Sporting",
-    "clusters": [
-      "herding_working"
-    ]
+    "akc_group": "Herding",
+    "clusters": ["herding_working"]
   },
   "Pointer": {
     "akc_group": "Sporting",
@@ -502,10 +489,8 @@
     ]
   },
   "Saluki": {
-    "akc_group": "Non-Sporting",
-    "clusters": [
-      "sight_hound"
-    ]
+    "akc_group": "Hound",
+    "clusters": ["sight_hound"]
   },
   "Samoyed": {
     "akc_group": "Working",
