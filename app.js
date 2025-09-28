@@ -953,6 +953,10 @@ function compute(){
   if (els.resetBtn){ els.resetBtn.disabled = false; els.resetBtn.setAttribute('aria-disabled','false'); }
   if (els.shareBtn){ els.shareBtn.disabled = false; els.shareBtn.setAttribute('aria-disabled','false'); }
 
+// Show popup copy of Results (headline + KPIs + plan)
+BarkdayResultsModal.showFromElement('.kpi');   // or '#nextPlan' or a composed HTML
+
+  
   // If gifts open, refilter
   if(els.gifts.children.length) loadGifts();
 }
