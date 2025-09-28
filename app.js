@@ -180,6 +180,8 @@ function bdSaveRun(){
   if (list.length > 50) list.length = 50;
   bdStoreSave(list);
   bdToast('Saved to this device'); // Round 2 toast
+  if (document.getElementById('bdSaved')?.classList.contains('is-open')) {
+  BarkdaySaved.render();
 }
 
 function hydrateRun(run, doCompute=false){
@@ -1145,15 +1147,7 @@ window.runCalculation = function(){
     return null;
   }
 
-bdSaveRunSkeleton({
-  name: (els.dogName.value||'').trim(),
-  breed: (els.breed.value||'').trim(),
-  group: els.breedGroup.value,
-  weight: parseInt(els.adultWeight.value,10),
-  dogAgeToday: els.dogAge.textContent,
-  humanYears: els.humanYears.textContent,
-  next: { headline: els.nextHeadline.textContent, date: els.nextBday.textContent }
-});
+bdSaveRun(); // uses currentRunPayload() and stores to localStorage
   
   const { start, end, title, notes } = getContext();
   return {
