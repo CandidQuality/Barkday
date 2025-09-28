@@ -166,6 +166,7 @@ function currentRunPayload(){
     kpi: {
       nextHeadline: els.nextHeadline.textContent,
       nextDate: els.nextBday.textContent,
+      nextDateISO: els.nextBday.dataset.iso || null,
       hy: els.humanYears.textContent,
       dogAge: els.dogAge.textContent
     },
@@ -572,13 +573,21 @@ function updateBreedNotes(){
 }
 // <— end updateBreedNotes()
 
+// Debounce helper for updateBreedNotes
+const debounce = (fn, ms = 120) => {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+};
+const debouncedUpdate = debounce(updateBreedNotes, 120);
+
+
 ['input','change'].forEach(ev=>{
-  els.breed.addEventListener(ev, updateBreedNotes);
-  els.breedGroup.addEventListener(ev, updateBreedNotes);
-  els.dogName.addEventListener(ev, updateBreedNotes);
-  els.adultWeight.addEventListener(ev, updateBreedNotes);
-});
-updateBreedNotes();
+  els.breed.addEventListener(ev, debouncedUpdate);
+  els.breedGroup.addEventListener(ev, debouncedUpdate);
+  els.dogName.addEventListener(ev, debouncedUpdate);
+  els.adultWeight.addEventListener(ev, debouncedUpdate);
+  });
+updateBreedNotes(); // initial render stays immediate
 
 // ---------- Slider label (5-lb steps) ----------
 els.adultWeight.addEventListener('input', ()=>{
@@ -870,7 +879,7 @@ function hrefForGiftItem(it) {
 function decorateAffiliateAnchor(aEl) {
   if (!aEl) return;
   aEl.target = "_blank";
-  aEl.rel = "nofollow sponsored noopener";
+  aEl.rel = "nofollow sponsored noopener noreferrer";
 }
 
 // --- FTC / program disclosure ---
@@ -993,7 +1002,7 @@ async function loadGifts(){
     console.warn('[Barkday] gifts load error', e);
   }
 }
-$('loadGifts').addEventListener('click', loadGifts);
+els.loadGifts?.addEventListener('click', loadGifts);
 
 // Saved drawer event delegation
 document.addEventListener('click', (e)=>{
@@ -1086,12 +1095,20 @@ function compute(){
   const H=humanEqYears(years, lb, els.smooth.checked); els.humanYears.textContent=H.toFixed(2); const R=slopeFromWeight(lb); els.slopeNote.textContent=`R≈${R.toFixed(2)} (weight-continuous)`;
 
   // Next dog-year birthday
-  const rawName=els.dogName.value || 'your dog';
-  const name = rawName.trim() || 'your dog';
-  const upcoming=Math.floor(H)+1;
-  els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`;
-  const nbd=nextDogYearDate(dob,H,lb,els.smooth.checked); els.nextBday.textContent=nbd.toDateString(); const dTo=daysBetween(now, nbd); els.nextBdayDelta.textContent = dTo>0? `${dTo} days from now` : '';
-  if (dTo === 0) { els.nextHeadline.textContent = `🎉 It’s Barkday today!`; }
+const rawName = els.dogName.value || 'your dog';
+const name = rawName.trim() || 'your dog';
+const upcoming = Math.floor(H) + 1;
+els.nextHeadline.textContent = `${name} is about to be ${upcoming} years old!`;
+
+const nbd = nextDogYearDate(dob, H, lb, els.smooth.checked);
+els.nextBday.textContent = nbd.toDateString();
+els.nextBday.dataset.iso = nbd.toISOString(); // <-- keep ISO for saves/reminders
+
+const dTo = daysBetween(now, nbd);
+els.nextBdayDelta.textContent = dTo > 0 ? `${dTo} days from now` : '';
+if (dTo === 0) {
+  els.nextHeadline.textContent = `🎉 It’s Barkday today!`;
+}
 
   // Profile/notes
   const breedTxtRaw = (els.breed.value||'').trim();
@@ -1197,9 +1214,8 @@ if (els.shareBtn) els.shareBtn.addEventListener('click', ()=>{
 -------------------- */
 function getContext(){
   const rawText = els.nextBday.textContent || '';
-  const start = !rawText || rawText==='—'
-    ? new Date()
-    : new Date(rawText.replace(/\s+/g,' ').trim());
+  const iso = els.nextBday.dataset.iso;
+  const start = iso ? new Date(iso) : new Date();
   const end   = new Date(start.getTime() + 60*60*1000);
   const rawName = els.dogName.value || 'your dog';
   const name = rawName.trim() || 'your dog';
@@ -1227,7 +1243,7 @@ function getContext(){
     enableCurrent(){
       if (!els.nextBday.textContent || els.nextBday.textContent==='—') { alert('Calculate first.'); return; }
       const {name, upcoming} = getContext();
-      const when = new Date(els.nextBday.textContent).toISOString();
+      const when = els.nextBday.dataset.iso || new Date().toISOString();
       const list = load().filter(r => r.name !== name);
       list.push({ name, when, upcoming });
       save(list);
@@ -1240,7 +1256,7 @@ function getContext(){
     const list = load(); if (!list.length) return;
     const now = new Date();
     for (const r of list){
-      const when = new Date(r.when);
+      const when = new Date(r.when); // r.when is ISO now
       const days = Math.floor((when - now)/(24*60*60*1000));
       if (days === 7) alert(`🎁 One week until ${r.name}'s Barkday (turning ${r.upcoming} DY)!`);
       if (days === 1) alert(`🎉 ${r.name}'s Barkday is tomorrow!`);
