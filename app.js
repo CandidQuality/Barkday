@@ -183,6 +183,7 @@ function bdSaveRun(){
   if (document.getElementById('bdSaved')?.classList.contains('is-open')) {
   BarkdaySaved.render();
 }
+}
 
 function hydrateRun(run, doCompute=false){
   if (!run) return;
