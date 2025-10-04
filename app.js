@@ -714,20 +714,29 @@ function getDogYearBarkdayInfo(dob, lb, smooth){
   const Htoday0    = dogYearsAt(today0,    dob, lb, smooth);
   const Htomorrow0 = dogYearsAt(tomorrow0, dob, lb, smooth);
 
-  // If the integer rolls over sometime today, it's a Barkday today
-  const crossedToday = Math.floor(Htomorrow0) > Math.floor(Htoday0);
-  if (crossedToday){
-    const turning = Math.floor(Htomorrow0);            // the new integer we reach during today
+  // If we are exactly on an integer at today's local midnight, celebrate today
+  const EPS = 1e-9;
+  const isExactToday = Math.abs(Htoday0 - Math.round(Htoday0)) < EPS;
+  if (isExactToday){
+    const turning = Math.round(Htoday0);
     return { isToday: true, nextBarkday: today0, turning, Htoday0 };
   }
 
-  // Otherwise, find the next integer milestone date from today
+  // If the integer rolls over at some point today, it's a Barkday today
+  const crossedToday = Math.floor(Htomorrow0) > Math.floor(Htoday0);
+  if (crossedToday){
+    const turning = Math.floor(Htoday0) + 1;
+    return { isToday: true, nextBarkday: today0, turning, Htoday0 };
+  }
+
+  // Otherwise, compute the next integer milestone date
   const milestone = nextDogYearDate(dob, Htoday0, lb, smooth);
-  const m0 = norm(milestone);                           // normalize to local midnight for display
+  const m0 = norm(milestone);
   const turning = Math.floor(Htoday0) + 1;
 
   return { isToday: false, nextBarkday: m0, turning, Htoday0 };
 }
+
 
 
 // ---------- Math utils ----------
