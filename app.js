@@ -701,23 +701,35 @@ function nextDogYearMilestone(dob, lb, smooth){
   return nextDogYearDate(dob, Hnow, lb, smooth);
 }
 
-/** All info needed for UI: isToday, nextBarkday (dog-year), and which integer we're turning */
+/**
+ * Compute “dog-year Barkday” info using LOCAL-midnight math.
+ * Returns whether the milestone is today, the next milestone date (local),
+ * which dog-year integer is being turned, and Htoday0 for UI.
+ */
 function getDogYearBarkdayInfo(dob, lb, smooth){
-  const today0    = norm(new Date());
-  const tomorrow0 = new Date(today0.getFullYear(), today0.getMonth(), today0.getDate() + 1);
+  // Pin “today” to local midnight so Barkday holds the whole day
+  const today0 = norm(new Date());
 
   // Dog-years at today's local midnight
   const Htoday0 = dogYearsAt(today0, dob, lb, smooth);
 
-  // Find the next integer milestone date starting from Htoday0
+  // Ask the solver for the next milestone date, given H at today0
+  // (nextDogYearDate is already patched to treat exact integers as TODAY)
   const milestone = nextDogYearDate(dob, Htoday0, lb, smooth);
-  const isToday   = milestone >= today0 && milestone < tomorrow0;
 
-  // The upcoming integer (e.g., if H=27.3, turning=28; if today crosses, still 28)
-  const turning = Math.floor(Htoday0) + 1;
+  // Normalize milestone to local midnight for clean equality checks
+  const m0 = norm(milestone);
+  const isToday = m0.getTime() === today0.getTime();
 
-  return { isToday, nextBarkday: milestone, turning, Htoday0 };
+  // If we're exactly on an integer at local midnight, we're turning that integer; else floor+1
+  const EPS = 1e-9;
+  const turning = (Math.abs(Htoday0 - Math.round(Htoday0)) < EPS)
+    ? Math.round(Htoday0)
+    : Math.floor(Htoday0) + 1;
+
+  return { isToday, nextBarkday: m0, turning, Htoday0 };
 }
+
 
 
 // ---------- Math utils ----------
@@ -749,9 +761,13 @@ function humanEqYears(tY, lb, smooth){
   return upto2+(tY-2)*post;
 }
 function nextDogYearDate(dob, H, lb, smooth){
-  // Find the earliest t (in human-years since DOB) where humanEqYears(t) >= next integer
+  // Find the earliest t (in human-years since DOB) where humanEqYears(t) >= target integer
   if (!(dob instanceof Date) || isNaN(dob)) return new Date();
-  const target = Math.floor(H) + 1;
+
+  // If we are exactly on an integer at local midnight, that integer is today's milestone.
+  const EPS = 1e-9;
+  const isExact = Math.abs(H - Math.round(H)) < EPS;
+  const target = isExact ? Math.round(H) : Math.floor(H) + 1;
 
   // Conservative search bounds: start at 0 years since DOB and expand hi until target is reachable.
   const MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
@@ -1293,9 +1309,10 @@ function compute(){
   els.sizeWarn.textContent = warn;
 
   // Celebrate & plan
-  const upcoming = Math.floor(H) + 1;   // << was missing before
-  if (info.isToday) confetti();         // confetti only on the day
-  renderPlan(els.breedGroup.value, upcoming);
+const upcoming = info.turning;        // use local-midnight milestone (correct on “today”)
+if (info.isToday) confetti();         // confetti only on the day
+renderPlan(els.breedGroup.value, upcoming);
+
 
   // Epigenetic note (optional)
   els.epi.textContent = els.showEpi.checked
