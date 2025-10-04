@@ -276,7 +276,7 @@ html, body{ overflow-x:hidden }
 /* Bubble */
 .slider-tooltip{
   position: absolute;
-  top: -80px;              /* distance above slider track */
+  top: -60px;              /* distance above slider track */
   left: 0;                 /* JS sets left in px; center via translateX(-50%) */
   transform: translateX(-50%);
   background: #222;
