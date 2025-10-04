@@ -1839,15 +1839,15 @@ function render(container){
       }
     });
 
-    // NEW: Save + Saved
+    // NEW: (auto)Saved
+// Saved drawer
 const btnSaved = root.querySelector('#btnSaved');
- // require a valid calc (buttons are enabled only when calc succeeded)
-  bdSaveRun();
-});
+if (btnSaved) {
+  btnSaved.addEventListener('click', () => {
+    BarkdaySaved.open();
+  });
+}
 
-btnSaved.addEventListener('click', ()=>{
-  BarkdaySaved.open();
-});
 
     btnICS.addEventListener('click', ()=>{
       if (btnICS.disabled) return;
