@@ -225,6 +225,14 @@
       <button class="bd-close-x" type="button" aria-label="Close" data-close="drawer">×</button>
     </header>
     <div id="bdSavedBody" class="bd-body">
+  <section class="bd-info" aria-live="polite">
+    <p><strong>Privacy &amp; portability</strong> — Barkday™ saves your results <em>only on this device</em>.
+    To take them to another device, click <strong>Export</strong> to download a file. On the other device, open Barkday™ and click <strong>Import</strong> to load it.</p>
+  </section>
+
+  <!-- hidden file input used by the Import button -->
+  <input id="bdImportFile" type="file" accept=".barkday,.json" style="display:none">
+
       <!-- cards render here -->
     </div>
     <footer class="bd-footer">
