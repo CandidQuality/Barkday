@@ -707,35 +707,33 @@ function nextDogYearMilestone(dob, lb, smooth){
  * today's local midnight and tomorrow's local midnight.
  */
 function getDogYearBarkdayInfo(dob, lb, smooth){
-  const today0    = norm(new Date());                                       // today @ 00:00 local
-  const tomorrow0 = new Date(today0.getFullYear(), today0.getMonth(), today0.getDate() + 1);
+  const norm = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const daysBetween = (a,b)=> Math.floor((b-a)/86400000);
+  const dogYearsAt = (date, dob, lb, smooth) => {
+    const years = daysBetween(norm(dob), norm(date)) / 365.2425;
+    return humanEqYears(years, lb, smooth);
+  };
 
-  // Dog-years pinned to local midnights
-  const Htoday0    = dogYearsAt(today0,    dob, lb, smooth);
-  const Htomorrow0 = dogYearsAt(tomorrow0, dob, lb, smooth);
+  const today0     = norm(new Date());
+  const yesterday0 = new Date(today0.getFullYear(), today0.getMonth(), today0.getDate() - 1);
 
-  // If we are exactly on an integer at today's local midnight, celebrate today
-  const EPS = 1e-9;
-  const isExactToday = Math.abs(Htoday0 - Math.round(Htoday0)) < EPS;
-  if (isExactToday){
-    const turning = Math.round(Htoday0);
+  const Hyesterday0 = dogYearsAt(yesterday0, dob, lb, smooth);
+  const Htoday0     = dogYearsAt(today0,     dob, lb, smooth);
+
+  const turnedToday = Math.floor(Htoday0) > Math.floor(Hyesterday0);
+  if (turnedToday){
+    const turning = Math.floor(Htoday0);
     return { isToday: true, nextBarkday: today0, turning, Htoday0 };
   }
 
-  // If the integer rolls over at some point today, it's a Barkday today
-  const crossedToday = Math.floor(Htomorrow0) > Math.floor(Htoday0);
-  if (crossedToday){
-    const turning = Math.floor(Htoday0) + 1;
-    return { isToday: true, nextBarkday: today0, turning, Htoday0 };
-  }
-
-  // Otherwise, compute the next integer milestone date
+  // Otherwise, find the next integer milestone date from *today*
   const milestone = nextDogYearDate(dob, Htoday0, lb, smooth);
   const m0 = norm(milestone);
   const turning = Math.floor(Htoday0) + 1;
 
   return { isToday: false, nextBarkday: m0, turning, Htoday0 };
 }
+
 
 
 
