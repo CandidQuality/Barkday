@@ -399,24 +399,88 @@ const BarkdaySaved = (() => {
   }
 
   // Footer controls
-  function onFooterClick(e){
-    const id = e.target.id;
-    if (id === 'bdExport'){
-      const data = JSON.stringify(bdStoreList(), null, 2);
-      const blob = new Blob([data], {type:'application/json'});
+function onFooterClick(e){
+  const id = e.target.id;
+
+  if (id === 'bdExport'){
+    try {
+      const runs = bdStoreList() || [];
+      const payload = { version: 1, exportedAt: new Date().toISOString(), app: 'Barkday', runs };
+      const blob = new Blob([JSON.stringify(payload)], { type:'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'barkday-saved.json';
+      const dt = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
+      a.download = `barkday-export-${dt}.barkday`;   // no “JSON” in filename
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
-    } else if (id === 'bdClearAll'){
-      if (confirm('Delete all saved results on this device?')){
-        bdStoreSave([]); render(); bdToast('Cleared');
-      }
-    } else if (e.target.dataset?.close === 'drawer'){
-      close();
+      bdToast?.('Exported your records.');
+    } catch (err) {
+      console.warn('[Barkday] export failed', err);
+      bdToast?.('Export failed.');
     }
+
+  } else if (id === 'bdImport') {
+    const input = document.getElementById('bdImportFile');
+    if (!input) { alert('Import not available.'); return; }
+    input.value = ''; // allow same file twice
+    input.onchange = async (ev) => {
+      const f = ev.target.files && ev.target.files[0];
+      if (!f) return;
+      if (!/\.barkday$|\.json$/i.test(f.name)) { bdToast?.('Please choose an exported Barkday file.'); input.value=''; input.onchange=null; return; }
+
+      try {
+        const text = await f.text();
+        const raw  = JSON.parse(text);
+
+        // normalize accepted shapes
+        const norm = Array.isArray(raw)
+          ? { version:1, exportedAt:null, runs: raw }
+          : (raw && Array.isArray(raw.runs) ? { version:raw.version??1, exportedAt:raw.exportedAt??null, runs: raw.runs } : null);
+
+        if (!norm) { bdToast?.('That file could not be read.'); input.value=''; input.onchange=null; return; }
+
+        // soft validation
+        const isRun = (x)=> x && typeof x==='object' && (('id'in x)||('_id'in x)||('ts'in x)) && (('dog'in x)||('breed'in x)||('event'in x)||('kpi'in x));
+        const incoming = (norm.runs||[]).filter(isRun);
+        if (!incoming.length){ bdToast?.('No records found in the file.'); input.value=''; input.onchange=null; return; }
+
+        // merge with existing; dedupe by stable key, newest ts wins
+        const existing = bdStoreList() || [];
+        const key = (x)=> String(x?.id ?? x?._id ?? `${x?.dog||'dog'}|${x?.dob||''}|${x?.ts||''}`);
+        const map = new Map();
+        const add = (arr)=>arr.forEach(r=>{
+          if (!isRun(r)) return;
+          const k = key(r), prev = map.get(k);
+          if (!prev) { map.set(k, r); return; }
+          const tNew = new Date(r.ts||0).getTime(), tOld = new Date(prev.ts||0).getTime();
+          if (tNew > tOld) map.set(k, r);
+        });
+        add(existing); add(incoming);
+        const merged = Array.from(map.values());
+
+        // persist with your existing helper
+        bdStoreSave(merged);
+        render(); // re-render drawer
+        bdToast?.(`Imported ${incoming.length} record(s).`);
+      } catch (err) {
+        console.warn('[Barkday] import failed', err);
+        bdToast?.('Import failed.');
+      } finally {
+        input.value=''; input.onchange=null;
+      }
+    };
+    input.click();
+
+  } else if (id === 'bdClearAll'){
+    if (confirm('Delete all saved results on this device?')){
+      bdStoreSave([]); render(); bdToast('Cleared');
+    }
+
+  } else if (e.target.dataset?.close === 'drawer'){
+    close();
   }
+}
+
 
   // Public API
   return { open, close, render, onListClick, onFooterClick };
