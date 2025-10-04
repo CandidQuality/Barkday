@@ -749,14 +749,33 @@ function humanEqYears(tY, lb, smooth){
   return upto2+(tY-2)*post;
 }
 function nextDogYearDate(dob, H, lb, smooth){
+  // Find the earliest t (in human-years since DOB) where humanEqYears(t) >= next integer
   if (!(dob instanceof Date) || isNaN(dob)) return new Date();
-  if (!isFinite(H)) return new Date(dob.getTime() + 365.2425*24*60*60*1000);
-  const target=Math.floor(H)+1, now=new Date();
-  const yearsNow=daysBetween(dob, now)/365.2425;
-  let lo=yearsNow, hi=yearsNow+5;
-  for(let i=0;i<40;i++){ const mid=(lo+hi)/2; const h=humanEqYears(mid,lb,smooth); if(h>=target) hi=mid; else lo=mid; }
-  const t=(lo+hi)/2; return new Date(dob.getTime()+t*365.2425*24*60*60*1000);
+  const target = Math.floor(H) + 1;
+
+  // Conservative search bounds: start at 0 years since DOB and expand hi until target is reachable.
+  const MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
+  let lo = 0;
+  let hi = Math.max(2, (new Date() - dob) / MS_PER_YEAR + 2);
+
+  // Ensure hi is high enough to reach the target (expand if needed).
+  let hhi = humanEqYears(hi, lb, smooth);
+  let guard = 0;
+  while (hhi < target && guard++ < 20) {
+    hi *= 1.5;
+    hhi = humanEqYears(hi, lb, smooth);
+  }
+
+  // Bisection to the earliest crossing time
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    const h = humanEqYears(mid, lb, smooth);
+    if (h >= target) hi = mid; else lo = mid;
+  }
+  const t = (lo + hi) / 2;
+  return new Date(dob.getTime() + t * MS_PER_YEAR);
 }
+
 
 // ---------- Confetti ----------
 function confetti(ms){
