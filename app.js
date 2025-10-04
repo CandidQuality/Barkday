@@ -686,41 +686,39 @@ els.adultWeight.addEventListener('input', ()=>{
 
 // ---------- Local date helpers (fixes “day-of” Barkday logic) ----------
 const norm = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()); // local midnight
-const isLeap = y => (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0));
-const safeBday = (y, m, d) => {
-  // Feb 29 → use Feb 29 in leap years, Feb 28 otherwise
-  if (m === 1 && d === 29 && !isLeap(y)) return new Date(y, 1, 28);
-  return new Date(y, m, d);
-};
 
-// Returns calendar-based birthday info using LOCAL dates only
-function getBarkdayInfo(dob /* Date */) {
-  const today = norm(new Date());
-  const birth = norm(dob);
-
-  const bMonth = birth.getMonth();
-  const bDate  = birth.getDate();
-
-  const thisYear = today.getFullYear();
-  const thisYearBday = norm(safeBday(thisYear, bMonth, bDate));
-  const isToday = today.getTime() === thisYearBday.getTime();
-
-  // Next Barkday date (calendar birthday, not the “dog-year” curve)
-  let nextBarkday;
-  if (isToday) {
-    nextBarkday = norm(safeBday(thisYear + 1, bMonth, bDate));
-  } else if (today < thisYearBday) {
-    nextBarkday = thisYearBday;
-  } else {
-    nextBarkday = norm(safeBday(thisYear + 1, bMonth, bDate));
-  }
-
-  // Age in whole years as humans speak it, holding all day on the birthday
-  let ageYears = thisYear - birth.getFullYear();
-  if (!isToday && today < thisYearBday) ageYears -= 1;
-
-  return { today, birth, thisYearBday, nextBarkday, isToday, ageYears };
+// ---------- Dog-year milestone helpers (LOCAL-day pinned) ----------
+/** Dog-years at a given date using local-midnight age math */
+function dogYearsAt(date, dob, lb, smooth){
+  const years = daysBetween(norm(dob), norm(date)) / 365.2425;
+  return humanEqYears(years, lb, smooth);
 }
+
+/** Next dog-year milestone date from "today" (uses your existing nextDogYearDate()) */
+function nextDogYearMilestone(dob, lb, smooth){
+  const now = new Date();
+  const Hnow = dogYearsAt(now, dob, lb, smooth);
+  return nextDogYearDate(dob, Hnow, lb, smooth);
+}
+
+/** All info needed for UI: isToday, nextBarkday (dog-year), and which integer we're turning */
+function getDogYearBarkdayInfo(dob, lb, smooth){
+  const today0    = norm(new Date());
+  const tomorrow0 = new Date(today0.getFullYear(), today0.getMonth(), today0.getDate() + 1);
+
+  // Dog-years at today's local midnight
+  const Htoday0 = dogYearsAt(today0, dob, lb, smooth);
+
+  // Find the next integer milestone date starting from Htoday0
+  const milestone = nextDogYearDate(dob, Htoday0, lb, smooth);
+  const isToday   = milestone >= today0 && milestone < tomorrow0;
+
+  // The upcoming integer (e.g., if H=27.3, turning=28; if today crosses, still 28)
+  const turning = Math.floor(Htoday0) + 1;
+
+  return { isToday, nextBarkday: milestone, turning, Htoday0 };
+}
+
 
 // ---------- Math utils ----------
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
@@ -1222,19 +1220,19 @@ function compute(){
   const R = slopeFromWeight(lb);
   els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight-continuous)`;
 
-  // Next Barkday (calendar birthday, full-day “today” handling)
+    // Next Barkday (DOG-YEAR milestone day, full-day “today” handling)
   const rawName = els.dogName.value || 'your dog';
   const name = rawName.trim() || 'your dog';
 
-  const info = getBarkdayInfo(dob); // uses norm/safeBday helpers
+  const info = getDogYearBarkdayInfo(dob, lb, els.smooth.checked); // dog-years, not calendar
 
   if (info.isToday) {
-    els.nextHeadline.textContent = `🎉 It’s Barkday today!`;
+    els.nextHeadline.textContent = `🎉 It’s Barkday today — turning ${info.turning} dog-years!`;
   } else {
-    els.nextHeadline.textContent = `${name} is about to be ${info.ageYears + 1} years old!`;
+    els.nextHeadline.textContent = `${name} is about to be ${info.turning} dog-years old!`;
   }
 
-  // Show next calendar Barkday
+  // Show the next DOG-YEAR Barkday date
   els.nextBday.textContent = info.nextBarkday.toDateString();
 
   // ISO for reminders — 09:00 local to avoid UTC flips
@@ -1246,10 +1244,11 @@ function compute(){
   ).toISOString();
   els.nextBday.dataset.iso = isoStart;
 
-  // Days-until
-  const dTo = daysBetween(norm(now), info.nextBarkday);
+  // Days-until (local-day pinned)
+  const dTo = daysBetween(norm(now), norm(info.nextBarkday));
   els.nextBdayDelta.textContent = info.isToday ? '' : `${dTo} days from now`;
 
+  
   // ------- Profile / notes (moved back inside compute) -------
   const breedTxtRaw = (els.breed.value||'').trim();
   const breedCanon  = normalizeBreed(breedTxtRaw) || breedTxtRaw;
@@ -1366,11 +1365,13 @@ function getContext(){
   const name = rawName.trim() || 'your dog';
 
   // Use local-midnight math here too
-  const dob = new Date(els.dob.value), now = new Date();
-  const years = daysBetween(norm(dob), norm(now)) / 365.2425;
+    const dob = new Date(els.dob.value);
+  const lb  = parseInt(els.adultWeight.value,10);
+  const smooth = els.smooth.checked;
 
-  const H = humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
-  const upcoming = Math.floor(H) + 1;
+  // Use the same dog-year logic the UI uses
+  const dyInfo  = getDogYearBarkdayInfo(dob, lb, smooth);
+  const upcoming = dyInfo.turning;
 
   const notes = planNotesText(resolveGroupKey(els.breedGroup.value), upcoming);
   const title = `🎉 ${name} turns ${upcoming} dog-years! Happy Barkday!`;
