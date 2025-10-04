@@ -704,18 +704,18 @@ function nextDogYearMilestone(dob, lb, smooth){
 /**
  * Compute “dog-year Barkday” info using LOCAL-midnight math.
  * Today is a Barkday if:
- *  1) dog-years is an exact integer at today's local midnight, OR
- *  2) the integer increases between today@00:00 and tomorrow@00:00.
+ *  1) we're exactly on an integer at today's local midnight, OR
+ *  2) the integer increases between today's and tomorrow's local midnights.
  */
 function getDogYearBarkdayInfo(dob, lb, smooth){
-  const today0    = norm(new Date()); // today @ 00:00 local
+  const today0    = norm(new Date());                                        // today @ 00:00 local
   const tomorrow0 = new Date(today0.getFullYear(), today0.getMonth(), today0.getDate() + 1);
 
   // Dog-years pinned to local midnights
   const Htoday0    = dogYearsAt(today0,    dob, lb, smooth);
   const Htomorrow0 = dogYearsAt(tomorrow0, dob, lb, smooth);
 
-  // 1) Exact-at-midnight counts as a Barkday today
+  // 1) Exact-integer-at-midnight ⇒ Barkday today
   const EPS = 1e-9;
   const isExactToday = Math.abs(Htoday0 - Math.round(Htoday0)) < EPS;
   if (isExactToday){
@@ -723,20 +723,21 @@ function getDogYearBarkdayInfo(dob, lb, smooth){
     return { isToday: true, nextBarkday: today0, turning, Htoday0 };
   }
 
-  // 2) Rollover sometime today
+  // 2) Integer rolls over at some time today ⇒ Barkday today
   const crossedToday = Math.floor(Htomorrow0) > Math.floor(Htoday0);
   if (crossedToday){
-    const turning = Math.floor(Htomorrow0); // the new integer we reach today
+    const turning = Math.floor(Htomorrow0);
     return { isToday: true, nextBarkday: today0, turning, Htoday0 };
   }
 
-  // Otherwise, find the next integer milestone date from today
+  // Otherwise, ask solver for the next milestone date from today
   const milestone = nextDogYearDate(dob, Htoday0, lb, smooth);
   const m0 = norm(milestone);
   const turning = Math.floor(Htoday0) + 1;
 
   return { isToday: false, nextBarkday: m0, turning, Htoday0 };
 }
+
 
 // ---------- Math utils ----------
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
