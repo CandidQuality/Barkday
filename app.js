@@ -678,11 +678,40 @@ const debouncedUpdate = debounce(updateBreedNotes, 120);
   });
 updateBreedNotes(); // initial render stays immediate
 
-// ---------- Slider label (5-lb steps) ----------
-els.adultWeight.addEventListener('input', ()=>{
-  const v=Math.round(parseInt(els.adultWeight.value,10)/5)*5;
-  els.adultWeight.value=v; els.adultWeightVal.textContent=v;
-});
+// ---------- Slider label + floating tooltip (5-lb steps) ----------
+const weightTooltip = document.getElementById('weightTooltip');
+
+function positionWeightTooltip(){
+  if (!weightTooltip || !els.adultWeight) return;
+  const slider = els.adultWeight;
+  const min = Number(slider.min || 0);
+  const max = Number(slider.max || 100);
+  const val = Number(slider.value || min);
+  const pct = (val - min) / (max - min);
+  const trackW = slider.offsetWidth;
+  weightTooltip.style.left = (pct * trackW) + 'px';
+  weightTooltip.style.transform = 'translateX(-50%)';
+}
+
+function updateWeightUI(){
+  let v = Math.round(parseInt(els.adultWeight.value,10)/5)*5;
+  if (isNaN(v)) v = 55;
+  els.adultWeight.value = v;
+  if (els.adultWeightVal) els.adultWeightVal.textContent = v;
+  if (weightTooltip) weightTooltip.textContent = v + ' lb';
+  positionWeightTooltip();
+}
+
+els.adultWeight.addEventListener('input', updateWeightUI);
+window.addEventListener('resize', positionWeightTooltip);
+
+// initialize on load (after DOM is ready)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateWeightUI, { once:true });
+} else {
+  updateWeightUI();
+}
+
 
 // ---------- Local date helpers (fixes “day-of” Barkday logic) ----------
 const norm = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()); // local midnight
@@ -1403,6 +1432,8 @@ if (els.resetBtn) els.resetBtn.addEventListener('click', ()=>{
   document.getElementById('nextPlan').innerHTML=''; document.getElementById('nextPlanHeading').textContent='Next Birthday Plan';
   els.sizeWarn.style.display='none'; els.gifts.innerHTML=''; els.giftMeta.textContent=''; els.epi.textContent='';
   renderHero(); updateBreedNotes();
+  els.adultWeight.dispatchEvent(new Event('input'));
+
 
   if (els.resetBtn){ els.resetBtn.disabled = true; els.resetBtn.setAttribute('aria-disabled','true'); }
   if (els.shareBtn){ els.shareBtn.disabled = true; els.shareBtn.setAttribute('aria-disabled','true'); }
