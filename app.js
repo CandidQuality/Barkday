@@ -678,10 +678,11 @@ const debouncedUpdate = debounce(updateBreedNotes, 120);
   });
 updateBreedNotes(); // initial render stays immediate
 
-// ---------- Slider label + floating tooltip (5-lb steps) ----------
+// ---------- Slider label + floating tooltip (shows only while interacting) ----------
 const weightTooltip = document.getElementById('weightTooltip');
+let weightTooltipHideT = null;
 
-function positionWeightTooltip(){
+function positionWeightTooltip() {
   if (!weightTooltip || !els.adultWeight) return;
   const slider = els.adultWeight;
   const min = Number(slider.min || 0);
@@ -693,23 +694,71 @@ function positionWeightTooltip(){
   weightTooltip.style.transform = 'translateX(-50%)';
 }
 
-function updateWeightUI(){
-  let v = Math.round(parseInt(els.adultWeight.value,10)/5)*5;
+function showWeightTooltip() {
+  if (!weightTooltip) return;
+  weightTooltip.classList.add('is-visible');
+  weightTooltip.classList.remove('is-hidden');
+  weightTooltip.setAttribute('aria-hidden', 'false');
+}
+
+function hideWeightTooltip(delayMs = 300) {
+  if (!weightTooltip) return;
+  if (weightTooltipHideT) clearTimeout(weightTooltipHideT);
+  weightTooltipHideT = setTimeout(() => {
+    weightTooltip.classList.remove('is-visible');
+    weightTooltip.classList.add('is-hidden');
+    weightTooltip.setAttribute('aria-hidden', 'true');
+  }, delayMs);
+}
+
+function updateWeightUI() {
+  let v = Math.round(parseInt(els.adultWeight.value, 10) / 5) * 5;
   if (isNaN(v)) v = 55;
   els.adultWeight.value = v;
+
+  // update label number (Expected adult weight (XX lb))
   if (els.adultWeightVal) els.adultWeightVal.textContent = v;
+
+  // bubble text + position
   if (weightTooltip) weightTooltip.textContent = v + ' lb';
   positionWeightTooltip();
 }
 
-els.adultWeight.addEventListener('input', updateWeightUI);
-window.addEventListener('resize', positionWeightTooltip);
+// Wire up interaction (show only while changing value)
+if (els?.adultWeight) {
+  const s = els.adultWeight;
 
-// initialize on load (after DOM is ready)
+  s.addEventListener('input', () => {
+    updateWeightUI();
+    showWeightTooltip();
+    hideWeightTooltip(800);          // fade out after last change
+  });
+
+  // Show when user begins interaction (mouse/touch/keyboard focus)
+  s.addEventListener('pointerdown', showWeightTooltip);
+  s.addEventListener('mousedown', showWeightTooltip);
+  s.addEventListener('touchstart', showWeightTooltip, { passive: true });
+  s.addEventListener('focus', showWeightTooltip);
+
+  // Hide when user ends interaction or leaves control
+  s.addEventListener('pointerup', () => hideWeightTooltip(300));
+  s.addEventListener('mouseup', () => hideWeightTooltip(300));
+  s.addEventListener('touchend', () => hideWeightTooltip(300));
+  s.addEventListener('blur', () => hideWeightTooltip(0));
+
+  // Keep position correct on resize (does not force visibility)
+  window.addEventListener('resize', positionWeightTooltip);
+}
+
+// Initialize (start hidden)
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', updateWeightUI, { once:true });
+  document.addEventListener('DOMContentLoaded', () => {
+    updateWeightUI();
+    hideWeightTooltip(0); // ensure hidden at first paint
+  }, { once: true });
 } else {
   updateWeightUI();
+  hideWeightTooltip(0);
 }
 
 
