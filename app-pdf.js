@@ -295,6 +295,61 @@
     return pos >= 0 ? pos : 0;
   }
 
+   function isAndroid(){
+  return /Android/i.test(navigator.userAgent || '');
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=> URL.revokeObjectURL(url), 1200);
+}
+
+function androidPrintHintOnce(){
+  try {
+    const KEY = 'barkday:androidPrintHintShown';
+    if (localStorage.getItem(KEY) === '1') return;
+    localStorage.setItem(KEY, '1');
+  } catch(_) {}
+  (window.bdToast || alert)(
+    'On Android, the PDF is saved to your Downloads. Open it from Files/Downloads to view or print.'
+  );
+}
+
+   
+async function presentPDF(doc, safeName){
+  const filename = `${safeName}-Barkday.pdf`;
+
+
+   
+  // Android: download to device
+  if (isAndroid()){
+  androidPrintHintOnce();                    // <-- one-time hint
+  const blob = doc.output('blob');
+  downloadBlob(blob, filename);
+  (window.bdToast || alert)('PDF saved to Downloads.');  // short confirm
+  return;
+}
+
+
+  // Desktop: open tab and auto-print
+  const url = doc.output('bloburl');
+  const w = window.open(url, '_blank');
+  if (!w){
+    // Popup blocked → fall back to download
+    const blob = doc.output('blob');
+    downloadBlob(blob, filename);
+    (window.bdToast || alert)('Popup blocked—downloaded the PDF instead.');
+    return;
+  }
+  setTimeout(()=>{ try { w.focus(); w.print(); } catch {} }, 300);
+}
+
   function bindGlobalClick() {
     document.addEventListener('click', async (e) => {
       const btn = e.target.closest && e.target.closest('[data-act="pdf"]');
@@ -304,17 +359,9 @@
       const list = (window.bdStoreList ? bdStoreList() : []);
       const run = list[idx];
       if (!run) { (window.bdToast || alert)('Record not found'); return; }
-
-      const doc = await buildRunPDF(run);
-      const url = doc.output('bloburl');
-      const w = window.open(url, '_blank');
-      if (!w) {
-        (window.bdToast || alert)('Popup blocked — saving the PDF instead.');
-        const safe = (run?.dog || 'Barkday').replace(/[^\w\- ]+/g, '').trim() || 'Barkday';
-        doc.save(`${safe}-Barkday.pdf`);
-      } else {
-        setTimeout(() => { try { w.focus(); w.print(); } catch { } }, 300);
-      }
+    const doc = await buildRunPDF(run);
+      const safe = (run?.dog || 'Barkday').replace(/[^\w\- ]+/g, '').trim() || 'Barkday';
+      await presentPDF(doc, safe);
     });
   }
 
