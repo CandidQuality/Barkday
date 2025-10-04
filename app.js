@@ -1201,52 +1201,43 @@ function compute(){
   clearInline();
 
   const dobStr = els.dob.value;
-  if (!dobStr) {
-    alert('Please select a birthdate.');
-    return;
-  }
+  if (!dobStr) { alert('Please select a birthdate.'); return; }
 
   const dob = new Date(dobStr);
   const now = new Date();
-  if (isNaN(dob) || dob > now) {
-    alert('Birthdate is invalid.');
-    return;
-  }
+  if (isNaN(dob) || dob > now) { alert('Birthdate is invalid.'); return; }
 
   const lb = parseInt(els.adultWeight.value, 10);
 
-  // --- Chronological age (pin to LOCAL midnights so birthdays hold all day)
-  const days  = daysBetween(norm(dob), norm(now));
-  const years = days / 365.2425;
-  const yrs   = Math.floor(years);
-  const months= Math.floor((years % 1) * 12);
+  // Chronological age (pin to LOCAL midnights so birthdays hold all day)
+  const days   = daysBetween(norm(dob), norm(now));
+  const years  = days / 365.2425;
+  const yrs    = Math.floor(years);
+  const months = Math.floor((years % 1) * 12);
   els.dogAge.textContent = `${yrs}y ${months}m`;
 
-  // --- Dog-years (your existing model)
+  // Dog-years (existing model)
   const H = humanEqYears(years, lb, els.smooth.checked);
   els.humanYears.textContent = H.toFixed(2);
   const R = slopeFromWeight(lb);
   els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight-continuous)`;
 
-  // --- Next Barkday (calendar birthday, full-day “today” handling)
+  // Next Barkday (calendar birthday, full-day “today” handling)
   const rawName = els.dogName.value || 'your dog';
   const name = rawName.trim() || 'your dog';
 
   const info = getBarkdayInfo(dob); // uses norm/safeBday helpers
 
-  // Headline
   if (info.isToday) {
-    // Example: “🎉 It’s Barkday today!” (and show the actual age reached)
     els.nextHeadline.textContent = `🎉 It’s Barkday today!`;
   } else {
-    // Example: “finn is about to be 5 years old!”
     els.nextHeadline.textContent = `${name} is about to be ${info.ageYears + 1} years old!`;
   }
 
-  // Date line (show the next calendar Barkday)
+  // Show next calendar Barkday
   els.nextBday.textContent = info.nextBarkday.toDateString();
 
-  // ISO (for reminders/saves) — set to 09:00 local to avoid UTC date flips
+  // ISO for reminders — 09:00 local to avoid UTC flips
   const isoStart = new Date(
     info.nextBarkday.getFullYear(),
     info.nextBarkday.getMonth(),
@@ -1255,12 +1246,11 @@ function compute(){
   ).toISOString();
   els.nextBday.dataset.iso = isoStart;
 
-  // Days-until label
+  // Days-until
   const dTo = daysBetween(norm(now), info.nextBarkday);
   els.nextBdayDelta.textContent = info.isToday ? '' : `${dTo} days from now`;
-}
-  
-  // Profile/notes
+
+  // ------- Profile / notes (moved back inside compute) -------
   const breedTxtRaw = (els.breed.value||'').trim();
   const breedCanon  = normalizeBreed(breedTxtRaw) || breedTxtRaw;
   const mapped      = findGroupByBreedName(breedCanon);
@@ -1276,30 +1266,35 @@ function compute(){
     (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
 
   // Weight/group hint
-  let warn='';
-  if(els.breedGroup.value.includes('Toy') && lb>30) warn='Breed group "Toy" but weight > 30 lb. Math stays weight-based.';
-  if((els.breedGroup.value.includes('Guardian')||els.breedGroup.value.includes('Working')) && lb<20) warn='Breed group suggests large/giant, but weight < 20 lb. Math stays weight-based.';
-  els.sizeWarn.style.display = warn? 'block':'none'; els.sizeWarn.textContent = warn;
+  let warn = '';
+  if (els.breedGroup.value.includes('Toy') && lb > 30)
+    warn = 'Breed group "Toy" but weight > 30 lb. Math stays weight-based.';
+  if ((els.breedGroup.value.includes('Guardian')||els.breedGroup.value.includes('Working')) && lb < 20)
+    warn = 'Breed group suggests large/giant, but weight < 20 lb. Math stays weight-based.';
+  els.sizeWarn.style.display = warn ? 'block' : 'none';
+  els.sizeWarn.textContent = warn;
 
   // Celebrate & plan
-  confetti(); renderPlan(els.breedGroup.value, upcoming);
+  const upcoming = Math.floor(H) + 1;   // << was missing before
+  if (info.isToday) confetti();         // confetti only on the day
+  renderPlan(els.breedGroup.value, upcoming);
 
   // Epigenetic note (optional)
-  els.epi.textContent = els.showEpi.checked ? 'Science curve: UCSD DNA-methylation (≥ 1 yr). Note: visualization context; math remains weight-based.' : '';
+  els.epi.textContent = els.showEpi.checked
+    ? 'Science curve: UCSD DNA-methylation (≥ 1 yr). Note: visualization context; math remains weight-based.'
+    : '';
 
   // Enable gated buttons now that we have a valid result
   if (els.resetBtn){ els.resetBtn.disabled = false; els.resetBtn.setAttribute('aria-disabled','false'); }
   if (els.shareBtn){ els.shareBtn.disabled = false; els.shareBtn.setAttribute('aria-disabled','false'); }
 
-  // 🔔 Show popup copy of Results (headline + KPIs + plan)
-  BarkdayResultsModal.showFromElement('.kpi');   // or '#nextPlan' or a composed HTML
+  // Popup + toast + scroll
+  BarkdayResultsModal.showFromElement('.kpi');
+  bdToast('Results updated — opened popup with details');
+  scrollResultsIntoView();
 
-// 🔔 Round 2: toast + auto-scroll (keeps popup too)
-bdToast('Results updated — opened popup with details');
-scrollResultsIntoView();
-  
   // If gifts open, refilter
-  if(els.gifts.children.length) loadGifts();
+  if (els.gifts.children.length) loadGifts();
 }
 
 // Adapter the Button Bar will call
