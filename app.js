@@ -1382,6 +1382,7 @@ function compute(){
   els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight-continuous)`;
 
     // Next Barkday (DOG-YEAR milestone day, full-day “today” handling)
+   const info = getDogYearBarkdayInfo(dob, lb, els.smooth.checked);
   const rawName = (els.dogName.value || '').trim();
 const hasName = !!rawName;
 
