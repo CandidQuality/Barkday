@@ -1179,7 +1179,7 @@ document.addEventListener('click', (e)=>{
 });
 
 
-// ---------- ✅ GLOBAL Results Modal helper (fixed) ----------
+// ---------- ✅ GLOBAL Results Modal helper (fixed, aria-hidden corrected) ----------
 window.BarkdayResultsModal = window.BarkdayResultsModal || (() => {
   let lastFocus = null;
   const focusableSel = 'button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
@@ -1198,43 +1198,74 @@ window.BarkdayResultsModal = window.BarkdayResultsModal || (() => {
       return;
     }
     lastFocus = document.activeElement;
+
     bodyEl.innerHTML = html || '<p>No results.</p>';
+
+    // Show + ARIA state
     modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');   // ← important: visible & focusable
+
+    // Optional: prevent background scroll
     document.body.classList.add('body-lock');
+
+    // Focus the first focusable element (or dialog itself)
     (dialog.querySelector(focusableSel) || dialog).focus();
+
+    // Event wiring
     modal.addEventListener('click', onBackdrop);
     document.addEventListener('keydown', onKey);
     dialog.addEventListener('keydown', trap);
   }
+
   function close() {
     const { modal, dialog } = q();
     if (!modal || !dialog) return;
+
+    // Hide + ARIA state
     modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');    // ← important: hidden to AT
+
+    // Optional: restore scroll
     document.body.classList.remove('body-lock');
+
+    // Cleanup listeners
     modal.removeEventListener('click', onBackdrop);
     document.removeEventListener('keydown', onKey);
     dialog.removeEventListener('keydown', trap);
+
+    // Restore focus to opener if possible
     if (lastFocus?.focus) lastFocus.focus();
   }
-  function onBackdrop(e){ if (e.target?.dataset?.close === 'true') close(); }
-  function onKey(e){ if (e.key === 'Escape') close(); }
-  function trap(e){
+
+  function onBackdrop(e) {
+    if (e.target?.dataset?.close === 'true') close();
+  }
+
+  function onKey(e) {
+    if (e.key === 'Escape') close();
+  }
+
+  // Focus trap inside dialog
+  function trap(e) {
     const { dialog } = q();
     if (!dialog || e.key !== 'Tab') return;
-    const f = dialog.querySelectorAll(focusableSel); if (!f.length) return;
-    const first=f[0], last=f[f.length-1];
-    if (e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    const f = dialog.querySelectorAll(focusableSel);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
+
   return {
-    show(html){ open(html); },
-    showFromElement(sel){
+    show(html) { open(html); },
+    showFromElement(sel) {
       const el = document.querySelector(sel);
       open(el ? el.innerHTML : '');
     },
     close
   };
 })();
+
 
 // ---------- Compute ----------
 function compute(){
