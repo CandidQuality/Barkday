@@ -1365,8 +1365,10 @@ function getContext(){
   const rawName = els.dogName.value || 'your dog';
   const name = rawName.trim() || 'your dog';
 
+  // Use local-midnight math here too
   const dob = new Date(els.dob.value), now = new Date();
-  const years = daysBetween(dob, now) / 365.2425;
+  const years = daysBetween(norm(dob), norm(now)) / 365.2425;
+
   const H = humanEqYears(years, parseInt(els.adultWeight.value,10), els.smooth.checked);
   const upcoming = Math.floor(H) + 1;
 
@@ -1375,6 +1377,7 @@ function getContext(){
 
   return { start, end, name, upcoming, notes, title };
 }
+
 
 /* --------------------
    Local in-app reminders (beta) — shimmed
