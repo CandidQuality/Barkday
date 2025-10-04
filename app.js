@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }, { once:true });
 
 // ---------- Hero line ----------
-const poss = n => !n ? "your precious friend's" : (/\s*$/.test(n)&&/s$/i.test(n.trim())? n.trim()+"’" : n.trim()+"’s");
+const poss = n => {   const t = String(n||'').trim();   if (!t) return "your dog's";   return /s$/i.test(t) ? `${t}’` : `${t}’s`; };
 function renderHero(){ els.heroLine.textContent = `Let’s find out together what ${poss(els.dogName.value)} birthdays are, so we can celebrate every single one.`; }
 els.dogName.addEventListener('input', renderHero); renderHero();
 
@@ -194,7 +194,7 @@ function bdStoreSave(list){
 // Optional: show which backend we’re using (local/session/memory) — gated for dev
 (function showStorageStatus(){
   try{
-    if (!(location.hostname === 'localhost' || location.search.includes('debug=1'))) return;
+    if (!(location.hostname === 'localhost' && location.search.includes('debug=1'))) return;
     const el = document.createElement('div');
     el.id = 'bdStorageStatus';
     el.textContent = `Storage: ${BarkdayStore.kind}`;
@@ -260,10 +260,21 @@ function currentRunPayload(){
 // Save handler (session-only toast is always shown when not on localStorage)
 function bdSaveRun(){
   const list = bdStoreList();
-  list.unshift(currentRunPayload());
+  const now = Date.now();
+  const cur = currentRunPayload();
+
+  // De-dupe: if the latest saved item matches same dog + same ISO date within 2 minutes, skip
+  const last = list[0];
+  const isDup = last
+    && (last.dog||'').trim().toLowerCase() === (cur.dog||'').trim().toLowerCase()
+    && (last.kpi?.nextDateISO || '') === (cur.kpi?.nextDateISO || '')
+    && Math.abs((last.ts||0) - now) < 120000;
+
+  if (!isDup) list.unshift(cur);
   if (list.length > 50) list.length = 50;
+
   bdStoreSave(list);
-  bdToast('Saved to this device');
+  bdToast(isDup ? 'Already saved recently' : 'Saved to this device');
 
   if (BarkdayStore?.kind && BarkdayStore.kind !== 'localStorage') {
     bdToast('Saved for this session only in this browser.', 3500);
@@ -273,6 +284,7 @@ function bdSaveRun(){
     BarkdaySaved.render();
   }
 }
+
 
 
 function hydrateRun(run, doCompute=false){
@@ -1370,28 +1382,30 @@ function compute(){
   els.slopeNote.textContent = `R≈${R.toFixed(2)} (weight-continuous)`;
 
     // Next Barkday (DOG-YEAR milestone day, full-day “today” handling)
-  const rawName = els.dogName.value || 'your dog';
-  const name = rawName.trim() || 'your dog';
+  const rawName = (els.dogName.value || '').trim();
+const hasName = !!rawName;
 
-  const info = getDogYearBarkdayInfo(dob, lb, els.smooth.checked); // dog-years, not calendar
-
-  if (info.isToday) {
-  // Personalized headline when today is the Barkday
-  els.nextHeadline.textContent = `🎉 ${name}’s Barkday today — turning ${info.turning} dog-years!`;
+if (info.isToday) {
+  els.nextHeadline.textContent = hasName
+    ? `🎉 ${rawName}’s Barkday today — turning ${info.turning} dog-years!`
+    : `🎉 It’s Barkday today — turning ${info.turning} dog-years!`;
 } else {
-  els.nextHeadline.textContent = `${name} is about to be ${info.turning} dog-years old!`;
+  els.nextHeadline.textContent = hasName
+    ? `${rawName} is about to be ${info.turning} dog-years old!`
+    : `About to be ${info.turning} dog-years old!`;
 }
-
 
   // Show the next DOG-YEAR Barkday date
   els.nextBday.textContent = info.nextBarkday.toDateString();
   // Optional: system Notification if permission already granted (personalized)
 try {
-  if (info.isToday && 'Notification' in window && Notification.permission === 'granted') {
-    const body = `${name}’s Barkday today — turning ${info.turning} dog-years!\n${els.nextBday.textContent}`;
-    // Use a short title to avoid truncation; details in body
-    new Notification('Barkday 🎉', { body });
-  }
+if (info.isToday && 'Notification' in window && Notification.permission === 'granted') {
+  const body = (hasName
+    ? `${rawName}’s Barkday today — turning ${info.turning} dog-years!`
+    : `It’s Barkday today — turning ${info.turning} dog-years!`
+  ) + `\n${els.nextBday.textContent}`;
+  new Notification('Barkday 🎉', { body });
+}
 } catch {}
 
 
@@ -1418,8 +1432,8 @@ try {
   const gname = setGroupFromName(els.breedGroup?.value);
   const gkey  = resolveGroupKey(gname);
 
-  els.profileLine.textContent =
-    `Profile: ${name}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
+els.profileLine.textContent =
+  `Profile: ${hasName ? rawName : 'your dog'}${breedCanon ? ' — ' + breedCanon : ''} • Group: ${gname} • Weight: ${lb} lb`;
 
   els.breedNotes.innerHTML =
     (GROUPS[gkey]||[]).map(n=>`• ${n}`).join(' ');
@@ -1450,11 +1464,15 @@ renderPlan(els.breedGroup.value, upcoming);
 
   // Popup + toast + scroll
   BarkdayResultsModal.showFromElement('.kpi');
-  if (els.nextHeadline.textContent && info.isToday) {
-  bdToast(`${name}’s Barkday today — turning ${info.turning} dog-years! ${els.nextBday.textContent}`);
+if (els.nextHeadline.textContent && info.isToday) {
+  bdToast((hasName
+    ? `${rawName}’s Barkday today — turning ${info.turning} dog-years! `
+    : `It’s Barkday today — turning ${info.turning} dog-years! `
+  ) + `${els.nextBday.textContent}`);
 } else {
   bdToast('Results updated — opened popup with details');
 }
+
 
   scrollResultsIntoView();
 
