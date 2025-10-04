@@ -4,12 +4,12 @@
    - Finds run index via data-idx, data-i, or DOM order
    - Vector-logo with PNG fallback
    - Landscape, print-accurate layout (no mid-rule)
-   - Full plan category set; "—" when a lane has no items
+   - Full plan categories; maps aliases (e.g., "Exercise Needs" -> "Exercise & Bonding")
    - New-tab print (fallback: download if popup blocked)
 */
 
 (function () {
-  // ---------- Config ----------
+  // ---------- Canon + Aliases ----------
   const CANON_LANES = [
     'Training & Enrichment',
     'Health & Wellness',
@@ -20,7 +20,37 @@
     'Socialization & Behavior',
     'Gear & Enrichment Ideas'
   ];
-  const SHOW_EMPTY_LANES = true; // always show all categories
+  const SHOW_EMPTY_LANES = true;
+
+  // map normalized keys -> canonical titles
+  const TITLE_ALIAS = {
+    'trainingenrichment': 'Training & Enrichment',
+    'healthwellness': 'Health & Wellness',
+    'dietnutrition': 'Diet & Nutrition',
+    'exercisebonding': 'Exercise & Bonding',
+    'exerciseneeds': 'Exercise & Bonding',                // alias
+    'groominghome': 'Grooming & Home',
+    'safetyid': 'Safety & ID',
+    'socializationbehavior': 'Socialization & Behavior',
+    'playbondingideas': 'Play & Bonding Ideas',
+    'gearandenrichmentideas': 'Gear & Enrichment Ideas',
+    'gearenrichmentideas': 'Gear & Enrichment Ideas',
+    'helpfulgear': 'Gear & Enrichment Ideas',             // alias
+    'helpfulgearoptional': 'Gear & Enrichment Ideas'       // alias
+  };
+
+  function titleKey(s) {
+    if (!s) return '';
+    // strip bullets, punctuation, parentheses, normalize &/and, collapse spaces
+    const t = String(s)
+      .replace(/^[-•\s]+/, '')
+      .replace(/\([^)]*\)/g, '')
+      .replace(/\band\b/gi, '&')
+      .replace(/[^A-Za-z&]+/g, '')
+      .toLowerCase();
+    // also handle "&" removal for keys like "gear&enrichmentideas"
+    return t.replace(/&/g, '');
+  }
 
   // ---------- Small utilities ----------
   function onceDOMReady(fn) {
@@ -70,25 +100,42 @@
     }
   }
 
-  // ---------- Notes -> lanes (with canonical fill) ----------
+  // ---------- Notes -> lanes (with canonical fill + alias mapping) ----------
   function normalizeLanesFromNotes(notes) {
     const blocks = [];
     if (notes && typeof notes === 'string') {
       notes.split(/\n\s*\n+/).forEach(block => {
         const lines = block.split(/\n/).map(s => s.trim()).filter(Boolean);
         if (!lines.length) return;
-        const title = lines[0].replace(/^[-•]+\s*/, '');
-        const items = lines.slice(1).map(s => s.replace(/^[-•]+\s*/, '').trim()).filter(Boolean);
-        if (title) blocks.push({ title, items });
+
+        const rawTitle = lines[0];
+        const key = titleKey(rawTitle);
+        const canon = TITLE_ALIAS[key] || rawTitle;
+
+        const items = lines.slice(1)
+          .map(s => s.replace(/^[-•]+\s*/, '').trim())
+          .filter(Boolean);
+
+        blocks.push({ title: canon, items });
       });
     }
+
     if (!SHOW_EMPTY_LANES) return blocks;
 
-    const map = new Map(blocks.map(b => [b.title, b]));
+    // Merge by canonical title
+    const map = new Map();
+    for (const b of blocks) {
+      const t = b.title;
+      if (!map.has(t)) map.set(t, { title: t, items: [] });
+      map.get(t).items.push(...b.items);
+    }
+
+    // Fill all canonical lanes in canonical order
     CANON_LANES.forEach(name => {
       if (!map.has(name)) map.set(name, { title: name, items: [] });
     });
-    // Preserve canonical order
+
+    // Return in canonical order
     return CANON_LANES.map(name => map.get(name));
   }
 
@@ -181,7 +228,7 @@
     row('Reminder ISO',            run?.kpi?.nextDateISO || '—');
     row('Reminder Local',          localStr);
 
-    // --- Plan (right; two columns; full canonical set) ---
+    // --- Plan (right; two columns; full canonical set w/ aliases) ---
     tx('Next Birthday Plan', X_R, yR, 15, true); yR += LINE;
     const innerGap = 18, subW = (RIGHT_W - innerGap) / 2;
     const colX = [X_R, X_R + subW + innerGap], colY = [yR, yR];
@@ -214,7 +261,6 @@
 
   // ---------- Button injection + click handling ----------
   function findSavedHost() {
-    // Prefer the inner cards container if present
     const body = document.getElementById('bdSavedBody') || document.getElementById('bdSaved') || document.body;
     const cards = body.querySelector('#bdSavedCards');
     return cards || body;
@@ -227,7 +273,7 @@
       if (!card || card.querySelector('[data-act="pdf"]')) return;
 
       const idx = loadBtn.dataset.idx || card.getAttribute('data-i');
-      const actions = loadBtn.parentNode; // same row as Load/Delete
+      const actions = loadBtn.parentNode;
       const btn = document.createElement('button');
       btn.className = 'ghost';
       btn.type = 'button';
@@ -239,15 +285,10 @@
   }
 
   function computeIndexForButton(btn) {
-    // 1) explicit data-idx
     let idx = btn.dataset.idx;
     if (idx != null) return Number(idx);
-
-    // 2) nearest card’s data-i
     const card = btn.closest('[data-i]');
     if (card) return Number(card.getAttribute('data-i'));
-
-    // 3) position among current Load buttons
     const allLoads = [...document.querySelectorAll('#bdSavedBody [data-act="load"]')];
     const localLoad = btn.parentNode?.querySelector?.('[data-act="load"]');
     const pos = allLoads.indexOf(localLoad);
@@ -267,7 +308,6 @@
       const doc = await buildRunPDF(run);
       const url = doc.output('bloburl');
       const w = window.open(url, '_blank');
-
       if (!w) {
         (window.bdToast || alert)('Popup blocked — saving the PDF instead.');
         const safe = (run?.dog || 'Barkday').replace(/[^\w\- ]+/g, '').trim() || 'Barkday';
@@ -279,10 +319,7 @@
   }
 
   function startObserving(host) {
-    // Inject now for existing cards
     injectButtonsIn(host);
-
-    // Then observe for future renders
     const mo = new MutationObserver(muts => {
       for (const m of muts) {
         if (m.addedNodes) m.addedNodes.forEach(n => {
@@ -291,12 +328,10 @@
       }
     });
     mo.observe(host, { childList: true, subtree: true });
-
-    // Also “pump” a few times in case the UI renders right after we start
     let pumps = 0;
     const pump = setInterval(() => {
       injectButtonsIn(host);
-      if (++pumps >= 20) clearInterval(pump);  // ~5s total at 250ms
+      if (++pumps >= 20) clearInterval(pump);
     }, 250);
   }
 
@@ -308,6 +343,6 @@
       bindGlobalClick();
       startObserving(host);
     }, 50);
-    setTimeout(() => clearInterval(wait), 10000); // stop waiting after 10s
+    setTimeout(() => clearInterval(wait), 10000);
   });
 })();
