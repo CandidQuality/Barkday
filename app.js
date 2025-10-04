@@ -334,7 +334,7 @@ const BarkdaySaved = (() => {
 
   const items = bdStoreList();
   if (!items.length){
-    cardsHost.innerHTML = `<div class="muted">No saved results yet. Run Calculate, then click “Save result”.</div>`;
+    cardsHost.innerHTML = `<div class="muted">No saved results yet. Run Calculate — results auto-save.</div>`;
     return;
   }
 
