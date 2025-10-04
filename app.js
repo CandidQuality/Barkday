@@ -703,35 +703,40 @@ function nextDogYearMilestone(dob, lb, smooth){
 
 /**
  * Compute “dog-year Barkday” info using LOCAL-midnight math.
- * Today is a Barkday if the integer dog-years increases between
- * today's local midnight and tomorrow's local midnight.
+ * Today is a Barkday if:
+ *  1) dog-years is an exact integer at today's local midnight, OR
+ *  2) the integer increases between today@00:00 and tomorrow@00:00.
  */
 function getDogYearBarkdayInfo(dob, lb, smooth){
-  const today0    = norm(new Date());                                       // today @ 00:00 local
+  const today0    = norm(new Date()); // today @ 00:00 local
   const tomorrow0 = new Date(today0.getFullYear(), today0.getMonth(), today0.getDate() + 1);
 
   // Dog-years pinned to local midnights
   const Htoday0    = dogYearsAt(today0,    dob, lb, smooth);
   const Htomorrow0 = dogYearsAt(tomorrow0, dob, lb, smooth);
 
-  // If the integer rolls over sometime today, it's a Barkday today
-  const crossedToday = Math.floor(Htomorrow0) > Math.floor(Htoday0);
+  // 1) Exact-at-midnight counts as a Barkday today
+  const EPS = 1e-9;
+  const isExactToday = Math.abs(Htoday0 - Math.round(Htoday0)) < EPS;
+  if (isExactToday){
+    const turning = Math.round(Htoday0);
+    return { isToday: true, nextBarkday: today0, turning, Htoday0 };
+  }
 
+  // 2) Rollover sometime today
+  const crossedToday = Math.floor(Htomorrow0) > Math.floor(Htoday0);
   if (crossedToday){
-    const turning = Math.floor(Htomorrow0);            // the new integer we reach today
+    const turning = Math.floor(Htomorrow0); // the new integer we reach today
     return { isToday: true, nextBarkday: today0, turning, Htoday0 };
   }
 
   // Otherwise, find the next integer milestone date from today
   const milestone = nextDogYearDate(dob, Htoday0, lb, smooth);
-  const m0 = norm(milestone);                           // normalize to local midnight for display
+  const m0 = norm(milestone);
   const turning = Math.floor(Htoday0) + 1;
 
   return { isToday: false, nextBarkday: m0, turning, Htoday0 };
 }
-
-
-
 
 // ---------- Math utils ----------
 const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
