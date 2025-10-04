@@ -1376,13 +1376,24 @@ function compute(){
   const info = getDogYearBarkdayInfo(dob, lb, els.smooth.checked); // dog-years, not calendar
 
   if (info.isToday) {
-    els.nextHeadline.textContent = `🎉 It’s Barkday today — turning ${info.turning} dog-years!`;
-  } else {
-    els.nextHeadline.textContent = `${name} is about to be ${info.turning} dog-years old!`;
-  }
+  // Personalized headline when today is the Barkday
+  els.nextHeadline.textContent = `🎉 ${name}’s Barkday today — turning ${info.turning} dog-years!`;
+} else {
+  els.nextHeadline.textContent = `${name} is about to be ${info.turning} dog-years old!`;
+}
+
 
   // Show the next DOG-YEAR Barkday date
   els.nextBday.textContent = info.nextBarkday.toDateString();
+  // Optional: system Notification if permission already granted (personalized)
+try {
+  if (info.isToday && 'Notification' in window && Notification.permission === 'granted') {
+    const body = `${name}’s Barkday today — turning ${info.turning} dog-years!\n${els.nextBday.textContent}`;
+    // Use a short title to avoid truncation; details in body
+    new Notification('Barkday 🎉', { body });
+  }
+} catch {}
+
 
   // ISO for reminders — 09:00 local to avoid UTC flips
   const isoStart = new Date(
@@ -1439,7 +1450,12 @@ renderPlan(els.breedGroup.value, upcoming);
 
   // Popup + toast + scroll
   BarkdayResultsModal.showFromElement('.kpi');
+  if (els.nextHeadline.textContent && info.isToday) {
+  bdToast(`${name}’s Barkday today — turning ${info.turning} dog-years! ${els.nextBday.textContent}`);
+} else {
   bdToast('Results updated — opened popup with details');
+}
+
   scrollResultsIntoView();
 
   // If gifts open, refilter
