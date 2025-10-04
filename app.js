@@ -327,34 +327,39 @@ const BarkdaySaved = (() => {
   function onEsc(e){ if (e.key === 'Escape') close(); }
 
   function render(){
-    const host = bodyEl(); if (!host) return;
-    const items = bdStoreList();
-    if (!items.length){
-      host.innerHTML = `<div class="muted">No saved results yet. Run Calculate, then click “Save result”.</div>`;
-      return;
-    }
-    host.innerHTML = items.map((r, i) => {
-      const date = new Date(r.ts).toLocaleString();
-      const dog  = r.dog || 'Your dog';
-      const hy   = r.kpi?.hy || '—';
-      const next = r.kpi?.nextDate || '—';
-      const w    = r.weight ? `${r.weight} lb` : '';
-      const grp  = r.group || '';
-      return `
-        <div class="bd-card" data-i="${i}">
-          <h4>${dog}</h4>
-          <div class="muted">${grp}${grp&&w?' · ':''}${w} · Saved ${date}</div>
-          <div class="muted" style="margin-top:4px">Next: ${r.kpi?.nextHeadline || '—'} (${next}) · Human-years: ${hy}</div>
-          <div class="bd-row">
-            <button type="button" class="btn" data-act="load">Load</button>
-            <button type="button" class="ghost" data-act="compute">Load & Compute</button>
-            <button type="button" class="ghost" data-act="share">Copy Share Link</button>
-            <button type="button" class="ghost" data-act="delete">Delete</button>
-          </div>
-        </div>
-      `;
-    }).join('');
+  const host = bodyEl(); if (!host) return;
+
+  // NEW: render into #bdSavedCards if present, otherwise fall back to the body
+  const cardsHost = host.querySelector('#bdSavedCards') || host;
+
+  const items = bdStoreList();
+  if (!items.length){
+    cardsHost.innerHTML = `<div class="muted">No saved results yet. Run Calculate, then click “Save result”.</div>`;
+    return;
   }
+
+  cardsHost.innerHTML = items.map((r, i) => {
+    const date = new Date(r.ts).toLocaleString();
+    const dog  = r.dog || 'Your dog';
+    const hy   = r.kpi?.hy || '—';
+    const next = r.kpi?.nextDate || '—';
+    const w    = r.weight ? `${r.weight} lb` : '';
+    const grp  = r.group || '';
+    return `
+      <div class="bd-card" data-i="${i}">
+        <h4>${dog}</h4>
+        <div class="muted">${grp}${grp&&w?' · ':''}${w} · Saved ${date}</div>
+        <div class="muted" style="margin-top:4px">Next: ${r.kpi?.nextHeadline || '—'} (${next}) · Human-years: ${hy}</div>
+        <div class="bd-row">
+          <button type="button" class="btn" data-act="load">Load</button>
+          <button type="button" class="ghost" data-act="compute">Load & Compute</button>
+          <button type="button" class="ghost" data-act="share">Copy Share Link</button>
+          <button type="button" class="ghost" data-act="delete">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
   function onListClick(e){
     const btn = e.target.closest('[data-act]'); if (!btn) return;
