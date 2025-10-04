@@ -134,12 +134,22 @@
   }
 
   function findSavedHost(){
-    return document.getElementById('bdSavedBody') || document.getElementById('bdSaved') || document.body;
+  // Prefer the inner cards container if present
+  const body = document.getElementById('bdSavedBody') || document.getElementById('bdSaved') || document.body;
+  const cards = body.querySelector('#bdSavedCards');
+  return cards || body;
+}
+
   }
 
   function injectButtonsIn(container){
     // A card is anything that has a Load button
     const cards = container.querySelectorAll('[data-act="load"]');
+if (!cards.length) {
+  // also look under the body wrapper if we were passed the cards node
+  const alt = document.getElementById('bdSavedBody');
+  if (alt) alt.querySelectorAll('[data-act="load"]').forEach(btn => cards.item ? null : null);
+}
     cards.forEach(loadBtn=>{
       const card = loadBtn.closest('.bd-card, article, li, div') || loadBtn.parentNode;
       if (!card || card.querySelector('[data-act="pdf"]')) return;
@@ -158,20 +168,21 @@
   }
 
   function computeIndexForButton(btn){
-    // 1) explicit data-idx
-    let idx = btn.dataset.idx;
-    if (idx != null) return Number(idx);
+  // 1) explicit data-idx on the same action row
+  let idx = btn.dataset.idx;
+  if (idx != null) return Number(idx);
 
-    // 2) take from nearest card’s data-i
-    const card = btn.closest('[data-i]');
-    if (card) return Number(card.getAttribute('data-i'));
+  // 2) data-i on the nearest card container
+  const card = btn.closest('[data-i]');
+  if (card) return Number(card.getAttribute('data-i'));
 
-    // 3) fallback: order among current cards
-    const allCards = [...document.querySelectorAll('#bdSavedBody [data-act="load"]')];
-    const loadBtn = btn.parentNode?.querySelector?.('[data-act="load"]');
-    const pos = allCards.indexOf(loadBtn);
-    return pos >= 0 ? pos : 0;
-  }
+  // 3) fallback: position among current Load buttons
+  const allLoads = [...document.querySelectorAll('#bdSavedBody [data-act="load"]')];
+  const localLoad = btn.parentNode?.querySelector?.('[data-act="load"]');
+  const pos = allLoads.indexOf(localLoad);
+  return pos >= 0 ? pos : 0;
+}
+
 
   function bindGlobalClick(){
     document.addEventListener('click', async (e)=>{
@@ -223,6 +234,16 @@
       clearInterval(wait);
       bindGlobalClick();
       startObserving(host);
+       // Immediately inject for anything already on the page
+injectButtonsIn(host);
+
+// Also “pump” a few times in case the UI renders right after we start
+let pumps = 0;
+const pump = setInterval(()=>{
+  injectButtonsIn(host);
+  if (++pumps >= 20) clearInterval(pump);  // ~5s total at 250ms
+}, 250);
+
     }, 50);
     // in case it never appears, stop after 10s
     setTimeout(()=>clearInterval(wait), 10000);
