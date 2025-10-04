@@ -83,9 +83,11 @@
           <div class="muted">Dog age shown under Results.</div>
         </div>
         <div>
-          <label for="adultWeight">Expected adult weight (lb)</label>
-          <input id="adultWeight" type="range" min="5" max="200" step="5" value="55" />
-          <div class="muted">Aging rate uses <em>5-lb steps</em>. <span id="adultWeightVal">55</span> lb</div>
+         <label for="adultWeight">Expected adult weight (<span id="adultWeightVal">55</span> lb)</label>
+          <div class="slider-wrap">
+            <div id="weightTooltip" class="slider-tooltip" role="status" aria-live="polite">55 lb</div>
+            <input id="adultWeight" type="range" min="5" max="200" step="5" value="55" aria-describedby="weightTooltip" />
+        </div>
         </div>
         <div>
           <label for="chewer">Chewer level</label>
