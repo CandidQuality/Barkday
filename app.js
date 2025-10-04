@@ -1797,7 +1797,6 @@ function render(container){
   container.innerHTML = `
     <div class="btn-bar" data-state="disabled">
       <button type="button" class="primary" id="btnCalc">Calculate</button>
-      <button type="button" class="secondary" id="btnSave" disabled>Save result</button>
       <button type="button" class="secondary" id="btnICS" disabled>Download .ics</button>
       <button type="button" class="secondary" id="btnGCal" disabled>Add to Google Calendar</button>
       <button type="button" class="ghost" id="btnSaved" title="Open Saved Results">Saved ▾</button>
@@ -1809,7 +1808,7 @@ function render(container){
 
  function setEnabled(on){
   // Toggle only the action buttons that require a computed result
-  ['#btnSave','#btnICS','#btnGCal'].forEach(sel=>{
+  ['#btnICS','#btnGCal'].forEach(sel=>{
     document.querySelectorAll('#btnBarMount .btn-bar ' + sel).forEach(b=> b.disabled = !on);
   });
   const bar = document.querySelector('#btnBarMount .btn-bar');
@@ -1841,11 +1840,8 @@ function render(container){
     });
 
     // NEW: Save + Saved
-const btnSave  = root.querySelector('#btnSave');
 const btnSaved = root.querySelector('#btnSaved');
-
-btnSave.addEventListener('click', ()=>{
-  // require a valid calc (buttons are enabled only when calc succeeded)
+ // require a valid calc (buttons are enabled only when calc succeeded)
   bdSaveRun();
 });
 
